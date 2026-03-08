@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  #Contenedor para MySQL
+  mysql:
+    image: mysql:8
+    container_name: devcards_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devcards
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  #Contenedor para el backend
+  backend:
+    build: ./backend
+    container_name: devcards_node
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: devcards
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/app
+
+#Volumen para persistir datos de MySQL
+volumes:
+  mysql_data:
