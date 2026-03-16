@@ -1,0 +1,30 @@
+CREATE DATABASE IF NOT EXISTS devcards;
+
+USE devcards;
+
+CREATE TABLE users(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin','user') DEFAULT 'user',
+    avatar_url VARCHAR(500) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cards(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    logo VARCHAR(255) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    url VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE settings(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    theme ENUM('light', 'dark') DEFAULT 'light',
+    language VARCHAR(5) DEFAULT 'es',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
