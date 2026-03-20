@@ -17,3 +17,7 @@ export const removeUser = async(req,res) => {
         res.status(500).json({error: error.message})
     }
 };
+
+export const getMe = async(req,res) => {
+    res.json(req.user)
+};
