@@ -29,19 +29,20 @@ CREATE TABLE IF NOT EXISTS cards(
 
 CREATE TABLE IF NOT EXISTS tags(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS card_tags(
     card_id INT UNSIGNED,
-    tag_id INT UNSIGNED PRIMARY KEY (card_id, tag_id),
+    tag_id INT UNSIGNED,
+    PRIMARY KEY (card_id, tag_id),
     FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE  
 );
 
 CREATE TABLE IF NOT EXISTS settings(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
+    user_id INT UNSIGNED UNIQUE,
     theme ENUM('light', 'dark') DEFAULT 'light',
     language VARCHAR(5) DEFAULT 'es',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -1,6 +1,5 @@
 import express from "express";
-import { getMe } from "../controllers/userController.js";
-import { getUsers, removeUser } from "../controllers/userController.js";
+import { getMe, getUsers, removeUser } from "../controllers/userController.js";
 import { verifyToken } from "../middlewares/auth.js";
 import { requireAdmin } from "../middlewares/role.js";
 

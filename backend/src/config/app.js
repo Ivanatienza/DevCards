@@ -6,6 +6,7 @@ import authRoutes from "../routes/authRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
 import cardRoutes from "../routes/cardRoutes.js";
 import settingsRoutes from "../routes/settingsRoutes.js";
+import adminRoutes from "../routes/adminRoutes.js";
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/cards", cardRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/admin", adminRoutes);
 
 export default app;

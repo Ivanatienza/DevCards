@@ -4,28 +4,27 @@ import { generateToken } from "../utils/jwt.js";
 
 export const register = async(req,res) => {
     try{
-        const {name,surname,email,password,role,avatar_url} = req.body
-        const existingUser = await getUserByEmail(email)
+        const {name,surname,email,password,avatar_url} = req.body
+        const existingUser = await getUserByEmail(email);
         if(existingUser){
             return res.status(400).json({msg: "El usuario ya existe"})
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const userId = await createUser(
             name,
             surname,
             email,
-            password,
             hashedPassword,
             "user",
             avatar_url || null
-        )
+        );
 
-        res.status(201).json({msg: "Usuario creado", userId})
+        res.status(201).json({msg: "Usuario creado", userId});
 
     }catch(error){
-        res.status(500).json({error: error.message})
+        res.status(500).json({error: error.message});
     }
 };
 
@@ -33,17 +32,17 @@ export const login = async (req,res) => {
     try{
         const {email,password} = req.body
 
-        const user = await getUserByEmail(email)
+        const user = await getUserByEmail(email);
         if(!user){
-            return res.status(400).json({msg: "Credenciales incorrectas"})
+            return res.status(400).json({message: "Credenciales incorrectas"});
         }
 
-        const passwordMatched = await bcrypt.compare(password, user.password)
+        const passwordMatched = await bcrypt.compare(password, user.password);
         if(!passwordMatched){
-            return res.status(400).json({msg: "La contraseña es incorrecta"})
+            return res.status(400).json({message: "La contraseña es incorrecta"});
         }
 
-        const token = generateToken(user)
+        const token = generateToken(user);
 
         res.cookie("auth_token", token,{
             httpOnly: true,
@@ -64,7 +63,7 @@ export const login = async (req,res) => {
             }
         })
     }catch(error){
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: error.message });
     }
 };
 
