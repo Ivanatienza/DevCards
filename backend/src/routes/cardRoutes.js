@@ -2,7 +2,7 @@ import express from "express";
 import { 
     createNewCard,
     getUserCards,
-    getPublicCards,
+    getpublicCards,
     editCard,
     removeCard
 } from "../controllers/cardController.js";
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/", verifyToken, createNewCard);
 router.get("/", verifyToken, getUserCards);
-router.get("/public", verifyToken, getPublicCards);
+router.get("/public", verifyToken, getpublicCards);
 router.put("/:id", verifyToken, editCard);
 router.delete("/:id", verifyToken, removeCard);
 

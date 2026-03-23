@@ -1,10 +1,15 @@
-import { createCard, getCards, getPublicCards, updateCard, deleteCard } from "../models/cardModel.js";
+import { createCard, getCards, getPublicCardsModel, updateCard, deleteCard } from "../models/cardModel.js";
 import { createTag } from "../models/tagModel.js";
 import { addTagToCard, removeAllTagsFromCard } from "../models/card_tagModel.js";
 
 export const createNewCard = async (req,res) => {
     try{
         const { logo_url, title, description, documentation_url, tags, is_public } = req.body;
+
+        if(!req.user || !req.user.id){
+            return res.status(401).json({error: "Usuario no autenticado"});
+        }
+
         const user_id = req.user.id;
 
         const card_id = await createCard(
@@ -13,7 +18,6 @@ export const createNewCard = async (req,res) => {
             title, 
             description,
             documentation_url,
-            tags,
             is_public || false
         );
 
@@ -34,18 +38,23 @@ export const createNewCard = async (req,res) => {
 
 export const getUserCards = async (req,res) => {
     try{
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ error: "Usuario no autenticado" });
+        }
+
         const search = req.query.search || ""
         const cards = await getCards(req.user.id, search);
         res.json(cards);
+        
     }catch(error){
         res.status(500).json({error: error.message});
     }
 };
 
 
-export const getPublicCards = async(req,res) => {
+export const getpublicCards = async(req,res) => {
     try{
-        const cards = await getPublicCards();
+        const cards = await getPublicCardsModel();
         res.json(cards);
     }catch(error){
         res.status(500).json({error: error.message});

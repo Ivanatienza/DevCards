@@ -2,10 +2,19 @@ import { pool } from "../config/db.js";
 
 export const createTag = async (name) => {
     const [result] = await pool.query(
-        "INSERT INTO tags (name) VALUES (?)",
+        "INSERT IGNORE INTO tags (name) VALUES (?)",
         [name]
     );
-    return result.insertId;
+    if(result.insertId){
+        return result.insertId;
+    }
+
+    const [rows] = await pool.query(
+        "SELECT id FROM tags WHERE name = ?",
+        [name]
+    );
+    
+    return rows[0]?.id
 };
 
 export const getAllTags = async() => {

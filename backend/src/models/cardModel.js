@@ -24,13 +24,14 @@ export const getPublicCardsModel = async() => {
 
 export const updateCard = async (id,logo_url,title,description,documentation_url,is_public) => {
     await pool.query(
-        "UPDATE cards SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? WHERE id=?"
+        "UPDATE cards SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? WHERE id=?",
         [logo_url,title,description,documentation_url,is_public,id]
     );
 };
 
 export const deleteCard = async(id) => {
-    await pool.query(
+    const [result] = await pool.query(
         "DELETE FROM cards WHERE id=?", [id]
     );
+    return result;
 };

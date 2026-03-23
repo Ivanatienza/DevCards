@@ -17,6 +17,6 @@ export const getTagsByCard = async(card_id) => {
 
 export const removeAllTagsFromCard = async(card_id) => {
     await pool.query(
-        "DELETE FROM cards WHERE card_id = ?", [card_id]
+        "DELETE FROM card_tags WHERE card_id = ?", [card_id]
     );
 };
