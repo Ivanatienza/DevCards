@@ -10,6 +10,7 @@ import { verifyToken } from "../middlewares/auth.js";
 
 const router = express.Router();
 
+//Definición de rutas protegidas de cards
 router.post("/", verifyToken, createNewCard);
 router.get("/", verifyToken, getUserCards);
 router.get("/public", verifyToken, getpublicCards);

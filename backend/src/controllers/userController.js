@@ -1,6 +1,7 @@
 import { pool } from "../config/db.js";
 import { getAllUsers, deleteUser} from "../models/userModel.js";
 
+//Obtener los usuarios
 export const getUsers = async (req,res) => {
     try{
         const users = await getAllUsers();
@@ -10,6 +11,7 @@ export const getUsers = async (req,res) => {
     }
 };
 
+//Eliminar usuario
 export const removeUser = async(req,res) => {
     try{
         const {id} = req.params;
@@ -23,6 +25,7 @@ export const removeUser = async(req,res) => {
     }
 };
 
+//Obtener datos del usuario logueado
 export const getMe = async(req,res) => {
     try{
         const userId = req.user.id;

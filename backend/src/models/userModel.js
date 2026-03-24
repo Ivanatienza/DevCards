@@ -1,5 +1,6 @@
 import { pool } from "../config/db.js";
 
+//Crear un usuario
 export const createUser = async (name,surname,email,password,role="user",avatar_url=null) => {
     const [result] = await pool.query(
         "INSERT INTO users (name,surname,email,password,role,avatar_url)VALUES(?,?,?,?,?,?)",
@@ -8,6 +9,7 @@ export const createUser = async (name,surname,email,password,role="user",avatar_
     return result.insertId;
 };
 
+//Obtener usuario por su email
 export const getUserByEmail = async (email) => {
     const [rows] = await pool.query("SELECT * FROM users WHERE email = ?",
         [email]
@@ -15,12 +17,13 @@ export const getUserByEmail = async (email) => {
     return rows[0];
 };
 
+//Obtener todos los usuarios
 export const getAllUsers = async() => {
     const [rows] = await pool.query("SELECT * FROM users")
         return rows;
 };
 
-
+//Eliminar un usuario
 export const deleteUser = async(id) => {
     const [result] = await pool.query("DELETE FROM users WHERE id = ? ", [id]);
     return result;

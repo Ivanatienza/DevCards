@@ -1,7 +1,9 @@
+//Configuración principal de Express
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+//Importación de rutas
 import authRoutes from "../routes/authRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
 import cardRoutes from "../routes/cardRoutes.js";
@@ -10,6 +12,7 @@ import adminRoutes from "../routes/adminRoutes.js";
 
 const app = express();
 
+//Middlewares globales
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -17,6 +20,7 @@ app.use(cors({
   credentials: true
 }));
 
+//Definición de rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/cards", cardRoutes);

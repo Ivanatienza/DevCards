@@ -4,6 +4,7 @@ import { getUserSettings, saveSettings } from "../controllers/settingsController
 
 const router = express.Router();
 
+//Definición de rutas protegidas de las preferencias del usuario
 router.get("/", verifyToken, getUserSettings);
 router.post("/", verifyToken, saveSettings);
 

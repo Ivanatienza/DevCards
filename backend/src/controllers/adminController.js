@@ -1,5 +1,6 @@
 import { pool } from "../config/db.js";
 
+//Obtención de los usuarios con rol administrador
 export const getUsers = async (req,res) => {
     try{
         const [users] = await pool.query(
@@ -11,6 +12,7 @@ export const getUsers = async (req,res) => {
     }
 };
 
+//Eliminar usuarios con rol administrador
 export const deleteUser = async(req,res) => {
     try{
         const {id} = req.params;

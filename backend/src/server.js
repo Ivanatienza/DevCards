@@ -1,3 +1,4 @@
+//Punto de entrada del servidor
 import app from "./config/app.js";
 import dotenv from "dotenv";
 
@@ -10,6 +11,7 @@ console.error('Unhandled error:', err);
 res.status(500).json({ error: 'Error interno del servidor' });
 });
 
+//Arranque del servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

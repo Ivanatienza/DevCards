@@ -1,7 +1,9 @@
 CREATE DATABASE IF NOT EXISTS devcards CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+/*Nombre de la base de datos*/
 USE devcards;
 
+/*Tabla donde se almacena la información de los usuarios*/
 CREATE TABLE IF NOT EXISTS users(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -14,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+/*Tabla que almacena la información de las cards con referencia a la tabla usuarios*/
 CREATE TABLE IF NOT EXISTS cards(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED,
@@ -27,11 +30,13 @@ CREATE TABLE IF NOT EXISTS cards(
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+/*Tabla que guarda las etiquetas de las cards*/
 CREATE TABLE IF NOT EXISTS tags(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
+/*Tabla que guarda las etiquetas asignadas a las cards y hace referencia a las tablas de cards y etiquetas*/
 CREATE TABLE IF NOT EXISTS card_tags(
     card_id INT UNSIGNED,
     tag_id INT UNSIGNED,
@@ -40,6 +45,7 @@ CREATE TABLE IF NOT EXISTS card_tags(
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE  
 );
 
+/*Tabla que guarda las preferencias del usuario y hace referencia a la tabla usuarios*/
 CREATE TABLE IF NOT EXISTS settings(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED UNIQUE,

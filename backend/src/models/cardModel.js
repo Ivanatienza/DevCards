@@ -1,5 +1,6 @@
 import { pool } from "../config/db.js";
 
+//Crear una card
 export const createCard = async(user_id,logo_url,title,description,documentation_url,is_public) => {
     const [result] = await pool.query("INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public)VALUES(?,?,?,?,?,?)",
         [user_id,logo_url,title,description,documentation_url,is_public]
@@ -7,6 +8,7 @@ export const createCard = async(user_id,logo_url,title,description,documentation
     return result.insertId;
 };
 
+//Obtener las cards
 export const getCards = async(user_id, search="") => {
     const [rows] = await pool.query(
         "SELECT * FROM cards WHERE user_id = ? AND (title LIKE ? OR description LIKE ?) ORDER BY created_at DESC", [user_id, `%${search}%`, `%${search}%`]
@@ -14,6 +16,7 @@ export const getCards = async(user_id, search="") => {
     return rows;
 };
 
+//Obtener las cards activas (públicas por el usuario)
 export const getPublicCardsModel = async() => {
     const [rows] = await pool.query(
         "SELECT * FROM cards WHERE is_public = true ORDER BY created_at DESC"
@@ -21,7 +24,7 @@ export const getPublicCardsModel = async() => {
     return rows;
 };
 
-
+//Actualizar una card
 export const updateCard = async (id,logo_url,title,description,documentation_url,is_public) => {
     await pool.query(
         "UPDATE cards SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? WHERE id=?",
@@ -29,6 +32,7 @@ export const updateCard = async (id,logo_url,title,description,documentation_url
     );
 };
 
+//Eliminar una card
 export const deleteCard = async(id) => {
     const [result] = await pool.query(
         "DELETE FROM cards WHERE id=?", [id]

@@ -2,16 +2,21 @@ import bcrypt from "bcrypt";
 import { createUser, getUserByEmail } from "../models/userModel.js";
 import { generateToken } from "../utils/jwt.js";
 
+//Registro de usuarios
 export const register = async(req,res) => {
     try{
         const {name,surname,email,password,avatar_url} = req.body
+
+        //Comprobación usuario existente
         const existingUser = await getUserByEmail(email);
         if(existingUser){
             return res.status(400).json({msg: "El usuario ya existe"})
         }
 
+        //Cifrado de contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        //Creación del usuario
         const userId = await createUser(
             name,
             surname,
@@ -28,11 +33,14 @@ export const register = async(req,res) => {
     }
 };
 
+//Login de usuarios
 export const login = async (req,res) => {
     try{
         const {email,password} = req.body
 
         const user = await getUserByEmail(email);
+
+        //Validación de los datos del usuario
         if(!user){
             return res.status(400).json({message: "Credenciales incorrectas"});
         }
@@ -42,6 +50,7 @@ export const login = async (req,res) => {
             return res.status(400).json({message: "La contraseña es incorrecta"});
         }
 
+        //Generación del token
         const token = generateToken(user);
 
         res.cookie("auth_token", token,{
@@ -67,6 +76,7 @@ export const login = async (req,res) => {
     }
 };
 
+//Logout del usuario y eliminación de cookies
 export const logout = (req,res) => {
     res.clearCookie("auth_token", {
         httpOnly: true,

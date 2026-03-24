@@ -2,6 +2,7 @@ import { createCard, getCards, getPublicCardsModel, updateCard, deleteCard } fro
 import { createTag } from "../models/tagModel.js";
 import { addTagToCard, removeAllTagsFromCard } from "../models/card_tagModel.js";
 
+//Creación de cards
 export const createNewCard = async (req,res) => {
     try{
         const { logo_url, title, description, documentation_url, tags, is_public } = req.body;
@@ -35,7 +36,7 @@ export const createNewCard = async (req,res) => {
     }
 };
 
-
+//Obtener las cards del usuario
 export const getUserCards = async (req,res) => {
     try{
         if (!req.user || !req.user.id) {
@@ -51,7 +52,7 @@ export const getUserCards = async (req,res) => {
     }
 };
 
-
+//Obtener las cards públicas del usuario
 export const getpublicCards = async(req,res) => {
     try{
         const cards = await getPublicCardsModel();
@@ -61,6 +62,8 @@ export const getpublicCards = async(req,res) => {
     }
 };
 
+
+//Editar una card
 export const editCard = async (req,res) => {
     try{
         const { id } = req.params;
@@ -86,6 +89,7 @@ export const editCard = async (req,res) => {
     }
 };
 
+//Eliminar una card
 export const removeCard = async(req,res) => {
     try{
         const {id} = req.params;
@@ -96,6 +100,7 @@ export const removeCard = async(req,res) => {
         }
 
         res.json({message: "Card eliminada"});
+    
     }catch(error){
         res.status(500).json({error: error.message});
     }

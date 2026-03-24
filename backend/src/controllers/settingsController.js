@@ -1,5 +1,6 @@
 import { getSettings, updateSettings } from "../models/settingsModel.js";
 
+//Obtener las preferencias del usuario
 export const getUserSettings = async (req,res) => {
     try{
         const settings = await getSettings(req.user.id);
@@ -9,9 +10,12 @@ export const getUserSettings = async (req,res) => {
     }
 };
 
+//Guardar las preferencias del usuario
 export const saveSettings = async(req,res) => {
     try{
         const { theme,language } = req.body;
+
+        //Validación de las preferencias del usuario
         if(!theme || !language){
             return res.status(400).json({message: "Datos inválidos"});
         }

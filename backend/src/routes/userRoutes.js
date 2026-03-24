@@ -5,6 +5,7 @@ import { requireAdmin } from "../middlewares/role.js";
 
 const router = express.Router();
 
+//Definición de las rutas de usuarios con rol administrador y usuario logueado
 router.get("/", verifyToken, requireAdmin, getUsers);
 router.get("/me", verifyToken, getMe);
 router.delete("/:id", verifyToken, requireAdmin, removeUser);
