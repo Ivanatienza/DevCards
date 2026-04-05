@@ -9,6 +9,26 @@ export const createUser = async (name,surname,email,password,role="user",avatar_
     return result.insertId;
 };
 
+//Obtener usuario por ID
+export const getUserById = async(id) => {
+    const [rows] = await pool.query(
+        `SELECT id,name,surname,email,avatar_url 
+        FROM users WHERE id = ?`,
+        [id]
+    );
+    return rows[0];
+};
+
+//Actualizar usuario
+export const updateUser = async(id,name,surname,avatar_url) => {
+    await pool.query(
+        `UPDATE users 
+        SET name = ?, surname = ?, avatar_url = ?
+        WHERE id = ?`,
+        [name,surname,avatar_url,id]
+    );
+};
+
 //Obtener usuario por su email
 export const getUserByEmail = async (email) => {
     const [rows] = await pool.query("SELECT * FROM users WHERE email = ?",

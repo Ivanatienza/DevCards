@@ -1,5 +1,5 @@
 import { pool } from "../config/db.js";
-import { getAllUsers, deleteUser} from "../models/userModel.js";
+import { getAllUsers, getUserById, getUserByEmail, updateUser, deleteUser} from "../models/userModel.js";
 
 //Obtener los usuarios
 export const getUsers = async (req,res) => {
@@ -25,19 +25,26 @@ export const removeUser = async(req,res) => {
     }
 };
 
-//Obtener datos del usuario logueado
-export const getMe = async(req,res) => {
+//Obtener perfil del usuario logueado
+export const getUserProfile = async(req,res,next) => {
     try{
-        const userId = req.user.id;
-        const [rows] = await pool.query(
-            "SELECT id,name,email,role FROM users WHERE id = ?", [userId]
-        );
-
-        if(rows.length === 0){
-            return res.status(404).json({message: "Usuario no encontrado"});
-        }
-        res.json(rows[0]);
+        const user = await getUserById(req.user.id);
+        res.json(user);
     }catch(error){
-        res.status(500).json({error: error.message});
+        next(error);
+    }
+};
+
+//Actualizar perfil del usuario logueado
+export const updateUserProfile = async(req,res,next) => {
+    try{
+        const {name,surname,avatar_url} = req.body;
+
+        await updateUser(req.user.id,name,surname,avatar_url);
+
+        res.json({message: "Perfil actualizado"});
+        
+    }catch(error){
+        next(error);
     }
 };

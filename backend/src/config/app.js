@@ -9,6 +9,7 @@ import userRoutes from "../routes/userRoutes.js";
 import cardRoutes from "../routes/cardRoutes.js";
 import settingsRoutes from "../routes/settingsRoutes.js";
 import adminRoutes from "../routes/adminRoutes.js";
+import tagRoutes from "../routes/tagRoutes.js";
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/cards", cardRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/tags", tagRoutes);
 
 export default app;

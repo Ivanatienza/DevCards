@@ -2,26 +2,31 @@ import { pool } from "../config/db.js";
 
 //Crear una etiqueta de una card
 export const createTag = async (name) => {
-    const [result] = await pool.query(
-        "INSERT IGNORE INTO tags (name) VALUES (?)",
-        [name]
+    const validName = name.trim().toLowerCase();
+    const [exists] = await pool.query(
+        "SELECT id FROM tags WHERE name = ?",
+        [validName]
     );
-    if(result.insertId){
-        return result.insertId;
+    
+    if(exists.length > 0){
+        return exists[0].id;
     }
 
-    const [rows] = await pool.query(
-        "SELECT id FROM tags WHERE name = ?",
+    const [result] = await pool.query(
+        "INSERT INTO tags (name) VALUES (?)",
         [name]
     );
     
-    return rows[0]?.id
+    return result.insertId;
 };
 
 //Obtener las etiquetas creadas de una card
 export const getAllTags = async() => {
     const [rows] = await pool.query(
-        "SELECT * FROM tags"
+        `SELECT id, name 
+        FROM tags 
+        ORDER BY name ASC`
     );
+
     return rows;
 };

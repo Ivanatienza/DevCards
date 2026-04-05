@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users(
 /*Tabla que almacena la información de las cards con referencia a la tabla usuarios*/
 CREATE TABLE IF NOT EXISTS cards(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
+    user_id INT UNSIGNED NOT NULL,
     logo_url VARCHAR(255) NOT NULL,
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
@@ -52,5 +52,6 @@ CREATE TABLE IF NOT EXISTS settings(
     theme ENUM('light', 'dark') DEFAULT 'light',
     language VARCHAR(5) DEFAULT 'es',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

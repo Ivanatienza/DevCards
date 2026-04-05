@@ -16,10 +16,19 @@ export const getCards = async(user_id, search="") => {
     return rows;
 };
 
+//Obtener card por ID
+export const getCardById = async(id) => {
+    const [rows] = await pool.query(
+        "SELECT * FROM cards WHERE id = ?",
+        [id]
+    );
+    return rows[0];
+};
+
 //Obtener las cards activas (públicas por el usuario)
 export const getPublicCardsModel = async() => {
     const [rows] = await pool.query(
-        "SELECT * FROM cards WHERE is_public = true ORDER BY created_at DESC"
+        `SELECT * FROM cards WHERE is_public = 1 ORDER BY created_at DESC`
     );
     return rows;
 };
@@ -27,7 +36,9 @@ export const getPublicCardsModel = async() => {
 //Actualizar una card
 export const updateCard = async (id,logo_url,title,description,documentation_url,is_public) => {
     await pool.query(
-        "UPDATE cards SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? WHERE id=?",
+        `UPDATE cards 
+        SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? 
+        WHERE id=?`,
         [logo_url,title,description,documentation_url,is_public,id]
     );
 };
@@ -35,7 +46,9 @@ export const updateCard = async (id,logo_url,title,description,documentation_url
 //Eliminar una card
 export const deleteCard = async(id) => {
     const [result] = await pool.query(
-        "DELETE FROM cards WHERE id=?", [id]
+        "DELETE FROM cards WHERE id = ?", 
+        [id]
     );
+    
     return result;
 };

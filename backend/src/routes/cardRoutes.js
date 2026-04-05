@@ -4,7 +4,7 @@ import {
     getUserCards,
     getpublicCards,
     editCard,
-    removeCard
+    removeCard,
 } from "../controllers/cardController.js";
 import { verifyToken } from "../middlewares/auth.js";
 
