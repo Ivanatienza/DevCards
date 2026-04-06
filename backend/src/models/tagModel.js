@@ -14,7 +14,7 @@ export const createTag = async (name) => {
 
     const [result] = await pool.query(
         "INSERT INTO tags (name) VALUES (?)",
-        [name]
+        [validName]
     );
     
     return result.insertId;
@@ -23,8 +23,7 @@ export const createTag = async (name) => {
 //Obtener las etiquetas creadas de una card
 export const getAllTags = async() => {
     const [rows] = await pool.query(
-        `SELECT id, name 
-        FROM tags 
+        `SELECT * FROM tags 
         ORDER BY name ASC`
     );
 

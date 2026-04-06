@@ -15,6 +15,6 @@ export const updateSettings = async (user_id,theme,language) => {
         `UPDATE settings
         SET theme = ?, language = ?
         WHERE user_id = ?`,
-        [user_id,theme,language,theme,language]
+        [user_id,theme,language]
     );
 };

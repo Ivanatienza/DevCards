@@ -12,7 +12,7 @@ export const createUser = async (name,surname,email,password,role="user",avatar_
 //Obtener usuario por ID
 export const getUserById = async(id) => {
     const [rows] = await pool.query(
-        `SELECT id,name,surname,email,avatar_url 
+        `SELECT id,name,surname,email,avatar_url
         FROM users WHERE id = ?`,
         [id]
     );
@@ -31,7 +31,8 @@ export const updateUser = async(id,name,surname,avatar_url) => {
 
 //Obtener usuario por su email
 export const getUserByEmail = async (email) => {
-    const [rows] = await pool.query("SELECT * FROM users WHERE email = ?",
+    const [rows] = await pool.query(
+        "SELECT * FROM users WHERE email = ?",
         [email]
     );
     return rows[0];
@@ -39,12 +40,14 @@ export const getUserByEmail = async (email) => {
 
 //Obtener todos los usuarios
 export const getAllUsers = async() => {
-    const [rows] = await pool.query("SELECT * FROM users")
+    const [rows] = await pool.query(
+        "SELECT * FROM users")
         return rows;
 };
 
 //Eliminar un usuario
 export const deleteUser = async(id) => {
-    const [result] = await pool.query("DELETE FROM users WHERE id = ? ", [id]);
+    const [result] = await pool.query(
+        "DELETE FROM users WHERE id = ? ", [id]);
     return result;
 };

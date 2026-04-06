@@ -35,6 +35,11 @@ export const register = async(req,res) => {
             avatar_url || null
         );
 
+        await pool.query(
+            "INSERT INTO settings (user_id,theme,language) VALUES (?, 'light', 'es')",
+            [result.insertId]
+        );
+
         res.status(201).json({
             message: "Usuario creado", 
             userId: result.insertId});
@@ -73,14 +78,12 @@ export const login = async (req,res) => {
         });
 
         res.json({
+            token,
             message: "Login exitoso",
             user:{
                 id: user.id,
                 name: user.name,
-                surname: user.surname,
                 email: user.email,
-                role: user.role,
-                avatar_url: user.avatar_url
             }
         })
     }catch(error){
