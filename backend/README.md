@@ -1,147 +1,165 @@
-🖥️ DevCards Backend API
+# DevCards Backend:
 
-Se trata de una API REST desarrollada con Node.js y Express para la gestión de tarjetas de desarrollo (DevCards), usuarios, etiquetas y configuraciones.
+Backend API REST para la aplicación web DevCards. Permite la autenticación de usuarios, gestión de cards, tags (etiquetas) y configuración del usuario.
 
-🚀 Tecnologías utilizadas
+## Tecnologías utilizadas:
 
-- Node.js
-- Express.js
-- MySQL
-- JWT (JSON Web Tokens)
-- Bcrypt
-- Dotenv
-
----
-
-📁 Estructura del proyecto
-
-![Estructura carpetas backend](backend.png)
+* Node.js
+* Express
+* MySQL
+* Autenticación JWT (JSON Web Token)
+* Bcrypt (hash de contraseñas)
+* Docker (levantar backend)
 
 ---
 
-⚙️ Instalación
+# Estructura del proyecto:
 
-1. Clonar el repositorio:
+```
+backend/
+│
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── authController.js
+│   ├── cardController.js
+│   ├── tagController.js
+│   ├── userController.js
+│   └── settingsController.js
+│
+├── models/
+│   ├── cardModel.js
+│   ├── tagModel.js
+│   ├── card_tagModel.js
+│   ├── userModel.js
+│   └── settingsModel.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── cardRoutes.js
+│   ├── tagRoutes.js
+│   ├── userRoutes.js
+│   └── settingsRoutes.js
+│
+├── middlewares/
+│   └── authMiddleware.js
+│
+├── app.js
+└── server.js
+```
 
-git clone <https://github.com/Ivanatienza/DevCards.git>
+---
 
-2. Acceder al backend:
+# Base de datos:
 
-cd DevCards/DevCards/backend
+Tablas:
 
-3. Instalar dependencias:
+* users
+* cards
+* tags
+* card_tags
+* settings
 
-npm install bcrypt cookie-parser cors dotenv express jsonwebtoken mysql2
+Relaciones:
 
-4. Crear archivo ".env":
+* cards.user_id → users.id
+* card_tags.card_id → cards.id
+* card_tags.tag_id → tags.id
+* settings.user_id → users.id
 
+---
+
+# Autenticación
+
+Se usa JWT (JSON Web Token)
+
+Header requerido:
+
+```
+Authorization: Bearer TOKEN
+```
+
+---
+
+# Endpoints:
+
+## Auth:
+
+POST /auth/register
+POST /auth/login
+
+---
+
+## Users:
+
+GET /users/profile
+PUT /users/profile
+
+---
+
+## Cards:
+
+GET /cards
+POST /cards
+PUT /cards/:id
+DELETE /cards/:id
+GET /cards/public
+
+---
+
+## Tags:
+
+GET /tags
+POST /tags
+
+---
+
+## Settings:
+
+GET /settings
+PUT /settings
+
+---
+
+# Variables de entorno
+
+```
 PORT=3000
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=root
+DB_PASSWORD=password
 DB_NAME=devcards
+JWT_SECRET=secret
+```
 
-5. Ejecutar el servidor:
+---
 
+# Ejecutar el backend:
+
+Clonar repositorio:
+
+git clone https://github.com/Ivanatienza/DevCards.git
+cd backend
+
+Instalar dependencias necesarias:
+
+```
+npm install bcrypt express cors mysql2 jsonwebtoken cookie-parser dotenv
+
+Instalar dependencias de desarrollo:
+
+npm install -D nodemon
+```
+
+Ejecutar:
+
+```
 npm run dev
+```
 
 ---
 
-🗄️ Base de datos
+# Autor:
 
-El proyecto utiliza MySQL con las siguientes tablas:
-
-- "users"
-- "cards"
-- "tags"
-- "card_tags"
-- "settings"
-
-Relaciones principales:
-
-- Un usuario puede tener muchas tarjetas
-- Una tarjeta puede tener múltiples etiquetas
-- Relación muchos a muchos entre cards y tags
-- Cada usuario tiene su configuración (settings)
-
----
-
-🔐 Autenticación
-
-La autenticación se realiza mediante JWT.
-
-Endpoints protegidos requieren:
-
-Authorization: Bearer TOKEN
-
----
-
-📌 Endpoints principales
-
-🔐 Auth
-
-- "POST /api/auth/register" → Registrar usuario
-- "POST /api/auth/login" → Login
-
----
-
-👤 Usuarios
-
-- "GET /api/me" → Obtener perfil del usuario logueado
-
----
-
-🧾 Cards
-
-- "POST /api/cards" → Crear tarjeta
-- "GET /api/public" → Obtener tarjetas públicas
-- "GET /api/cards/:id" → Obtener tarjeta por ID
-- "PUT /api/cards/:id" → Actualizar tarjeta
-- "DELETE /api/cards/:id" → Eliminar tarjeta
-
-⚙️ Settings
-
-- "GET /api/settings" → Obtener configuración del usuario
-- "PUT /api/settings" → Actualizar configuración
-
----
-
-👑 Admin
-
-- "GET /api/admin/users" → Listar usuarios
-- "DELETE /api/admin/users/:id" → Eliminar usuario
-
-(Requiere rol administrador)
-
----
-
-🛡️ Middlewares
-
-- authMiddleware → Verifica JWT
-- adminMiddleware → Verifica rol admin
-
----
-
-🧪 Testing
-
-Los endpoints han sido probados mediante:
-
-- REST Client (VS Code)
-
----
-
-📌 Funcionalidades principales
-
-- Registro y autenticación de usuarios
-- Gestión completa de tarjetas (CRUD)
-- Sistema de etiquetas (tags)
-- Configuración de usuario (tema e idioma)
-- Control de roles (admin / user)
-
----
-
-📈 Mejoras futuras
-
-- Sistema de favoritos
-- Paginación
-- Filtros avanzados
+Iván Atienza Moya

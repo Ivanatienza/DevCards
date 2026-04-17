@@ -20,12 +20,12 @@ export const getUserById = async(id) => {
 };
 
 //Actualizar usuario
-export const updateUser = async(id,name,surname,avatar_url) => {
+export const updateUser = async(id,name,surname,email,avatar_url) => {
     await pool.query(
         `UPDATE users 
-        SET name = ?, surname = ?, avatar_url = ?
+        SET name = ?, surname = ?, email = ?, avatar_url = ?
         WHERE id = ?`,
-        [name,surname,avatar_url,id]
+        [name,surname,email,avatar_url,id]
     );
 };
 

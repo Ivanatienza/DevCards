@@ -1,10 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 //Importación de vistas
-import Login from "../views/LoginView.vue"
-import Register from "../views/RegisterView.vue"
-import Dashboard from "../views/DashboardView.vue"
-import AdminVew from "../views/AdminView.vue"
-import SettingsView from "../views/SettingsView.vue"
+import Login from "../views/LoginView.vue";
+import Register from "../views/RegisterView.vue";
+import Profile from "../views/ProfileView.vue";
+import Dashboard from "../views/DashboardView.vue";
+import AdminVew from "../views/AdminView.vue";
+import SettingsView from "../views/SettingsView.vue";
+import ProfileView from '../views/ProfileView.vue';
 
 //Definición de rutas
 const routes = [
@@ -28,6 +30,10 @@ const routes = [
   {
     path: "/settings",
     component: SettingsView
+  },
+  {
+    path: "/profile",
+    component: ProfileView
   }
 ]
 
@@ -35,7 +41,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
 //Middleware de navegación
 router.beforeEach((to,from,next) => {
@@ -49,4 +55,4 @@ if(to.meta.admin && user?.role!=="admin"){
 next()
 })
 
-export default router
+export default router;

@@ -38,9 +38,9 @@ export const getUserProfile = async(req,res,next) => {
 //Actualizar perfil del usuario logueado
 export const updateUserProfile = async(req,res,next) => {
     try{
-        const {name,surname,avatar_url} = req.body;
+        const {name,surname,email,avatar_url} = req.body;
 
-        await updateUser(req.user.id,name,surname,avatar_url);
+        await updateUser(req.user.id,name,surname,email,avatar_url);
 
         res.json({message: "Perfil actualizado"});
         

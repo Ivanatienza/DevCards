@@ -6,7 +6,7 @@ export const validateEmail = (email) => {
 };
 
 export const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{6,}$/;
     if(!password || !regex.test(password)){
         throw new Error('La contraseña ha de tener 6 caracteres mínimo, una minúscula, una mayúscula, un número y un caracter especial');
     }
@@ -14,7 +14,7 @@ export const validatePassword = (password) => {
 
 export const validateURL = (url) => {
     if(!url)
-        return true;
+        return;
     try{
         const parsed = new URL(url);
         
