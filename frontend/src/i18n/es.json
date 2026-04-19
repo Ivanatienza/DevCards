@@ -1,0 +1,51 @@
+{
+    "login": "Login",
+    "register": "Registro",
+    "logout": "Salir",
+    "dashboard": "Dashboard",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "admin": "Admin",
+
+    "hello": "Hola",
+
+    "email": "Email",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "surname": "Apellidos",
+
+    "save": "Guardar",
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+
+    "language": "Idioma",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+
+    "card": "Tarjeta",
+    "title": "Título",
+    "description": "Descripción",
+
+    "toastLoginSuccess": "Login correcto",
+    "toastLoginError": "Credenciales incorrectas",
+    "toastRegisterSuccess": "Usuario creado",
+    "toastRegisterError": "Error al registrar",
+    "toastLogout": "Sesión cerrada",
+
+    "toastProfileUpdated": "Perfil actualizado",
+    "toastProfileError": "Error al actualizar perfil",
+    "toastSettingsUpdated": "Configuración actualizada",
+    "toastSettingsError": "Error al guardar la configuración",
+
+    "toastCardCreated": "Card creada",
+    "toastCardUpdated": "Card actualizada",
+    "toastCardDeleted": "Card eliminada",
+    "toastCardError": "Error en la card",
+    
+    "toastUserCreated": "Usuario creado",
+    "toastUserUpdated": "Usuario actualizado",
+    "toastUserDeleted": "Usuario eliminado",
+    "toastUserError": "Error en el usuario"
+}

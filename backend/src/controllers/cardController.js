@@ -1,6 +1,6 @@
 import { createCard, getCards, getCardById, getPublicCardsModel, updateCard, deleteCard } from "../models/cardModel.js";
 import { createTag } from "../models/tagModel.js";
-import { addTagToCard, removeAllTagsFromCard } from "../models/card_tagModel.js";
+import { addTagToCard, removeAllTagsFromCard } from "../models/cardTagModel.js";
 
 //Creación de cards
 

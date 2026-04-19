@@ -1,0 +1,51 @@
+{
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "admin": "Admin",
+
+    "hello": "Hello",
+
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "surname": "Surname",
+
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+
+    "card": "Card",
+    "title": "Title",
+    "description": "Description",
+
+    "toastLoginSuccess": "Login successful",
+    "toastLoginError": "Invalid credentials",
+    "toastRegisterSuccess": "User created",
+    "toastRegisterError": "Register error",
+    "toastLogout": "Logged out",
+
+    "toastProfileUpdated": "Profile updated",
+    "toastProfileError": "Profile update error",
+    "toastSettingsUpdated": "Settings updated",
+    "toastSettingsError": "Settings save error",
+
+    "toastCardCreated": "Card created",
+    "toastCardUpdated": "Card updated",
+    "toastCardDeleted": "Card deleted",
+    "toastCardError": "Card error",
+    
+    "toastUserCreated": "User created",
+    "toastUserUpdated": "User updated",
+    "toastUserDeleted": "User deleted",
+    "toastUserError": "Error in user"
+}

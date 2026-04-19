@@ -1,76 +1,88 @@
 import bcrypt from "bcrypt";
+import { pool } from "../config/db.js";
 import { createUser, getUserByEmail } from "../models/userModel.js";
 import { generateToken } from "../utils/jwt.js";
-import { validatePassword } from "../middlewares/validates.js";
+import { validatePassword, validateEmail } from "../middlewares/validates.js";
 
-//Registro de usuarios
-export const register = async(req,res) => {
-    try{
-        const {name,surname,email,password,avatar_url} = req.body
+// Registro de usuarios
+export const register = async (req, res) => {
+    try {
+        const { name, surname, email, password, avatar_url } = req.body;
 
-        //Comprobación de correo y contraseña
-        validateEmail(email);
+        // Normalizar email
+        const cleanEmail = email.trim().toLowerCase();
+
+        // Validaciones
+        validateEmail(cleanEmail);
         validatePassword(password);
 
-        //Comprobación usuario existente
-        const existingUser = await pool.query(
+        // Comprobar si el usuario ya existe
+        const [rows] = await pool.query(
             "SELECT id FROM users WHERE email = ?",
-            [email]
+            [cleanEmail]
         );
-        
-        if(existingUser.length > 0){
-            return res.status(400).json({error: "El email ya existe"});
+
+        if (rows.length > 0) {
+            return res.status(400).json({ error: "El email ya existe" });
         }
 
-        //Cifrado de contraseña
+        // Hash de contraseña
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        //Creación del usuario
+        // Crear usuario
         const userId = await createUser(
             name,
             surname,
-            email,
+            cleanEmail,
             hashedPassword,
             "user",
             avatar_url || null
         );
 
+        // Crear settings por defecto
         await pool.query(
-            "INSERT INTO settings (user_id,theme,language) VALUES (?, 'light', 'es')",
-            [result.insertId]
+            "INSERT INTO settings (user_id, theme, language) VALUES (?, 'light', 'es')",
+            [userId]
         );
 
-        res.status(201).json({
-            message: "Usuario creado", 
-            userId: result.insertId});
+        const token = generateToken({
+            id: userId,
+            email: cleanEmail
+        });
 
-    }catch(error){
-        res.status(500).json({error: error.message});
+        res.status(201).json({
+            message: "Usuario creado",
+            userId,
+            token
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 
-//Login de usuarios
-export const login = async (req,res) => {
-    try{
-        const {email,password} = req.body
+// Login de usuarios
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-        const user = await getUserByEmail(email);
+        const cleanEmail = email.trim().toLowerCase();
 
-        //Validación de los datos del usuario
-        if(!user){
-            return res.status(400).json({message: "Credenciales incorrectas"});
+        const user = await getUserByEmail(cleanEmail);
+
+        if (!user) {
+            return res.status(400).json({ message: "Credenciales incorrectas" });
         }
 
         const passwordMatched = await bcrypt.compare(password, user.password);
-        
-        if(!passwordMatched){
-            return res.status(400).json({message: "La contraseña es incorrecta"});
+
+        if (!passwordMatched) {
+            return res.status(400).json({ message: "La contraseña es incorrecta" });
         }
 
-        //Generación del token
         const token = generateToken(user);
 
-        res.cookie("auth_token", token,{
+        res.cookie("auth_token", token, {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
@@ -80,23 +92,24 @@ export const login = async (req,res) => {
         res.json({
             token,
             message: "Login exitoso",
-            user:{
+            user: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
             }
-        })
-    }catch(error){
+        });
+
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-//Logout del usuario y eliminación de cookies
-export const logout = (req,res) => {
+// Logout
+export const logout = (req, res) => {
     res.clearCookie("auth_token", {
         httpOnly: true,
         sameSite: "strict",
     });
 
-    res.json({message: "Sesión cerrada correctamente."});
+    res.json({ message: "Sesión cerrada correctamente." });
 };

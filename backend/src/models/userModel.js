@@ -7,6 +7,10 @@ export const createUser = async (name,surname,email,password,role="user",avatar_
         [name,surname,email,password,role,avatar_url]
     );
     return result.insertId;
+    await pool.query(
+      `INSERT INTO settings (user_id) VALUES (?)`,
+      [userId]
+    );
 };
 
 //Obtener usuario por ID

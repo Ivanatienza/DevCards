@@ -1,0 +1,177 @@
+@baseUrl = http://localhost:3000/api
+@token = 
+
+### ==============================
+### AUTENTICACIÓN
+### ==============================
+
+### Registro de usuario
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Juanjo",
+  "surname": "Martínez",
+  "email": "juanjomartinezgarcia@gmail.com",
+  "password": "JuanjoMartinez50@"
+}
+
+### Iniciar sesión
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "juanjomartinezgarcia@gmail.com",
+  "password": "JuanjoMartinez50@"
+}
+
+
+### ==============================
+### USUARIO
+### ==============================
+
+### Obtener perfil del usuario actual
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+
+### Actualizar perfil
+PUT {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "John",
+  "surname": "Doe",
+  "email": "john@gmail.com"
+  "avatar_url": "https://example.com/avatar.png"
+}
+
+### Eliminar mi usuario
+DELETE {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+
+### ==============================
+### TARJETAS
+### ==============================
+
+### Crear tarjeta
+POST {{baseUrl}}/cards
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "logo_url": "https://example.com/logo.png",
+  "title": "React",
+  "description": "React library",
+  "documentation_url": "https://react.dev",
+  "is_public": true,
+  "tags": ["frontend", "javascript"]
+}
+
+### Obtener mis tarjetas
+GET {{baseUrl}}/cards
+Authorization: Bearer {{token}}
+
+### Obtener mis tarjetas con búsqueda
+GET {{baseUrl}}/cards?search=react
+Authorization: Bearer {{token}}
+
+### Obtener tarjeta por id
+GET {{baseUrl}}/cards/1
+Authorization: Bearer {{token}}
+
+### Actualizar tarjeta
+PUT {{baseUrl}}/cards/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "logo_url": "https://example.com/logo.png",
+  "title": "React Updated",
+  "description": "React library",
+  "documentation_url": "https://react.dev",
+  "is_public": true
+}
+
+### Eliminar tarjeta
+DELETE {{baseUrl}}/cards/1
+Authorization: Bearer {{token}}
+
+
+### ==============================
+### ETIQUETAS
+### ==============================
+
+### Añadir etiquetas a tarjeta
+POST {{baseUrl}}/cards/1/tags
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tags": ["frontend", "library"]
+}
+
+### Obtener etiquetas de tarjeta
+GET {{baseUrl}}/cards/1/tags
+Authorization: Bearer {{token}}
+
+### Eliminar etiqueta de tarjeta
+DELETE {{baseUrl}}/cards/1/tags/react
+Authorization: Bearer {{token}}
+
+
+### ==============================
+### CONFIGURACIÓN
+### ==============================
+
+### Obtener configuración
+GET {{baseUrl}}/settings
+Authorization: Bearer {{token}}
+
+### Actualizar configuración
+PUT {{baseUrl}}/settings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "theme": "dark",
+  "language": "es"
+}
+
+
+### ==============================
+### ADMIN - USUARIOS
+### ==============================
+
+### Obtener todos los usuarios (admin)
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Obtener usuario por id (admin)
+GET {{baseUrl}}/users/1
+Authorization: Bearer {{token}}
+
+### Actualizar usuario (admin)
+PUT {{baseUrl}}/users/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "John",
+  "surname": "Doe",
+  "email": "john@example.com"
+}
+
+### Cambiar rol de usuario (admin)
+PUT {{baseUrl}}/users/1/role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
+
+### Eliminar usuario (admin)
+DELETE {{baseUrl}}/users/1
+Authorization: Bearer {{token}}

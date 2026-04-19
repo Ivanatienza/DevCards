@@ -1,17 +1,32 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from "./App.vue";
+
+//Router del proyecto
 import router from "./router";
-//Importación traducción idiomas
+
+//Traducción del proyecto (español/inglés)
 import i18n from "./i18n";
-//Importaciones notificaciones interfaz usuario
+
+//Librería de notificaciones (toast) al usuario
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css"
-//Importación framework Tailwind
-import './index.css'
 
+//Estilos globales (Tailwind)
+import "./index.css"
+
+//Creación de la app Vue
 const app = createApp(App)
+
+//Definición de plugins globales
+
+//Rutas
 app.use(router);
+
+//Idiomas
 app.use(i18n);
+
+//Notificaciones
 app.use(Toast);
+
+//Montar la aplicación
 app.mount('#app')

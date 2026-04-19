@@ -2,7 +2,8 @@ import { pool } from "../config/db.js";
 
 //Crear una card
 export const createCard = async(user_id,logo_url,title,description,documentation_url,is_public) => {
-    const [result] = await pool.query("INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public)VALUES(?,?,?,?,?,?)",
+    const [result] = await pool.query(
+        "INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public)VALUES(?,?,?,?,?,?)",
         [user_id,logo_url,title,description,documentation_url,is_public]
     );
     return result.insertId;
@@ -11,7 +12,7 @@ export const createCard = async(user_id,logo_url,title,description,documentation
 //Obtener las cards
 export const getCards = async(user_id, search="") => {
     const [rows] = await pool.query(
-        `SELECT c.* GROUP_CONCAT(t.name) as tags
+        `SELECT c.*, GROUP_CONCAT(DISTINCT t.name) as tags
         FROM cards c
         LEFT JOIN card_tags ct ON c.id = ct.card_id
         LEFT JOIN tags t ON ct.tag_id = t.id
@@ -38,10 +39,10 @@ export const getCardById = async(id) => {
 };
 
 //Obtener las cards activas (públicas por el usuario)
-export const getPublicCardsModel = async() => {
+export const getPublicCardsModel = async(limit=20,offset=0) => {
     const [rows] = await pool.query(
         `SELECT c.*,
-        GROUP_CONCAT(t.name) as tags
+        GROUP_CONCAT(DISTINCT t.name) as tags
         FROM cards c
         LEFT JOIN card_tags ct ON c.id = ct.card_id
         LEFT JOIN tags t ON ct.tag_id = t.id

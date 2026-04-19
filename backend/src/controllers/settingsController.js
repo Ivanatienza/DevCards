@@ -1,4 +1,4 @@
-import { getSettings, updateSettings } from "../models/settingsModel.js";
+import { getSettings, updateSettings as updateSettingsModel } from "../models/settingsModel.js";
 
 //Obtener las preferencias del usuario
 export const getUserSettings = async (req,res,next) => {
@@ -16,7 +16,7 @@ export const updateSettings = async(req,res,next) => {
     try{
         const { theme,language } = req.body;
 
-        await updateSettings(req.user.id,theme,language);
+        await updateSettingsModel(req.user.id,theme,language);
 
         res.json({message: "Configuración guardada."});
 
