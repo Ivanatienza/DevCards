@@ -24,7 +24,7 @@ export const createNewCard = async (req,res,next) => {
         }
 
         if(!title){
-            return res.status(401).json({error: "El titulo es obligatorio"});
+            return res.status(400).json({error: "El titulo es obligatorio"});
         }
 
         const user_id = req.user.id;
@@ -46,7 +46,7 @@ export const createNewCard = async (req,res,next) => {
 
         for(let tagName of validTags){
             const tag_id = await createTag(tagName);
-            if(!tag_id){
+            if(tag_id){
                 await addTagToCard(card_id, tag_id);
             }
         }
@@ -97,13 +97,13 @@ export const editCard = async (req,res,next) => {
         //Comprobar si la card es de un usuario
         const card = await getCardById(id);
 
-        if(!card || card.user_id !== req.user_id){
+        if(!card || card.user_id !== req.user.id){
             return res.status(403).json({error: "No autorizado"});
         }
 
         const is_Public = is_public === true || is_public === 1;
 
-        await updateCard(id,logo_url,title,description,documentation_url,is_public);
+        await updateCard(id,logo_url,title,description,documentation_url,is_Public);
 
         if(tags && Array.isArray(tags)){
             await removeAllTagsFromCard(id);
@@ -136,11 +136,11 @@ export const removeCard = async(req,res,next) => {
 
         const card = await getCardById(id);
 
-        if(!card || card.user_id !== req.user_id){
+        if(!card || card.user_id !== req.user.id){
             return res.status(403).json({error: "No autorizado"});
         }
 
-        const result = await deleteCard(id);
+        const result = await deleteCard(id, req.user.id);
 
         if(result.affectedRows === 0){
             return res.status(404).json({message: "Card no encontrada"})

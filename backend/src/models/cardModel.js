@@ -3,14 +3,14 @@ import { pool } from "../config/db.js";
 //Crear una card
 export const createCard = async(user_id,logo_url,title,description,documentation_url,is_public) => {
     const [result] = await pool.query(
-        "INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public)VALUES(?,?,?,?,?,?)",
-        [user_id,logo_url,title,description,documentation_url,is_public]
+        `INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public) VALUES (?,?,?,?,?,?)`,
+        [user_id,logo_url,title,description,documentation_url,is_public ? 1 : 0]
     );
     return result.insertId;
 };
 
 //Obtener las cards
-export const getCards = async(user_id, search="") => {
+export const getCards = async(user_id, search = search || "") => {
     const [rows] = await pool.query(
         `SELECT c.*, GROUP_CONCAT(DISTINCT t.name) as tags
         FROM cards c
@@ -19,7 +19,7 @@ export const getCards = async(user_id, search="") => {
         WHERE c.user_id = ?
         AND c.title LIKE ?
         GROUP BY c.id
-        ORDER BY c.created_at DESC`,
+        ORDER BY MAX(c.created_at) DESC`,
         [user_id, `%${search}%`]
     );
     
@@ -30,20 +30,36 @@ export const getCards = async(user_id, search="") => {
 };
 
 //Obtener card por ID
-export const getCardById = async(id) => {
+export const getCardById = async (id) => {
     const [rows] = await pool.query(
-        "SELECT * FROM cards WHERE id = ?",
+        `SELECT c.*,
+        GROUP_CONCAT(DISTINCT t.name) AS tags
+        FROM cards c
+        LEFT JOIN card_tags ct ON c.id = ct.card_id
+        LEFT JOIN tags t ON ct.tag_id = t.id
+        WHERE c.id = ?
+        GROUP BY c.id`,
         [id]
     );
-    return rows[0];
+
+    const card = rows[0];
+
+    if(card && card.tags){
+        card.tags = cards.tags.split(",");
+    }else{
+        card.tags = [];
+    }
+
+    return card;
 };
 
 //Obtener las cards activas (públicas por el usuario)
-export const getPublicCardsModel = async(limit=20,offset=0) => {
+export const getPublicCardsModel = async() => {
     const [rows] = await pool.query(
-        `SELECT c.*,
+        `SELECT c.*, u.name, u.avatar_url,
         GROUP_CONCAT(DISTINCT t.name) as tags
         FROM cards c
+        JOIN users u ON c.user_id = u.id
         LEFT JOIN card_tags ct ON c.id = ct.card_id
         LEFT JOIN tags t ON ct.tag_id = t.id
         WHERE c.is_public = 1
@@ -61,15 +77,15 @@ export const updateCard = async (id,logo_url,title,description,documentation_url
         `UPDATE cards 
         SET logo_url=?, title=?, description=?, documentation_url=?, is_public=? 
         WHERE id=?`,
-        [logo_url,title,description,documentation_url,is_public,id]
+        [logo_url,title,description,documentation_url,is_public ? 1 : 0,id]
     );
 };
 
 //Eliminar una card
-export const deleteCard = async(id) => {
+export const deleteCard = async (id,user_id) => {
     const [result] = await pool.query(
-        "DELETE FROM cards WHERE id = ?", 
-        [id]
+        `DELETE FROM cards WHERE id = ? AND user_id = ?`, 
+        [id,user_id]
     );
     
     return result;
