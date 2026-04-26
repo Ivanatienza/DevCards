@@ -6,14 +6,15 @@ const api = axios.create({
 });
 
 //Interceptor para añadir el token automáticamente
-api.interceptors.request.use(config => {
+api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
 
-    if(!token){
+    if(token){
         config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
+    
 });
 
 export default api;

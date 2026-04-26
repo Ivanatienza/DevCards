@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { createI18n } from "vue-i18n";
-import { es } from "../i18n/es.json";
-import { en } from "../i18n/en.json";
+
 //Importación de vistas
+import Home from "../views/HomeView.vue";
 import Login from "../views/LoginView.vue";
 import Register from "../views/RegisterView.vue";
 import Profile from "../views/ProfileView.vue";
@@ -10,17 +9,22 @@ import Dashboard from "../views/DashboardView.vue";
 import AdminVew from "../views/AdminView.vue";
 import SettingsView from "../views/SettingsView.vue";
 import ProfileView from '../views/ProfileView.vue';
+import DashboardView from '../views/DashboardView.vue';
 
 //Definición de rutas
 const routes = [
   {
     path: "/",
+    component: HomeView
+  },
+  {
+    path: "/dashboard",
     component: DashboardView,
     meta: { requiresAuth: true }
   },
   {
     path: "/register",
-    component: RegisterView,
+    component: RegisterView
   },
   {
     path: "/login",
@@ -43,17 +47,6 @@ const routes = [
     meta: { requiresAuth: true }
   }
 ]
-
-//Importación de mensajes (para los idiomas)
-const i18n = createI18n({
-  locale = "es",
-
-  messages: {
-    es,
-    en
-  }
-
-});
 
 //Creación del router
 const router = createRouter({

@@ -10,10 +10,10 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "name": "Juanjo",
+  "name": "Jose",
   "surname": "Martínez",
-  "email": "juanjomartinezgarcia@gmail.com",
-  "password": "JuanjoMartinez50@"
+  "email": "josemartinezgarcia@gmail.com",
+  "password": "JoseMartinez50@"
 }
 
 ### Iniciar sesión
@@ -21,8 +21,8 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "juanjomartinezgarcia@gmail.com",
-  "password": "JuanjoMartinez50@"
+  "email": "josemartinezgarcia@gmail.com",
+  "password": "JoseMartinez50@"
 }
 
 
@@ -40,10 +40,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "John",
-  "surname": "Doe",
-  "email": "john@gmail.com"
-  "avatar_url": "https://example.com/avatar.png"
+  "name": "Juan",
+  "surname": "Garcia",
+  "email": "juangarcia@gmail.com",
+  "avatar_url": ""
 }
 
 ### Eliminar mi usuario
@@ -61,12 +61,12 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "logo_url": "https://example.com/logo.png",
-  "title": "React",
-  "description": "React library",
-  "documentation_url": "https://react.dev",
+  "logo_url": "",
+  "title": "",
+  "description": "",
+  "documentation_url": "",
   "is_public": true,
-  "tags": ["frontend", "javascript"]
+  "tags": ["", ""]
 }
 
 ### Obtener mis tarjetas
@@ -74,7 +74,7 @@ GET {{baseUrl}}/cards
 Authorization: Bearer {{token}}
 
 ### Obtener mis tarjetas con búsqueda
-GET {{baseUrl}}/cards?search=react
+GET {{baseUrl}}/cards/public
 Authorization: Bearer {{token}}
 
 ### Obtener tarjeta por id
@@ -87,10 +87,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "logo_url": "https://example.com/logo.png",
-  "title": "React Updated",
-  "description": "React library",
-  "documentation_url": "https://react.dev",
+  "logo_url": "",
+  "title": "",
+  "description": "",
+  "documentation_url": "",
   "is_public": true
 }
 
@@ -109,7 +109,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "tags": ["frontend", "library"]
+  "tags": ["", ""]
 }
 
 ### Obtener etiquetas de tarjeta
@@ -145,11 +145,11 @@ Content-Type: application/json
 ### ==============================
 
 ### Obtener todos los usuarios (admin)
-GET {{baseUrl}}/users
+GET {{baseUrl}}/admin/users
 Authorization: Bearer {{token}}
 
 ### Obtener usuario por id (admin)
-GET {{baseUrl}}/users/1
+GET {{baseUrl}}/admin/users/1
 Authorization: Bearer {{token}}
 
 ### Actualizar usuario (admin)
@@ -158,18 +158,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "John",
-  "surname": "Doe",
-  "email": "john@example.com"
-}
-
-### Cambiar rol de usuario (admin)
-PUT {{baseUrl}}/users/1/role
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "role": "admin"
+  "name": "David",
+  "surname": "Gonzalez",
+  "email": "davidgonzalez@gmail.com",
+  "avatar_url":
 }
 
 ### Eliminar usuario (admin)

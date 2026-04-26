@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp } from "vue";
 import App from "./App.vue";
 
 //Router del proyecto
@@ -13,6 +13,13 @@ import "vue-toastification/dist/index.css"
 
 //Estilos globales (Tailwind)
 import "./index.css"
+
+//Aplicación del tema guardado (claro/oscuro)
+const theme = localStorage.getItem("theme");
+
+if(theme === "dark"){
+    document.documentElement.classList.add("dark");
+}
 
 //Creación de la app Vue
 const app = createApp(App)

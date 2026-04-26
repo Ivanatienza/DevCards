@@ -21,9 +21,9 @@
 <script setup>
 
 //Barra de navegación reutilizable
-import Navbar from "./components/Layout/Navbar.vue";
+import Navbar from "@/components/Layout/Navbar.vue";
 
 //Pie de página reutilizable
-import Footer from "./components/Layout/Footer.vue";
+import Footer from "@/components/Layout/Footer.vue";
 
 </script>
