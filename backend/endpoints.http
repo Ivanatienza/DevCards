@@ -1,169 +1,140 @@
+=====================================================
+DevCards API
+=====================================================
+
 @baseUrl = http://localhost:3000/api
-@token = 
+@token =
 
-### ==============================
-### AUTENTICACIÓN
-### ==============================
+=====================================================
+Auth
+=====================================================
+Register
 
-### Registro de usuario
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
-
 {
-  "name": "Jose",
-  "surname": "Martínez",
-  "email": "josemartinezgarcia@gmail.com",
-  "password": "JoseMartinez50@"
+"name": "Ivan",
+"surname": "Atienza",
+"email": "ivan@test.com",
+"password": "123456",
+"avatar": "https://es.pngtree.com/so/usuarios"
 }
 
-### Iniciar sesión
+Login
+
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
-
 {
-  "email": "josemartinezgarcia@gmail.com",
-  "password": "JoseMartinez50@"
+"email": "ivan@test.com",
+"password": "123456"
 }
 
+=====================================================
+Cards
+=====================================================
 
-### ==============================
-### USUARIO
-### ==============================
+Obtener cards del usuario
 
-### Obtener perfil del usuario actual
-GET {{baseUrl}}/users/profile
-Authorization: Bearer {{token}}
-
-### Actualizar perfil
-PUT {{baseUrl}}/users/profile
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "name": "Juan",
-  "surname": "Garcia",
-  "email": "juangarcia@gmail.com",
-  "avatar_url": ""
-}
-
-### Eliminar mi usuario
-DELETE {{baseUrl}}/users
-Authorization: Bearer {{token}}
-
-
-### ==============================
-### TARJETAS
-### ==============================
-
-### Crear tarjeta
-POST {{baseUrl}}/cards
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "logo_url": "",
-  "title": "",
-  "description": "",
-  "documentation_url": "",
-  "is_public": true,
-  "tags": ["", ""]
-}
-
-### Obtener mis tarjetas
 GET {{baseUrl}}/cards
 Authorization: Bearer {{token}}
 
-### Obtener mis tarjetas con búsqueda
-GET {{baseUrl}}/cards/public
-Authorization: Bearer {{token}}
+Obtener cards públicas
 
-### Obtener tarjeta por id
+GET {{baseUrl}}/cards/public
+
+Obtener card por ID
+
 GET {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 
-### Actualizar tarjeta
+Crear card
+
+POST {{baseUrl}}/cards
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+"logo_url": "https://es.wikipedia.org/wiki/Archivo:Vue.js_Logo_2.svg",
+"title": "Vue Docs",
+"description": "Documentación Vue",
+"documentation_url": "https://vuejs.org",
+"is_public": 1,
+"tags": ["vue","frontend"]
+}
+
+Actualizar card
+
 PUT {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
 {
-  "logo_url": "",
-  "title": "",
-  "description": "",
-  "documentation_url": "",
-  "is_public": true
+"logo_url": "https://vuejs.org/logo.png",
+"title": “Documentación Vue",
+"description": "Documentación Vue 3 Inglés",
+"documentation_url": "https://vuejs.org",
+"is_public": 1,
+"tags": ["vue","frontend"]
 }
 
-### Eliminar tarjeta
+Eliminar card
+
 DELETE {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 
+=====================================================
+Settings
+=====================================================
 
-### ==============================
-### ETIQUETAS
-### ==============================
+Obtener settings
 
-### Añadir etiquetas a tarjeta
-POST {{baseUrl}}/cards/1/tags
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-  "tags": ["", ""]
-}
-
-### Obtener etiquetas de tarjeta
-GET {{baseUrl}}/cards/1/tags
-Authorization: Bearer {{token}}
-
-### Eliminar etiqueta de tarjeta
-DELETE {{baseUrl}}/cards/1/tags/react
-Authorization: Bearer {{token}}
-
-
-### ==============================
-### CONFIGURACIÓN
-### ==============================
-
-### Obtener configuración
 GET {{baseUrl}}/settings
 Authorization: Bearer {{token}}
 
-### Actualizar configuración
+Actualizar settings
+
 PUT {{baseUrl}}/settings
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
 {
-  "theme": "dark",
-  "language": "es"
+"theme": "dark",
+"language": "es"
 }
 
+=====================================================
+Admin (users)
+=====================================================
 
-### ==============================
-### ADMIN - USUARIOS
-### ==============================
+Obtener usuarios
 
-### Obtener todos los usuarios (admin)
 GET {{baseUrl}}/admin/users
 Authorization: Bearer {{token}}
 
-### Obtener usuario por id (admin)
-GET {{baseUrl}}/admin/users/1
-Authorization: Bearer {{token}}
+Crear usuario
 
-### Actualizar usuario (admin)
-PUT {{baseUrl}}/users/1
+POST {{baseUrl}}/admin/users
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
 {
-  "name": "David",
-  "surname": "Gonzalez",
-  "email": "davidgonzalez@gmail.com",
-  "avatar_url":
+"name": "Jose",
+"surname": "Garcia",
+"email": "admin@test.com",
+"password": "123456",
+"avatar": "https://es.pngtree.com/freepng/user-profile-avatar_13369991.html",
+"role": "admin"
 }
 
-### Eliminar usuario (admin)
-DELETE {{baseUrl}}/users/1
+Actualizar usuario
+
+PUT {{baseUrl}}/admin/users/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+"name": "Juan",
+"surname": "Gonzalez",
+"email": "admin@test.com",
+"avatar": "https://es.pngtree.com/freepng/user-profile-avatar_13369991.html"
+}
+
+Eliminar usuario
+
+DELETE {{baseUrl}}/admin/users/1
 Authorization: Bearer {{token}}

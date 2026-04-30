@@ -1,13 +1,18 @@
 {
-    "login": "Login",
-    "register": "Registro",
-    "logout": "Salir",
+    "home": "Inicio",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
     "dashboard": "Dashboard",
+    "publicCards": "Tarjetas Públicas",
     "profile": "Perfil",
     "settings": "Configuración",
     "admin": "Admin",
 
     "hello": "Hola",
+    "welcome": "Bienvenido a DevCards",
+    "homeSubtitle": "Organiza tu documentación de desarrollo",
+    "loading": "Cargando",
 
     "email": "Email",
     "password": "Contraseña",
@@ -18,6 +23,8 @@
     "create": "Crear",
     "edit": "Editar",
     "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "refresh": "Actualizar",
 
     "language": "Idioma",
     "theme": "Tema",
@@ -27,6 +34,7 @@
     "card": "Tarjeta",
     "title": "Título",
     "description": "Descripción",
+    "tags": "etiquetas",
 
     "toastLoginSuccess": "Login correcto",
     "toastLoginError": "Credenciales incorrectas",
@@ -42,10 +50,14 @@
     "toastCardCreated": "Card creada",
     "toastCardUpdated": "Card actualizada",
     "toastCardDeleted": "Card eliminada",
-    "toastCardError": "Error en la card",
+    "toastCardError": "Error cargando las cards",
+    "publicCardsError": "Error cargando cards públicas",
     
     "toastUserCreated": "Usuario creado",
     "toastUserUpdated": "Usuario actualizado",
     "toastUserDeleted": "Usuario eliminado",
-    "toastUserError": "Error en el usuario"
+    "toastUserError": "Error cargando usuarios",
+    "serverError": "Error del servidor",
+    "networkError": "Error de conexión",
+    "unauthorized": "No autorizado"
 }
