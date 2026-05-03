@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 
 //Router del proyecto
@@ -9,10 +10,10 @@ import i18n from "./i18n";
 
 //Librería de notificaciones (toast) al usuario
 import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css"
+import "vue-toastification/dist/index.css";
 
 //Estilos globales (Tailwind)
-import "./index.css"
+import "./index.css";
 
 //Aplicación del tema guardado (claro/oscuro)
 const theme = localStorage.getItem("theme");
@@ -22,7 +23,7 @@ if(theme === "dark"){
 }
 
 //Creación de la app Vue
-const app = createApp(App)
+const app = createApp(App);
 
 //Definición de plugins globales
 
@@ -35,5 +36,8 @@ app.use(i18n);
 //Notificaciones
 app.use(Toast);
 
+//Registrar Pinia
+app.use(createPinia());
+
 //Montar la aplicación
-app.mount('#app')
+app.mount('#app');

@@ -1,7 +1,7 @@
 import express from "express";
 import { 
-    createNewCard,
-    getUserCards,
+    createCard,
+    getCards,
     getpublicCards,
     editCard,
     removeCard,
@@ -11,8 +11,8 @@ import { verifyToken } from "../middlewares/auth.js";
 const router = express.Router();
 
 //Definición de rutas protegidas de cards
-router.post("/", verifyToken, createNewCard);
-router.get("/", verifyToken, getUserCards);
+router.post("/", verifyToken, createCard);
+router.get("/", verifyToken, getCards);
 router.get("/public", verifyToken, getpublicCards);
 router.put("/:id", verifyToken, editCard);
 router.delete("/:id", verifyToken, removeCard);

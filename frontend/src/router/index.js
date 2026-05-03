@@ -9,7 +9,10 @@ import Dashboard from "../views/DashboardView.vue";
 import AdminVew from "../views/AdminView.vue";
 import SettingsView from "../views/SettingsView.vue";
 import ProfileView from '../views/ProfileView.vue';
+import PublicCards from '../views/PublicCardsView.vue';
 import DashboardView from '../views/DashboardView.vue';
+import PublicCardsView from '../views/PublicCardsView.vue';
+import { authGuard, guestGuard } from "./guards";
 
 //Definición de rutas
 const routes = [
@@ -44,6 +47,11 @@ const routes = [
   {
     path: "/profile",
     component: ProfileView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/public",
+    component: PublicCardsView,
     meta: { requiresAuth: true }
   }
 ]
