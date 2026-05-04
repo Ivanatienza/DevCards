@@ -6,20 +6,21 @@ export const createCard = async(user_id,logo_url,title,description,documentation
         `INSERT INTO cards(user_id,logo_url,title,description,documentation_url,is_public) VALUES (?,?,?,?,?,?)`,
         [user_id,logo_url,title,description,documentation_url,is_public ? 1 : 0]
     );
+
     return result.insertId;
 };
 
 //Obtener las cards
-export const getCards = async(user_id, search = search || "") => {
+export const getCards = async(user_id, search = "") => {
     const [rows] = await pool.query(
-        `SELECT c.*, GROUP_CONCAT(DISTINCT t.name) as tags
+        `SELECT c.*, GROUP_CONCAT(DISTINCT t.name) AS tags
         FROM cards c
         LEFT JOIN card_tags ct ON c.id = ct.card_id
         LEFT JOIN tags t ON ct.tag_id = t.id
         WHERE c.user_id = ?
         AND c.title LIKE ?
         GROUP BY c.id
-        ORDER BY MAX(c.created_at) DESC`,
+        ORDER BY c.created_at) DESC`,
         [user_id, `%${search}%`]
     );
     
@@ -44,20 +45,19 @@ export const getCardById = async (id) => {
 
     const card = rows[0];
 
-    if(card && card.tags){
-        card.tags = cards.tags.split(",");
-    }else{
-        card.tags = [];
-    }
+    if(!card) return null;
 
-    return card;
+    return {
+        ...card,
+        tags: card.tags ? card.tags.split(",") : []
+    };
 };
 
 //Obtener las cards activas (públicas por el usuario)
 export const getPublicCardsModel = async() => {
     const [rows] = await pool.query(
         `SELECT c.*, u.name, u.avatar_url,
-        GROUP_CONCAT(DISTINCT t.name) as tags
+        GROUP_CONCAT(DISTINCT t.name) AS tags
         FROM cards c
         JOIN users u ON c.user_id = u.id
         LEFT JOIN card_tags ct ON c.id = ct.card_id

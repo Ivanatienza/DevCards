@@ -1,18 +1,60 @@
 import { pool } from "../config/db.js";
 
-//Obtención de los usuarios con rol administrador
+//Obtener los usuarios
 export const getUsers = async (req,res) => {
     try{
         const [users] = await pool.query(
             "SELECT id,name,surname,email,role,avatar_url FROM users"
-        )
+        );
+
         res.json(users);
+
     }catch(error){
         res.status(500).json({message: "Error al obtener usuarios"});
     }
 };
 
-//Eliminar usuarios con rol administrador
+//Crear usuarios
+export const createUserAdmin = async(req,res) => {
+
+    try{
+        const { name, surname, email, password, role } = req.body;
+
+        await pool.query(
+            "INSERT INTO users (name,surname,email,password,role) VALUES (?,?,?,?,?)",
+            [name,surname,email,password,role || "user"]
+        );
+
+        res.json({ message: "Usuario creado" });
+
+    }catch(error){
+        res.status(500).json({message: "Error al crear el usuario"});
+    }
+};
+
+//Actualizar usuarios
+export const updateUserAdmin = async(req,res) => {
+    try{
+        const { id } = req.params;
+        const { name,surname,email,password,role } = req.body;
+
+        await pool.query(
+            `UPDATE users
+            SET name = ?, surname = ?, email = ?, avatar_url = ?, role = ?
+            WHERE id = ?`,
+            [name,surname,email,password,role,id]
+        );
+
+    res.json({ message: "Usuario actualizado" });
+
+    }catch(error){
+
+        res.status(500).json({ message: "Error al actualizar el usuario" });
+
+    };
+}
+
+//Eliminar usuarios
 export const deleteUser = async(req,res) => {
     try{
         const {id} = req.params;
@@ -25,7 +67,9 @@ export const deleteUser = async(req,res) => {
         }
 
         res.json({message: "Usuario eliminado correctamente"});
+
     }catch(error){
+        
         res.status(500).json({message: "Error al eliminar el usuario"});
     }
 };

@@ -3,3 +3,18 @@ node_modules/
 
 #Archivo de configuración de variables de entorno
 .env
+
+# Logs
+logs/
+*.log
+
+# Archivos de build
+dist/
+build/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/

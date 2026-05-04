@@ -74,7 +74,7 @@ export const getUserCards = async (req,res,next) => {
 };
 
 //Obtener las cards públicas del usuario
-export const getpublicCards = async(req,res,next) => {
+export const getPublicCards = async(req,res,next) => {
     try{
         const cards = await getPublicCardsModel();
         res.json(cards);

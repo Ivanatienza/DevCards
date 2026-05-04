@@ -15,4 +15,23 @@ export const pool = mysql.createPool({
     charset: "utf8mb4"
 });
 
+// Función para verificar conexión al iniciar la app
+const testConnection = async () => {
+  try {
+    const connection = await pool.getConnection();
+
+    console.log("Conexión a la base de datos establecida correctamente");
+
+    connection.release();
+  } catch (error) {
+
+    console.error("Error al conectar con la base de datos:");
+    console.error(error.message);
+
+  }
+};
+
+// Ejecutar test de conexión al cargar la app
+testConnection();
+
 export default pool;

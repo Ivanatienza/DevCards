@@ -29,4 +29,9 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/tags", tagRoutes);
 
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  res.status(500).json({ error: "Error interno del servidor" });
+});
+
 export default app;
