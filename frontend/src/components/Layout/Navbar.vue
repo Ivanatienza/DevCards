@@ -64,15 +64,15 @@
 
 //Navbar gloabl
 
-import { ref, onMounted} from "vue";
-import { useRouter} from "vue-router";
-import { usei18n } from "vue-i18n";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
-const { locale, t } = usei18n();
+const { locale, t } = useI18n();
 
 const user = ref(null);
-const defaultAvatar = "/";
+const defaultAvatar = "/default-avatar.png";
 
 //Cargar usuario
 

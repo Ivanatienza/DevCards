@@ -24,8 +24,8 @@
 
 <script setup>
 
-import { def } from "@vue/shared";
 import { ref, watch } from "vue";
+import { required, minLength, isURL } from "../utils/validators";
 
 const props = defineProps({
     card:Object
@@ -48,6 +48,7 @@ watch(() => props.card,
         documentation_url.value = val.documentation_url;
         logo_url.value = val.logo_url;
         is_public.value = val.is_public;
+        tags.value = val.tags ? val.tags.join(",") : "";
     }
     },
     { immediate: true }
@@ -60,7 +61,7 @@ const submit = () => {
         documentation_url: documentation_url.value,
         logo_url: logo_url.value,
         is_public: is_public.value ? 1 : 0,
-        tags: tags.value.split(",").map(t => t.trim()).filter(t => t.length > 0)
+        tags: tags.value.split(",").map(t => t.trim()).filter(Boolean)
     });
 };
 

@@ -1,5 +1,6 @@
 import { pool } from "../config/db.js";
 import { getAllUsers, getUserById, getUserByEmail, updateUser, deleteUser} from "../models/userModel.js";
+import { validateEmail, validateName } from "../middlewares/validates.js";
 
 //Obtener los usuarios
 export const getUsers = async (req,res) => {
@@ -39,6 +40,10 @@ export const getUserProfile = async(req,res,next) => {
 export const updateUserProfile = async(req,res,next) => {
     try{
         const {name,surname,email,avatar_url} = req.body;
+
+        validateName(name);
+        validateName(surname);
+        validateEmail(email);
 
         await updateUser(req.user.id,name,surname,email,avatar_url);
 

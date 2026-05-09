@@ -34,7 +34,12 @@ app.use(router);
 app.use(i18n);
 
 //Notificaciones
-app.use(Toast);
+app.use(Toast, {
+    position: "top-right",
+    timeout: 3000,
+    closeOneClick: true,
+    pauseOnHover: true
+});
 
 //Registrar Pinia
 app.use(createPinia());

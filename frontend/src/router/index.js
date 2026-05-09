@@ -1,18 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 //Importación de vistas
-import Home from "../views/HomeView.vue";
-import Login from "../views/LoginView.vue";
-import Register from "../views/RegisterView.vue";
-import Profile from "../views/ProfileView.vue";
-import Dashboard from "../views/DashboardView.vue";
-import AdminVew from "../views/AdminView.vue";
+import HomeView from "../views/HomeView.vue";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
+import ProfileView from "../views/ProfileView.vue";
+import DashboardView from "../views/DashboardView.vue";
+import AdminView from "../views/AdminView.vue";
 import SettingsView from "../views/SettingsView.vue";
-import ProfileView from '../views/ProfileView.vue';
-import PublicCards from '../views/PublicCardsView.vue';
-import DashboardView from '../views/DashboardView.vue';
 import PublicCardsView from '../views/PublicCardsView.vue';
-import { authGuard, guestGuard } from "./guards";
 
 //Definición de rutas
 const routes = [
@@ -51,19 +47,18 @@ const routes = [
   },
   {
     path: "/public",
-    component: PublicCardsView,
-    meta: { requiresAuth: true }
+    component: PublicCardsView
   }
 ]
 
 //Creación del router
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 });
 
 //Seguridad en las rutas
-router.beforeEach((to,from,next) => {
+router.beforeEach((to, from, next) => {
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -74,11 +69,8 @@ router.beforeEach((to,from,next) => {
   }
 
 //Si la ruta requiere usuario admin
-  if(to.meta.requiresAdmin){
-
-    if(!user || user.role !=="admin"){
+  if(to.meta.requiresAdmin && (!user || user.role !=="admin")){
       return next("/");
-    }
   }
 
 //Evitar login si el usuario ya está logueado
@@ -90,5 +82,4 @@ next();
 
 });
 
-export default i18n;
 export default router;

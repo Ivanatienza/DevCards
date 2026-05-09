@@ -1,6 +1,5 @@
 import { ref, computed } from "vue";
-import { useRouter} from "vue-router";
-import { C } from "vue-router/dist/router-CWoNjPRp.mjs";
+import { useRouter } from "vue-router";
 
 //Usuario reactivo
 const user = ref(JSON.parse(localStorage.getItem("user")) || null);
@@ -22,11 +21,9 @@ export function useAuth(){
 
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("token", jwtToken);
+
+        router.push("/dashboard");
     }
-
-//Redirección
-
-    router.push("/");
 
 //Logout
 
@@ -42,22 +39,13 @@ export function useAuth(){
 
 //Verificar si el usuario está autenticado
 
-    const isAuthenticated = computed(() => {
-        return !!token.value;
-    });
+    const isAuthenticated = computed(() => !!token.value);
 
 //Verificar si el usuario es administrador
 
-    const isAdmin = computed(() => {
-        return user.value?.role === "admin";
-    });
+    const isAdmin = computed(() => user.value?.role === "admin");
 
 //Obtener el usuario
-
-    const getUser = computed(() =>
-        user.value);
-
-//Actualizar usuario
 
     const setUser = (newUser) => {
         user.value = newUser;
@@ -71,7 +59,6 @@ export function useAuth(){
         logout,
         isAuthenticated,
         isAdmin,
-        getUser,
         setUser
     };
 }

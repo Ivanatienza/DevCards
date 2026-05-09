@@ -3,31 +3,37 @@
 import api from "./api";
 
 //Obtener cards del usuario
-export const getCards = () => {
-    return api.get("/cards");
+export const getCards = async(search = "") => {
+    const res = await api.get(`/cards?search=${search}`);
+    return res.data;
 };
 
 //Obtener cards públicas
-export const getPublicCards = () => {
-    return api.get("/cards/public");
+export const getPublicCards = async() => {
+    const res = await api.get("/cards/public");
+    return res.data;
 };
 
 //Obtener card por id
-export const getCardById = (id) => {
-    return api.get(`/cards/${id}`);
+export const getCardById = async(id) => {
+    const res = await api.get(`/cards/${id}`);
+    return res.data;
 };
 
 //Crear card
-export const createCard = (data) => {
-    return api.post("/cards", data);
+export const createCard = async(data) => {
+    const res = await api.post("/cards", data);
+    return res.data;
 };
 
 //Actualizar card
-export const updateCard = (id, data) => {
-    return api.put(`/cards/${id}`, data);
+export const updateCard = async(id, data) => {
+    const res = await api.put(`/cards/${id}`, data);
+    return res.data;
 };
 
 //Eliminar card
-export const deleteCard = (id) => {
-    return api.delete(`/cards/${id}`);
+export const deleteCard = async(id) => {
+    const res = await api.delete(`/cards/${id}`);
+    return res.data;
 };

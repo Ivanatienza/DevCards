@@ -3,11 +3,13 @@
 import api from "./api";
 
 //Obtener la configuración del usuario
-export const getSettings = () => {
-    return api.get("/settings");
+export const getSettings = async() => {
+    const res = await api.get("/settings");
+    return res.data;
 };
 
 //Actualizar la configuración del usuario
-export const udpateSettings = (data) => {
-    return api.put("/settings", data);
+export const updateSettings = async(data) => {
+    const res = await api.put("/settings", data);
+    return res.data;
 };

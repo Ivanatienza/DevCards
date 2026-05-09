@@ -12,16 +12,36 @@ export const validatePassword = (password) => {
     }
 };
 
+export const validateName = (name) => {
+    if(!name || name.trim().length < 2){
+        throw new Error("El nombre es inválido");
+    }
+};
+
+
+export const validateText = (text, field = "Campo") => {
+    if(!text || text.trim().length < 3){
+        throw new Error(`${field} inválido`);
+    }
+};
+
 export const validateURL = (url) => {
     if(!url)
         return;
+
     try{
         const parsed = new URL(url);
         
-        if(parsed.protocol !== 'http:' && parsed.protocol !== 'https:'){
-            throw new Error('La URL debe empezar por http o https');
+        if(!["http: ", "https"].includes(parsed.protocol)){
+            throw new Error();
         }
     }catch(error){
         throw new Error('La URL introducida no es válida');
     }
-}; 
+};
+
+export const validateTags = (tags) => {
+    if(!Array.isArray(tags)){
+        throw new Error("Las etiquetas son inválidas");
+    }
+};

@@ -67,9 +67,3 @@ Iván Atienza Moya
 </footer>
 
 </template>
-
-<script setup>
-
-// Footer global
-
-</script>

@@ -22,25 +22,20 @@
 
 <script setup>
 
-import { ref, onMounted } from "vue";
+import { updateUserProfile } from "../services/userService";
 import { useToast } from "vue-toastification";
 import { usei18n } from "vue-i18n";
-import api from "../services/api";
 
 const toast = useToast();
 const { t } = usei18n();
 
-const user = ref(null);
-
-const loadProfileUser = async() => {
+const saveProfile = async() => {
     try{
-        const res = await api.get("/auth/me");
-        user.value = res.data;
+        await updateUserProfile(data);
+        toast.success(t("toastProfileUpdated"));
     }catch(error){
-        toast.error(t("profileLoadError"));
+        toast.error(t("toastProfileError"));
     }
 };
-
-onMounted(loadProfileUser);
 
 </script>

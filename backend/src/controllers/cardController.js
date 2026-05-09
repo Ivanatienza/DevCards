@@ -1,23 +1,19 @@
 import { createCard, getCards, getCardById, getPublicCardsModel, updateCard, deleteCard } from "../models/cardModel.js";
 import { createTag } from "../models/tagModel.js";
 import { addTagToCard, removeAllTagsFromCard } from "../models/cardTagModel.js";
+import { validateText, validateURL, validateTags } from "../middlewares/validates.js";
 
 //Creación de cards
-
-//Validar etiquetas
-const validateTags = (tags) => {
-    if(!Array.isArray(tags))
-        return [];
-    return [...new Set(
-        tags
-            .map(tag => tag.trim().toLowerCase())
-            .filter(tag => tag.length > 0)
-    )];
-};
 
 export const createNewCard = async (req,res,next) => {
     try{
         const { logo_url, title, description, documentation_url, tags, is_public } = req.body;
+
+        validateText(title, "Titulo");
+        validateText(description, "Descripcion");
+        validateURL(documentation_url);
+        validateURL(logo_url);
+        validateTags(tags);
 
         if(!req.user || !req.user.id){
             return res.status(401).json({error: "Usuario no autenticado"});
@@ -89,6 +85,12 @@ export const editCard = async (req,res,next) => {
     try{
         const { id } = req.params;
         const { logo_url,title,description,documentation_url,is_public, tags } = req.body;
+
+        validateText(title, "Título");
+        validateText(description, "Descripción");
+        validateURL(documentation_url);
+        validateURL(logo_url);
+        validateTags(tags);
 
         if (!req.user || !req.user.id) {
             return res.status(401).json({ error: "Usuario no autenticado" });

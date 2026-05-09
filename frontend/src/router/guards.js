@@ -25,4 +25,6 @@ export function guestGuard(to, from, next){
     if(auth.isAuthenticated){
         return next('/');
     }
+    
+    next();
 }

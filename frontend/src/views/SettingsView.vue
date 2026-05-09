@@ -19,24 +19,35 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { usei18n } from "vue-i18n";
 import Button from "../components/UI/Button.vue";
+import { getSettings, updateSettings } from "../services/settingsService";
 
 const toast = useToast();
 const { t, locale } = usei18n();
 const theme = ref("light");
+const language = ref("es");
+
+onMounted(async () => {
+    const data = await getSettings();
+    theme.value = data.theme;
+    language.value = data.language;
+});
 
 const saveSettings = () => {
-    locale.value = locale.value;
-    if(theme.value === "dark"){
-        document.documentElement.classList.add("dark");
-    }else{
-        document.documentElement.classList.remove("dark");
-    }
+    try{
+        await updateSettings({
+            theme: theme.value,
+            language: language.value
+        });
 
-    toast.success(t("settingsSaved"));
+        toast.success(t("toastSettingsUpdated"));
+        
+    }catch(error){
+        toast.error(t("toastSettingsError"));
+    }
 }
 
 </script>

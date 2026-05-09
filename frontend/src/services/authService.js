@@ -1,11 +1,17 @@
 import api from "./api";
 
-//Login usuario
+//Login del usuario
 export const login = (data) => {
     return api.post("/auth/login", data);
+    return res.data;
 };
 
-//Registro usuario
+//Registro del usuario
 export const register = (data) => {
     return api.post("/auth/register", data);
+};
+
+//Logout del usuario
+export const logout = async() => {
+    return api.post("/auth/logout");
 };

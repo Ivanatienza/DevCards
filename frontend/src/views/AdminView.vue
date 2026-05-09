@@ -21,32 +21,21 @@
 
 <script setup>
 
-import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { usei18n } from "vue-i18n";
 import Button from "../components/UI/Button.vue";
-import api from "../services/api";
+import { deleteUser } from "../services/userService";
 
 const toast = useToast();
 const { t } = usei18n();
 
-const users = ref([]);
-
-const loadUsers = async() => {
+const removeUsers = async(id) => {
     try{
-        const res = await api.get("/admin/users");
-        users.value = res.data;
+        await deleteUser(id);
+        toast.success(t("toastUserDeleted"));
     }catch(error){
-        toast.error("usersLoadError");
+        toast.error(t("toastUserError"));
     }
 };
-
-const removeUsers = async(id) => {
-    await api.delete(`/admin/users/${id}`);
-    toast.success(t("userDeleted"));
-    loadUsers();
-};
-
-onMounted(loadUsers);
 
 </script>
