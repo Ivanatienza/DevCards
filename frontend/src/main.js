@@ -16,10 +16,10 @@ import "vue-toastification/dist/index.css";
 import "./index.css";
 
 //Aplicación del tema guardado (claro/oscuro)
-const theme = localStorage.getItem("theme");
+const savedTheme = localStorage.getItem("theme");
 
-if(theme === "dark"){
-    document.documentElement.classList.add("dark");
+if (savedTheme === "dark") {
+  document.documentElement.classList.add("dark");
 }
 
 //Creación de la app Vue

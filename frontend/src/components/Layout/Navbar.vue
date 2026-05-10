@@ -21,8 +21,8 @@
 
 <div class="flex items-center gap-3">
 
-<button @click="toggleDark">
-🌙
+<button @click="toggleDark" class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+{{ isDark ? "☀️" : "🌙" }}
 </button>
 
 <button @click="changeLang('es')">ES</button>
@@ -34,7 +34,7 @@
 {{ $t("hello") }} {{ user.name }} {{ user.surname }}
 </span>
 
-<img :src="user.avatar || defaultAvatar" class="w-8 h-8 rounded-full object-cover" />
+<img :src="user.avatar_url || defaultAvatar" class="w-8 h-8 rounded-full object-cover" />
 
 <button @click="logout" class="text-red-500">{{ $t("logout") }}
 </button>
@@ -72,6 +72,7 @@ const router = useRouter();
 const { locale, t } = useI18n();
 
 const user = ref(null);
+const isDark = ref(false);
 const defaultAvatar = "/default-avatar.png";
 
 //Cargar usuario
@@ -79,6 +80,8 @@ const defaultAvatar = "/default-avatar.png";
 onMounted(() => {
     const stored = localStorage.getItem("user");
     if(stored) user.value = JSON.parse(stored);
+
+    isDark.value = document.documentElement.classList.contains("dark");
 });
 
 //Logout
@@ -102,9 +105,9 @@ const changeLang = (lang) => {
 const toggleDark = () => {
     document.documentElement.classList.toggle("dark");
 
-    const isDark = document.documentElement.classList.contains("dark");
+    isDark.value = document.documentElement.classList.contains("dark");
 
-localStorage.setItem("theme", isDark ? "dark": "light");
+    localStorage.setItem("theme", isDark ? "dark": "light");
 
 };
 

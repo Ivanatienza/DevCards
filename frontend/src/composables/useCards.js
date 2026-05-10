@@ -27,9 +27,9 @@ export function useCards(){
         try{
             cards.value = await CardService.getCards();
 
-        }catch(error){
+        }catch(err){
 
-            error.value = error.message;
+            error.value = err.message;
             toast.error(t("toastCardError"));
 
         }finally{

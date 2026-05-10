@@ -54,11 +54,17 @@ npm install
 Variables de entorno
 
 PORT=3000
+
 DB_HOST=localhost
+
 DB_USER=root
+
 DB_PASSWORD=tu_password
+
 DB_NAME=devcards
+
 JWT_SECRET=tu_jwt_secret
+
 
 🐳 Base de datos (Docker)
 
@@ -71,7 +77,9 @@ npm run dev
 🎨 Frontend
 
 cd frontend
+
 npm install
+
 npm run dev
 
 🔐 Autenticación
@@ -79,8 +87,11 @@ npm run dev
 Se utiliza JWT:
 
 El usuario inicia sesión
+
 El backend genera un token
+
 El token se guarda en el cliente
+
 Se envía en cada petición protegida
 
 📡 Endpoints principales
@@ -88,39 +99,53 @@ Se envía en cada petición protegida
 Auth
 
 POST /api/auth/register
+
 POST /api/auth/login
+
 POST /api/auth/logout
 
 Cards
 
 GET /api/cards
+
 POST /api/cards
+
 PUT /api/cards/:id
+
 DELETE /api/cards/:id
+
 GET /api/cards/public
 
 Users
 
 GET /api/users
+
 GET /api/users/profile
+
 PUT /api/users/profile
+
 DELETE /api/users/:id
 
 Settings
 
 GET /api/settings
+
 PUT /api/settings
 
 Tags
 
 GET /api/tags
+
 POST /api/tags
 
 Admin
 
 GET /api/admin/users
+
 POST /api/admin/users
+
 PUT /api/admin/users/:id
+
 DELETE /api/admin/users/:id
 
 🧪 Validaciones
@@ -128,30 +153,43 @@ DELETE /api/admin/users/:id
 Backend
 
 Validación de email
+
 Validación de password segura
+
 Validación de URLs
+
 Validación de texto y campos obligatorios
+
 
 Frontend
 
 Validación por campo (UX)
+
 Reglas reutilizables
+
 Errores visuales en formularios
 
 🎨 UI/UX
 
 Diseño con Tailwind CSS
+
 Soporte modo oscuro
+
 Internacionalización (ES / EN)
+
 Notificaciones con toast
+
 Componentes reutilizables
 
 
 📌 Notas técnicas
 
 Arquitectura MVC en backend
+
 Uso de middlewares para auth y roles
+
 Separación de lógica (services, composables)
+
 Uso de Docker para persistencia de datos
 
 👨‍💻 Autor
