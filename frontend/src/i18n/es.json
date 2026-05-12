@@ -19,6 +19,10 @@
   "password": "Contraseña",
   "name": "Nombre",
   "surname": "Apellidos",
+  "avatar": "Avatar",
+  "documentation_url": "URL Documentación",
+  "logo_url": "URL logo",
+  "tagsPlaceholder": "vue,js,api",
 
   "save": "Guardar",
   "create": "Crear",
@@ -36,7 +40,7 @@
   "description": "Descripción",
   "tags": "Etiquetas",
 
-  "toastRegisterSuccess": "Usuario creado",
+  "toastRegisterSuccess": "Usuario registrado",
   "toastRegisterError": "Error al registrar",
 
   "toastLoginSuccess": "Login correcto",
@@ -45,6 +49,7 @@
 
   "toastProfileUpdated": "Perfil actualizado",
   "toastProfileError": "Error al actualizar perfil",
+  "uploadAvatar": "Subir avatar",
 
   "toastSettingsUpdated": "Configuración guardada",
   "toastSettingsError": "Error al guardar configuración",
@@ -53,10 +58,18 @@
   "toastCardUpdated": "Card actualizada",
   "toastCardDeleted": "Card eliminada",
   "toastCardError": "Error cargando las cards",
+
+  "manageUsers": "Gestión de usuarios",
+  "createUser": "Crear usuario",
+  "editUser": "Editar usuario",
+  "noUsers": "No hay usuarios",
+  "actions": "Acciones",
+  "role": "Rol",
+
   "toastUserCreated": "Usuario creado",
   "toastUserUpdated": "Usuario actualizado",
   "toastUserDeleted": "Usuario eliminado",
-  "toastUserError": "Error en el usuario",
+  "usersLoadError": "Error cargando usuarios",
 
   "serverError": "Error del servidor",
   "networkError": "Error de red",

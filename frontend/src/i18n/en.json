@@ -19,6 +19,10 @@
   "password": "Password",
   "name": "Name",
   "surname": "Surname",
+  "avatar": "Avatar",
+  "documentationUrl": "Documentation URL",
+  "logoUrl": "Logo URL",
+  "tagsPlaceholder": "vue,js,api",
 
   "save": "Save",
   "create": "Create",
@@ -45,13 +49,23 @@
 
   "toastSettingsUpdated": "Settings saved",
   "toastSettingsError": "Error saving settings",
+  "uploadAvatar": "Upload avatar",
 
   "toastCardCreated": "Card created",
   "toastCardDeleted": "Card deleted",
-  "toastCardError": "Error processing cards",
+  "cardsLoadError": "Error loading cards",
 
+  "manageUsers": "Manage users",
+  "createUser": "Create user",
+  "editUser": "Edit user",
+  "noUsers": "No users found",
+  "actions": "Actions",
+  "role": "Role",
+
+  "toastUserCreated": "User created",
+  "toastUserUpdated": "User updated",
   "toastUserDeleted": "User deleted",
-  "toastUserError": "Error processing user",
+  "usersLoadError": "Error loading users",
 
   "serverError": "Server error",
   "networkError": "Network error",

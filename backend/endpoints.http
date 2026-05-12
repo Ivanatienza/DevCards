@@ -17,7 +17,7 @@ Content-Type: application/json
 "surname": "Atienza",
 "email": "ivan@test.com",
 "password": "123456",
-"avatar": "https://es.pngtree.com/so/usuarios"
+"avatar_url": "https://es.pngtree.com/so/usuarios"
 }
 
 Login
@@ -81,6 +81,51 @@ DELETE {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 
 =====================================================
+Tags
+=====================================================
+
+### Obtener tags
+
+GET {{baseUrl}}/tags
+Authorization: Bearer {{token}}
+
+###
+
+### Crear tag
+
+POST {{baseUrl}}/tags
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "vue"
+}
+
+=====================================================
+Profile
+=====================================================
+
+### Obtener perfil
+
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+
+###
+
+### Actualizar perfil
+
+PUT {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Ivan",
+  "surname": "Atienza",
+  "email": "ivan@test.com",
+  "avatar_url": ""
+}
+
+=====================================================
 Settings
 =====================================================
 
@@ -105,26 +150,12 @@ Admin (users)
 
 Obtener usuarios
 
-GET {{baseUrl}}/admin/users
+GET {{baseUrl}}/users
 Authorization: Bearer {{token}}
-
-Crear usuario
-
-POST {{baseUrl}}/admin/users
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-"name": "Jose",
-"surname": "Garcia",
-"email": "admin@test.com",
-"password": "123456",
-"avatar": "https://es.pngtree.com/freepng/user-profile-avatar_13369991.html",
-"role": "admin"
-}
 
 Actualizar usuario
 
-PUT {{baseUrl}}/admin/users/1
+PUT {{baseUrl}}/users/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
@@ -136,5 +167,5 @@ Content-Type: application/json
 
 Eliminar usuario
 
-DELETE {{baseUrl}}/admin/users/1
+DELETE {{baseUrl}}/users/1
 Authorization: Bearer {{token}}
