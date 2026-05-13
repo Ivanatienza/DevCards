@@ -1,156 +1,204 @@
-import { createCard, getCards, getCardById, getPublicCardsModel, updateCard, deleteCard } from "../models/cardModel.js";
-import { createTag } from "../models/tagModel.js";
-import { addTagToCard, removeAllTagsFromCard } from "../models/cardTagModel.js";
-import { validateText, validateURL, validateTags } from "../middlewares/validates.js";
+import pool from "../config/db.js";
 
-//Creación de cards
+// Obtener cards usuario
+export const getCards = async(req,res) => {
 
-export const createNewCard = async (req,res,next) => {
-    try{
-        const { logo_url, title, description, documentation_url, tags, is_public } = req.body;
+  try{
 
-        validateText(title, "Titulo");
-        validateText(description, "Descripcion");
-        validateURL(documentation_url);
-        validateURL(logo_url);
-        validateTags(tags);
+    const [cards] = await pool.query(
 
-        if(!req.user || !req.user.id){
-            return res.status(401).json({error: "Usuario no autenticado"});
-        }
+      `SELECT *
+      FROM cards
+      WHERE user_id=?`,
 
-        if(!title){
-            return res.status(400).json({error: "El titulo es obligatorio"});
-        }
+      [req.user.id]
 
-        const user_id = req.user.id;
+    );
 
-        //Convertir booleano
-        const isPublic = is_public === true || is_public === 1;
+    res.json(cards);
 
-        const card_id = await createCard(
-            user_id,
-            logo_url,
-            title, 
-            description,
-            documentation_url,
-            is_public
-        );
+  }catch(error){
 
-        //Tags válidas
-        const validTags = validateTags(tags);
+    console.error(error);
 
-        for(let tagName of validTags){
-            const tag_id = await createTag(tagName);
-            if(tag_id){
-                await addTagToCard(card_id, tag_id);
-            }
-        }
-            res.status(201).json({message: "Card creada", card_id});
+    res.status(500).json({
+      success:false,
+      message:"Error obteniendo cards"
+    });
 
-    }catch(error){
-        next(error);
-    }
+  }
+
 };
 
-//Obtener las cards del usuario
-export const getUserCards = async (req,res,next) => {
-    try{
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ error: "Usuario no autenticado" });
-        }
+// Obtener públicas
+export const getPublicCards = async(req,res) => {
 
-        const search = req.query.search || "";
-        const cards = await getCards(req.user.id, search);
-        res.json(cards);
-        
-    }catch(error){
-        next(error);
-    }
+  try{
+
+    const [cards] = await pool.query(
+
+      `SELECT *
+      FROM cards
+      WHERE is_public=1`
+
+    );
+
+    res.json(cards);
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error obteniendo cards públicas"
+    });
+
+  }
+
 };
 
-//Obtener las cards públicas del usuario
-export const getPublicCards = async(req,res,next) => {
-    try{
-        const cards = await getPublicCardsModel();
-        res.json(cards);
-    }catch(error){
-        next(error);
-    }
+// Crear
+export const createCard = async(req,res) => {
+
+  try{
+
+    const {
+      title,
+      description,
+      documentation_url,
+      logo_url,
+      is_public
+    } = req.body;
+
+    const [result] = await pool.query(
+
+      `INSERT INTO cards
+      (
+        title,
+        description,
+        documentation_url,
+        logo_url,
+        is_public,
+        user_id
+      )
+      VALUES (?,?,?,?,?,?)`,
+
+      [
+        title,
+        description,
+        documentation_url,
+        logo_url,
+        is_public,
+        req.user.id
+      ]
+
+    );
+
+    res.status(201).json({
+      success:true,
+      id:result.insertId
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error creando card"
+    });
+
+  }
+
 };
 
+// Actualizar
+export const updateCard = async(req,res) => {
 
-//Editar una card
-export const editCard = async (req,res,next) => {
-    try{
-        const { id } = req.params;
-        const { logo_url,title,description,documentation_url,is_public, tags } = req.body;
+  try{
 
-        validateText(title, "Título");
-        validateText(description, "Descripción");
-        validateURL(documentation_url);
-        validateURL(logo_url);
-        validateTags(tags);
+    const { id } = req.params;
 
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ error: "Usuario no autenticado" });
-        }
+    const {
+      title,
+      description,
+      documentation_url,
+      logo_url,
+      is_public
+    } = req.body;
 
-        //Comprobar si la card es de un usuario
-        const card = await getCardById(id);
+    await pool.query(
 
-        if(!card || card.user_id !== req.user.id){
-            return res.status(403).json({error: "No autorizado"});
-        }
+      `UPDATE cards
+      SET
+        title=?,
+        description=?,
+        documentation_url=?,
+        logo_url=?,
+        is_public=?
+      WHERE id=? AND user_id=?`,
 
-        const is_Public = is_public === true || is_public === 1;
+      [
+        title,
+        description,
+        documentation_url,
+        logo_url,
+        is_public,
+        id,
+        req.user.id
+      ]
 
-        await updateCard(id,logo_url,title,description,documentation_url,is_Public);
+    );
 
-        if(tags && Array.isArray(tags)){
-            await removeAllTagsFromCard(id);
+    res.json({
+      success:true,
+      message:"Card actualizada"
+    });
 
-            const validTags = validateTags(tags);
+  }catch(error){
 
-            for (let tagName of validTags){
-                const tag_id = await createTag(tagName);
-                if(tag_id){
-                    await addTagToCard(id, tag_id);
-                }
-            }
-        }
+    console.error(error);
 
-        res.json({message: "Card actualizada"});
+    res.status(500).json({
+      success:false,
+      message:"Error actualizando card"
+    });
 
-    }catch(error){
-        next(error);
-    }
+  }
+
 };
 
-//Eliminar una card
-export const removeCard = async(req,res,next) => {
-    try{
-        const {id} = req.params;
+// Eliminar
+export const deleteCard = async(req,res) => {
 
-        if (!req.user || !req.user.id) {
-            return res.status(401).json({ error: "Usuario no autenticado" });
-        }
+  try{
 
-        const card = await getCardById(id);
+    const { id } = req.params;
 
-        if(!card || card.user_id !== req.user.id){
-            return res.status(403).json({error: "No autorizado"});
-        }
+    await pool.query(
 
-        const result = await deleteCard(id, req.user.id);
+      `DELETE FROM cards
+      WHERE id=? AND user_id=?`,
 
-        if(result.affectedRows === 0){
-            return res.status(404).json({message: "Card no encontrada"})
-        }
+      [id, req.user.id]
 
-        res.json({message: "Card eliminada"});
-    
-    }catch(error){
-        next(error);
-    }
+    );
+
+    res.json({
+      success:true,
+      message:"Card eliminada"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error eliminando card"
+    });
+
+  }
+
 };

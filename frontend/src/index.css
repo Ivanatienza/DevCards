@@ -6,27 +6,10 @@
 
 /* Estilos globales personalizados */
 body{
-    @apply bg-gray-50 text-gray-900 
-    dark:bg-gray-800 dark:border-gray-700;
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Inputs estándar del proyecto */
-
-.input{
-    @apply w-full border rounded p-2 
-    dark:bg-gray-800 dark:border-gray-700;
-}
-
-/* Botón principal */
-
-.btn{
-    @apply bg-blue-500 text-white px-4 
-    py-2 rounded hover:bg-blue-600;
-}
-
-/* Botón de advertencia */
-
-.btn-danger{
-    @apply bg-red-500 text-white px-4
-    py-2 rounded hover:bg-red-600;
+.container-app{
+    @apply max-w-7xl mx-auto;
 }

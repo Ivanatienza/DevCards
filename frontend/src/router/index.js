@@ -13,7 +13,6 @@ import ProfileView from "../views/ProfileView.vue";
 import SettingsView from "../views/SettingsView.vue";
 import PublicCardsView from "../views/PublicCardsView.vue";
 import AdminView from "../views/AdminView.vue";
-import NotFoundView from "../views/NotFoundView.vue";
 
 const routes = [
 
@@ -80,12 +79,6 @@ const routes = [
       }
 
     ]
-  },
-
-  // Página no encontrada
-  {
-    path: "/:pathMatch(.*)*",
-    component: NotFoundView
   }
 
 ];
@@ -117,15 +110,8 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  // Evitar login/register logueado
-  if (
-    (to.path === "/login" || to.path === "/register")
-    && token
-  ) {
-    return next("/dashboard");
-  }
-
   next();
+  
 });
 
 export default router;

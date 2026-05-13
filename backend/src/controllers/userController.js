@@ -1,55 +1,266 @@
-import { pool } from "../config/db.js";
-import { getAllUsers, getUserById, getUserByEmail, updateUser, deleteUser} from "../models/userModel.js";
-import { validateEmail, validateName } from "../middlewares/validates.js";
+import bcrypt from "bcrypt";
 
-//Obtener los usuarios
-export const getUsers = async (req,res) => {
-    try{
-        const users = await getAllUsers();
-        res.json(users);
-    }catch(error){
-        res.status(500).json({error: error.message});
-    }
+import pool from "../config/db.js";
+
+// Obtener usuarios
+export const getUsers = async(req,res) => {
+
+  try{
+
+    const [users] = await pool.query(
+
+      `SELECT
+        id,
+        name,
+        surname,
+        email,
+        avatar_url,
+        role
+      FROM users`
+
+    );
+
+    res.json(users);
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error obteniendo usuarios"
+    });
+
+  }
+
 };
 
-//Eliminar usuario
-export const removeUser = async(req,res) => {
-    try{
-        const {id} = req.params;
-        const result= await deleteUser(id);
-        if(result.affectedRows === 0){
-            return res.status(404).json({message: "Usuario no encontrado."})
-        }
-        res.json({message: "Usuario eliminado."});
-    }catch(error){
-        res.status(500).json({error: error.message});
-    }
+// Obtener perfil
+export const getProfile = async(req,res) => {
+
+  try{
+
+    const [users] = await pool.query(
+
+      `SELECT
+        id,
+        name,
+        surname,
+        email,
+        avatar_url,
+        role
+      FROM users
+      WHERE id=?`,
+
+      [req.user.id]
+
+    );
+
+    res.json(users[0]);
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error obteniendo perfil"
+    });
+
+  }
+
 };
 
-//Obtener perfil del usuario logueado
-export const getUserProfile = async(req,res,next) => {
-    try{
-        const user = await getUserById(req.user.id);
-        res.json(user);
-    }catch(error){
-        next(error);
-    }
+// Actualizar perfil
+export const updateProfile = async(req,res) => {
+
+  try{
+
+    const {
+      name,
+      surname,
+      email,
+      avatar_url
+    } = req.body;
+
+    await pool.query(
+
+      `UPDATE users
+      SET
+        name=?,
+        surname=?,
+        email=?,
+        avatar_url=?
+      WHERE id=?`,
+
+      [
+        name,
+        surname,
+        email,
+        avatar_url,
+        req.user.id
+      ]
+
+    );
+
+    res.json({
+      success:true,
+      message:"Perfil actualizado"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error actualizando perfil"
+    });
+
+  }
+
 };
 
-//Actualizar perfil del usuario logueado
-export const updateUserProfile = async(req,res,next) => {
-    try{
-        const {name,surname,email,avatar_url} = req.body;
+// Crear usuario admin
+export const createUser = async(req,res) => {
 
-        validateName(name);
-        validateName(surname);
-        validateEmail(email);
+  try{
 
-        await updateUser(req.user.id,name,surname,email,avatar_url);
+    const {
+      name,
+      surname,
+      email,
+      password,
+      avatar_url,
+      role
+    } = req.body;
 
-        res.json({message: "Perfil actualizado"});
-        
-    }catch(error){
-        next(error);
-    }
+    const hashedPassword =
+      await bcrypt.hash(password,10);
+
+    await pool.query(
+
+      `INSERT INTO users
+      (
+        name,
+        surname,
+        email,
+        password,
+        avatar_url,
+        role
+      )
+      VALUES (?,?,?,?,?,?)`,
+
+      [
+        name,
+        surname,
+        email,
+        hashedPassword,
+        avatar_url || "",
+        role || "user"
+      ]
+
+    );
+
+    res.status(201).json({
+      success:true,
+      message:"Usuario creado"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error creando usuario"
+    });
+
+  }
+
+};
+
+// Editar usuario admin
+export const updateUser = async(req,res) => {
+
+  try{
+
+    const { id } = req.params;
+
+    const {
+      name,
+      surname,
+      email,
+      avatar_url,
+      role
+    } = req.body;
+
+    await pool.query(
+
+      `UPDATE users
+      SET
+        name=?,
+        surname=?,
+        email=?,
+        avatar_url=?,
+        role=?
+      WHERE id=?`,
+
+      [
+        name,
+        surname,
+        email,
+        avatar_url,
+        role,
+        id
+      ]
+
+    );
+
+    res.json({
+      success:true,
+      message:"Usuario actualizado"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error actualizando usuario"
+    });
+
+  }
+
+};
+
+// Eliminar usuario
+export const deleteUser = async(req,res) => {
+
+  try{
+
+    const { id } = req.params;
+
+    await pool.query(
+      "DELETE FROM users WHERE id=?",
+      [id]
+    );
+
+    res.json({
+      success:true,
+      message:"Usuario eliminado"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error eliminando usuario"
+    });
+
+  }
+
 };

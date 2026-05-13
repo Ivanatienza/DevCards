@@ -2,40 +2,27 @@
 
 <div class="flex flex-col gap-4">
 
-<input v-model="title" :type="text" :placeholder="$t('title')" class="border p-3 rounded dark:bg-gray-700 text-sm md:text-base" />
+<input v-model="title" :type="text" :placeholder="$t('title')" class="border p-2 rounded dark:bg-gray-700"/>
 
-<p v-if="errors.title" class="text-red-500 text-sm">
-{{ errors.title }}
-</p>
+<p v-if="errors.title" class="text-red-500 text-sm"> {{ errors.title }} </p>
 
-<textarea v-model="description" :placeholder="$t('description')" class="border p-3 rounded dark:bg-gray-700 text-sm md:text-base" />
+<textarea v-model="description" :placeholder="$t('description')" class="border p-2 rounded dark:bg-gray-700"/>
 
-<p v-if="errors.description" class="text-red-500 text-sm">
-{{ errors.description }}
-</p>
+<p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
 
-<input v-model="documentation_url" type="text" :placeholder="$t('documentation_url')" class="border p-3 rounded dark:bg-gray-700 text-sm md:text-base" />
+<input v-model="documentation_url" :type="url" :placeholder="$t('documentationUrl')" class="border p-2 rounded dark:bg-gray-700" />
 
-<p v-if="errors.documentation_url" class="text-red-500 text-sm">
-{{ errors.documentation_url }}
-</p>
+<p v-if="errors.documentation_url" class="text-red-500 text-sm">{{ errors.documentation_url }}</p>
 
-<input v-model="logo_url" type="text" :placeholder="$t('logo_url')" class="border p-3 rounded dark:bg-gray-700 text-sm md:text-base" />
+<input v-model="logo_url" :type="url" :placeholder="$t('logoUrl')" class="border p-2 rounded dark:bg-gray-700" />
 
-<p v-if="errors.logo_url" class="text-red-500 text-sm">
-{{ errors.logo_url }}
-</p>
+<input v-model="tags" :type="text" :placeholder="$t('tagsPlaceholder')" class="border p-2 rounded dark:bg-gray-700" />
 
-<input v-model="tags" type="text" :placeholder="$t('tagsPlaceHolder')" class="border p-3 rounded dark:bg-gray-700 text-sm md:text-base" />
+<label class="flex gap-2 items-center">
 
-<label class="flex gap-2 items-center text-sm md:text-base">
+<input type="checkbox" v-model="is_public"/>Public</label>
 
-<input type="checkbox" v-model="is_public" />{{ $t("public") }}
-</label>
-
-<button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded text-sm md:text-base">
-{{ $t("save") }}
-</button>
+<button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition" >{{ $t("save") }}</button>
 
 </div>
 
@@ -44,10 +31,9 @@
 <script setup>
 
 import { ref, watch } from "vue";
-import { required, isURL } from "../utils/validators";
 
 const props = defineProps({
-    card:Object
+card: Object
 });
 
 const emit = defineEmits(["save"]);
@@ -58,54 +44,78 @@ const documentation_url = ref("");
 const logo_url = ref("");
 const is_public = ref(false);
 const tags = ref("");
+
 const errors = ref({});
 
-watch(() => props.card,
-(val) => {
-    if(val){
-        title.value = val.title;
-        description.value = val.description;
-        documentation_url.value = val.documentation_url;
-        logo_url.value = val.logo_url;
-        is_public.value = val.is_public;
-        tags.value = val.tags ?.join(",") || "";
-    }
-    },
-    { immediate: true }
-);
+watch(() => props.card, (val) => {
 
-const validateForm = () => {
-    errors.value = {};
+if(val){
 
-    const validations = {
-        title: required(title.value),
-        description: required(description.value),
-    documentation_url: isUrl(documentation_url.value),
-        logo_url: isUrl(logo_url.value)
-    };
+title.value = val.title || "";
+description.value = val.description || "";
+documentation_url.value = val.documentation_url || "";
+logo_url.value = val.logo_url || "";
+is_public.value = !!val.is_public;
+tags.value = val.tags || "";
 
-    for (const key in validations){
-        if(validations[key] !== true){
-            errors.value[key] = validations[key];
-        }
-    }
-    
-    return Object.keys(errors.value).length == 0;
+}
+
+}, { immediate: true });
+
+const validate = () => {
+
+errors.value = {};
+
+if(!title.value.trim()){
+
+errors.value.title = "Título obligatorio";
+
+}
+
+if(!description.value.trim()){
+
+errors.value.description = "Descripción obligatoria";
+
+}
+
+if(
+documentation_url.value &&
+!documentation_url.value.startsWith("http")
+){
+
+errors.value.documentation_url =
+"URL inválida";
+
+}
+
+return Object.keys(errors.value).length === 0;
+
 };
 
 const submit = () => {
 
-    if(!validateForm()) return;
+if(!validate()) return;
 
-    emit("save", {
+const uniqueTags = [...new Set(
 
-        title: title.value,
-        description: description.value,
-        documentation_url: documentation_url.value,
-        logo_url: logo_url.value,
-        is_public: is_public.value ? 1 : 0,
-        tags: tags.value.split(",").map(t => t.trim()).filter(t => t.length > 0)
-    });
+tags.value
+.split(",")
+.map(t => t.trim().toLowerCase())
+.filter(Boolean)
+
+)];
+
+emit("save", {
+
+title: title.value,
+description: description.value,
+documentation_url: documentation_url.value,
+logo_url: logo_url.value,
+is_public: is_public.value ? 1 : 0,
+tags: uniqueTags
+
+});
+
 };
 
 </script>
