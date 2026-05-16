@@ -1,60 +1,111 @@
 <template>
-<div class="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded shadow">
 
-<h1 class="text-2xl font-bold mb-6 text-center">
-{{ t("register") }}
-</h1>
+<div class="max-w-md mx-auto py-10 px-4">
 
-<form @submit.prevent="handleRegister" class="flex flex-col gap-4">
+  <h1 class="text-3xl font-bold mb-6">
+    {{ t("register") }}
+  </h1>
 
-<div>
+  <form
+    class="flex flex-col gap-4"
+    @submit.prevent="handleRegister"
+  >
 
-<input v-model="form.name" type="text" :placeholder="$t('name')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    <div>
 
-<p v-if="errors.name" class="text-red-500 text-sm mt-1">
-{{ errors.name }}
-</p>
-</div>
+      <input
+        v-model="form.name"
+        type="text"
+        :placeholder="t('name')"
+        class="input"
+      />
 
-<div>
+      <p
+        v-if="errors.name"
+        class="text-red-500 text-sm"
+      >
+        {{ errors.name }}
+      </p>
 
-<input v-model="form.surname" type="text" :placeholder="$t('surname')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    </div>
 
-<p v-if="errors.surname" class="text-red-500 text-sm mt-1">
-{{ errors.surname }}
-</p>
+    <div>
 
-</div>
+      <input
+        v-model="form.surname"
+        type="text"
+        :placeholder="t('surname')"
+        class="input"
+      />
 
-<div>
+      <p
+        v-if="errors.surname"
+        class="text-red-500 text-sm"
+      >
+        {{ errors.surname }}
+      </p>
 
-<input v-model="form.email" type="email" :placeholder="$t('email')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    </div>
 
-<p v-if="errors.email" class="text-red-500 text-sm mt-1">
-{{ errors.email }}
-</p>
+    <div>
 
-</div>
+      <input
+        v-model="form.email"
+        type="email"
+        :placeholder="t('email')"
+        class="input"
+      />
 
-<div>
+      <p
+        v-if="errors.email"
+        class="text-red-500 text-sm"
+      >
+        {{ errors.email }}
+      </p>
 
-<input v-model="form.password" type="password" :placeholder="$t('password')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    </div>
 
-<p v-if="errors.password" class="text-red-500 text-sm mt-1">
-{{ errors.password }}
-</p>
+    <div>
 
-</div>
+      <input
+        v-model="form.password"
+        type="password"
+        :placeholder="t('password')"
+        class="input"
+      />
 
-</form>
+      <p
+        v-if="errors.password"
+        class="text-red-500 text-sm"
+      >
+        {{ errors.password }}
+      </p>
 
-<input v-model ="form.name" class ="input mb-2" />
-<input v-model ="form.surname" class ="input mb-2" />
-<input v-model ="form.email" class ="input mb-2" />
-<input type ="password" v-model = "form.password" class = "input mb-2"/>
+    </div>
 
-<Button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">{{ t("register") }}
-</Button>
+    <div>
+
+      <input
+        v-model="form.confirmPassword"
+        type="password"
+        placeholder="Confirm Password"
+        class="input"
+      />
+
+      <p
+        v-if="errors.confirmPassword"
+        class="text-red-500 text-sm"
+      >
+        {{ errors.confirmPassword }}
+      </p>
+
+    </div>
+
+    <Button type="submit">
+      {{ t("register") }}
+    </Button>
+
+  </form>
 
 </div>
 
@@ -63,55 +114,66 @@
 <script setup>
 
 import { ref } from "vue";
+
 import { useRouter } from "vue-router";
+
+import { useI18n } from "vue-i18n";
+
 import { useToast } from "vue-toastification";
-import { usei18n } from "vue-i18n";
-import Button from "../components/UI/Button.vue";
+
 import { register } from "../services/authService";
-import { required, isEmail, minLength } from "../utils/validators";
+
+import Button from "../components/ui/Button.vue";
+
+import {
+  validateRegister
+} from "../utils/validators";
 
 const router = useRouter();
+
 const toast = useToast();
-const { t } = usei18n();
+
+const { t } = useI18n();
 
 const form = ref({
-    
-    name: "",
-    surname: "",
-    email: "",
-    password: ""
+
+  name:"",
+  surname:"",
+  email:"",
+  password:"",
+  confirmPassword:""
 
 });
 
 const errors = ref({});
 
-const validateForm = () => {
-    errors.value = {};
+const handleRegister = async() => {
 
-    const validations = {
-        name: required(form.value.name),
-        email: required(form.value.email),
-        password: required(form.value.password),
-    };
+  errors.value =
+    validateRegister(form.value,t);
 
-    for (const key in validations){
-        if(validations[key] !== true){
-        errors.value[key] = validations[key];
-        }
-    }
+  if(Object.keys(errors.value).length){
+    return;
+  }
 
-    return Object.keys(errors.value).length === 0;
-};
+  try{
 
-const submit = async() => {
-    try{
+    await register(form.value);
 
-        await register(form.value);
-        toast.success("registerSuccess");
+    toast.success(
+      t("toastRegisterSuccess")
+    );
 
-    }catch(error){
-        toast.error("registerError");
-    }
+    router.push("/login");
+
+  }catch(error){
+
+    toast.error(
+      t("toastRegisterError")
+    );
+
+  }
+
 };
 
 </script>

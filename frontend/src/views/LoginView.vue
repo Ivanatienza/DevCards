@@ -1,33 +1,57 @@
 <template>
 
-<div class="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded shadow">
+<div class="max-w-md mx-auto py-10 px-4">
 
-<h1 class="text-2xl font-bold mb-6 text-center">{{ t("login") }}
-</h1>
-<form @submit.prevent="handleLogin" class="flex flex-col gap-4">
+  <h1 class="text-3xl font-bold mb-6">
+    {{ t("login") }}
+  </h1>
 
-<div>
+  <form
+    class="flex flex-col gap-4"
+    @submit.prevent="handleLogin"
+  >
 
-<input v-model="email" type="email" :placeholder="$t('email')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    <div>
 
-<p v-if="errors.email" class="text-red-500 text-sm mt-1">
-{{ errors.email }}
-</p>
-</div>
+      <input
+        v-model="form.email"
+        type="email"
+        :placeholder="t('email')"
+        class="input"
+      />
 
-<div>
+      <p
+        v-if="errors.email"
+        class="text-red-500 text-sm mt-1"
+      >
+        {{ errors.email }}
+      </p>
 
-<input v-model="password" type="password" :placeholder="$t('password')" class="border p-2 rounded w-full dark:bg-gray-700"/>
+    </div>
 
-<p v-if="errors.password" class="text-red-500 text-sm mt-1">
-{{ errors.password }}
-</p>
-</div>
+    <div>
 
-</form>
+      <input
+        v-model="form.password"
+        type="password"
+        :placeholder="t('password')"
+        class="input"
+      />
 
-<Button class="w-full" @click="submit">{{ t("login") }}
-</Button>
+      <p
+        v-if="errors.password"
+        class="text-red-500 text-sm mt-1"
+      >
+        {{ errors.password }}
+      </p>
+
+    </div>
+
+    <Button type="submit">
+      {{ t("login") }}
+    </Button>
+
+  </form>
 
 </div>
 
@@ -36,56 +60,74 @@
 <script setup>
 
 import { ref } from "vue";
+
 import { useRouter } from "vue-router";
+
+import { useI18n } from "vue-i18n";
+
 import { useToast } from "vue-toastification";
-import Button from "../components/UI/Button.vue";
+
 import { login } from "../services/authService";
-import { isEmail, minLength } from "../utils/validators";
+
+import Button from "../components/ui/Button.vue";
+
+import {
+  validateLogin
+} from "../utils/validators";
 
 const router = useRouter();
+
 const toast = useToast();
-const { t } = usei18n();
 
-const email = ref("");
-const password = ref("");
-const errors = ref("");
+const { t } = useI18n();
 
-const validateForm = () => {
-    errors.value = {};
+const form = ref({
 
-    const emailValidation = isEmail(email.value);
+  email:"",
+  password:""
 
-    if(emailValidation !== true){
-        errors.value.email = emailValidation;
-    }
+});
 
-    const passwordValidation = minLength(6)(password.value);
-
-    if(passwordValidation !== true){
-        errors.value.password = passwordValidation;
-    }
-
-    return Object.keys(errors.value).length === 0;
-};
+const errors = ref({});
 
 const handleLogin = async() => {
-    if(!validateForm()) return;
-};
 
-const submit = async() => {
-    try{
-        
-        const res = await login({email: email.value, password: password.value});
+  errors.value =
+    validateLogin(form.value,t);
 
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+  if(Object.keys(errors.value).length){
+    return;
+  }
 
-        toast.success(t("loginSuccess"));
-        router.push('/dashboard');
+  try{
 
-    }catch(error){
-        toast.error(t("loginError"));
-    }
+    const res =
+      await login(form.value);
+
+    localStorage.setItem(
+      "token",
+      res.data.token
+    );
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(res.data.user)
+    );
+
+    toast.success(
+      t("toastLoginSuccess")
+    );
+
+    router.push("/dashboard");
+
+  }catch(error){
+
+    toast.error(
+      t("toastLoginError")
+    );
+
+  }
+
 };
 
 </script>

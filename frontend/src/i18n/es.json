@@ -1,77 +1,143 @@
 {
-  "login": "Login",
-  "register": "Registro",
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
   "logout": "Cerrar sesión",
+
   "dashboard": "Dashboard",
-  "public": "Públicas",
+  "publicCards": "Cards públicas",
   "profile": "Perfil",
   "settings": "Configuración",
-  "admin": "Admin",
+  "admin": "Administración",
 
   "hello": "Hola",
-  "homeSubtitle": "Organiza tu documentación de desarrollo",
+
   "welcome": "Bienvenido a DevCards",
-  "loading": "Cargando",
-  "noPublicCards": "No hay cards públicas",
+
+  "homeSubtitle": "Organiza tu documentación de desarrollo",
+
+  "loading": "Cargando...",
+
   "noCards": "No hay cards",
 
+  "noPublicCards": "No hay cards públicas",
+
+  "manageCards": "Gestiona tus cards",
+
   "email": "Email",
+
   "password": "Contraseña",
+
   "name": "Nombre",
+
   "surname": "Apellidos",
+
   "avatar": "Avatar",
-  "documentation_url": "URL Documentación",
-  "logo_url": "URL logo",
-  "tagsPlaceholder": "vue,js,api",
 
-  "save": "Guardar",
-  "create": "Crear",
-  "edit": "Editar",
-  "delete": "Eliminar",
-  "cancel": "Cancelar",
-
-  "language": "Idioma",
-  "theme": "Tema",
-  "light": "Claro",
-  "dark": "Oscuro",
-
-  "card": "Card",
-  "title": "Título",
-  "description": "Descripción",
-  "tags": "Etiquetas",
-
-  "toastRegisterSuccess": "Usuario registrado",
-  "toastRegisterError": "Error al registrar",
-
-  "toastLoginSuccess": "Login correcto",
-  "toastLoginError": "Credenciales incorrectas",
-  "toastLogout": "Sesión cerrada",
-
-  "toastProfileUpdated": "Perfil actualizado",
-  "toastProfileError": "Error al actualizar perfil",
-  "uploadAvatar": "Subir avatar",
-
-  "toastSettingsUpdated": "Configuración guardada",
-  "toastSettingsError": "Error al guardar configuración",
-
-  "toastCardCreated": "Card creada",
-  "toastCardUpdated": "Card actualizada",
-  "toastCardDeleted": "Card eliminada",
-  "toastCardError": "Error cargando las cards",
-
-  "manageUsers": "Gestión de usuarios",
-  "createUser": "Crear usuario",
-  "editUser": "Editar usuario",
-  "noUsers": "No hay usuarios",
-  "actions": "Acciones",
   "role": "Rol",
 
-  "toastUserCreated": "Usuario creado",
-  "toastUserUpdated": "Usuario actualizado",
-  "toastUserDeleted": "Usuario eliminado",
-  "usersLoadError": "Error cargando usuarios",
+  "theme": "Tema",
+
+  "language": "Idioma",
+
+  "light": "Claro",
+
+  "dark": "Oscuro",
+
+  "save": "Guardar",
+
+  "create": "Crear",
+
+  "edit": "Editar",
+
+  "delete": "Eliminar",
+
+  "cancel": "Cancelar",
+
+  "refresh": "Actualizar",
+
+  "search": "Buscar",
+
+  "actions": "Acciones",
+
+  "card": "Card",
+
+  "title": "Título",
+
+  "description": "Descripción",
+
+  "documentation": "Documentación",
+
+  "documentationUrl": "URL documentación",
+
+  "logoUrl": "URL logo",
+
+  "tags": "Etiquetas",
+
+  "tagsPlaceholder": "vue,node,express",
+
+  "publicCard": "Card pública",
+
+  "createdAt": "Fecha creación",
+
+  "updatedAt": "Fecha actualización",
+
+  "users": "Usuarios",
+
+  "confirmDeleteCard": "¿Seguro que deseas eliminar esta card?",
+
+  "confirmDeleteUser": "¿Seguro que deseas eliminar este usuario?",
+
+  "requiredField": "Campo obligatorio",
+
+  "invalidEmail": "Email inválido",
+
+  "passwordMin": "La contraseña debe tener mínimo 6 caracteres",
+
+  "titleRequired": "El título es obligatorio",
+
+  "descriptionRequired": "La descripción es obligatoria",
+
+  "toastLoginSuccess": "Inicio de sesión correcto",
+
+  "toastLoginError": "Credenciales inválidas",
+
+  "toastRegisterSuccess": "Usuario registrado correctamente",
+
+  "toastRegisterError": "Error al registrar usuario",
+
+  "toastLogout": "Sesión cerrada correctamente",
+
+  "toastCardCreated": "Card creada correctamente",
+
+  "toastCardUpdated": "Card actualizada correctamente",
+
+  "toastCardDeleted": "Card eliminada correctamente",
+
+  "toastCardError": "Error cargando cards",
+
+  "toastProfileUpdated": "Perfil actualizado correctamente",
+
+  "toastProfileError": "Error actualizando perfil",
+
+  "toastSettingsUpdated": "Configuración guardada correctamente",
+
+  "toastSettingsError": "Error guardando configuración",
+
+  "toastUserCreated": "Usuario creado correctamente",
+
+  "toastUserUpdated": "Usuario actualizado correctamente",
+
+  "toastUserDeleted": "Usuario eliminado correctamente",
+
+  "toastUserError": "Error cargando usuarios",
+
+  "toastAvatarUpdated": "Avatar actualizado correctamente",
+
+  "toastAvatarError": "Error actualizando avatar",
 
   "serverError": "Error del servidor",
+
   "networkError": "Error de red",
+
   "unauthorized": "No autorizado"
 }
