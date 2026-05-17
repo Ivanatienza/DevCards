@@ -1,143 +1,84 @@
 {
+  "dashboard": "Dashboard",
+  "manageCards": "Manage your cards",
+  "loading": "Loading...",
+
+  "create": "Create",
+  "edit": "Edit",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+
+  "title": "Title",
+  "description": "Description",
+  "logoUrl": "Logo URL",
+  "tags": "Tags",
+  "tagsPlaceholder": "vue, frontend, javascript",
+  "publicCard": "Public card",
+  "noCards": "No cards available",
+
   "login": "Login",
   "register": "Register",
   "logout": "Logout",
-
-  "dashboard": "Dashboard",
-  "publicCards": "Public Cards",
-  "profile": "Profile",
-  "settings": "Settings",
-  "admin": "Admin",
-
-  "hello": "Hello",
-
-  "welcome": "Welcome to DevCards",
-
-  "homeSubtitle": "Organize your development documentation",
-
-  "loading": "Loading...",
-
-  "noCards": "No cards",
-
-  "noPublicCards": "No public cards",
-
-  "manageCards": "Manage your cards",
-
   "email": "Email",
-
   "password": "Password",
+  "confirmPassword": "Confirm password",
 
   "name": "Name",
-
   "surname": "Surname",
 
-  "avatar": "Avatar",
+  "profile": "Profile",
+  "settings": "Settings",
 
-  "role": "Role",
-
-  "theme": "Theme",
+  "changeAvatar": "Change avatar",
+  "avatarMaxSize": "Image cannot exceed 2MB",
 
   "language": "Language",
-
-  "light": "Light",
-
-  "dark": "Dark",
-
-  "save": "Save",
-
-  "create": "Create",
-
-  "edit": "Edit",
-
-  "delete": "Delete",
-
-  "cancel": "Cancel",
-
-  "refresh": "Refresh",
-
-  "search": "Search",
-
-  "actions": "Actions",
-
-  "card": "Card",
-
-  "title": "Title",
-
-  "description": "Description",
-
-  "documentation": "Documentation",
-
-  "documentationUrl": "Documentation URL",
-
-  "logoUrl": "Logo URL",
-
-  "tags": "Tags",
-
-  "tagsPlaceholder": "vue,node,express",
-
-  "publicCard": "Public card",
-
-  "createdAt": "Created at",
-
-  "updatedAt": "Updated at",
+  "theme": "Theme",
+  "lightMode": "Light mode",
+  "darkMode": "Dark mode",
 
   "users": "Users",
+  "createUser": "Create user",
+  "editUser": "Edit user",
+  "deleteUser": "Delete user",
+  "role": "Role",
+  "admin": "Administrator",
+  "user": "User",
+
+  "publicCards": "Public cards",
 
   "confirmDeleteCard": "Are you sure you want to delete this card?",
-
   "confirmDeleteUser": "Are you sure you want to delete this user?",
 
-  "requiredField": "Required field",
-
-  "invalidEmail": "Invalid email",
-
-  "passwordMin": "Password must be at least 6 characters",
-
-  "titleRequired": "Title is required",
-
-  "descriptionRequired": "Description is required",
+  "validationRequired": "This field is required",
+  "validationEmail": "Invalid email",
+  "validationPasswordMin": "Password must contain at least 6 characters",
+  "validationPasswordsMatch": "Passwords do not match",
+  "validationUrl": "Invalid URL",
+  "validationDuplicateTags": "Duplicate tags are not allowed",
 
   "toastLoginSuccess": "Login successful",
+  "toastLoginError": "Login failed",
 
-  "toastLoginError": "Invalid credentials",
+  "toastRegisterSuccess": "Registration successful",
+  "toastRegisterError": "Registration failed",
 
-  "toastRegisterSuccess": "User registered successfully",
-
-  "toastRegisterError": "Register error",
-
-  "toastLogout": "Logged out successfully",
+  "toastLogout": "Session closed",
 
   "toastCardCreated": "Card created successfully",
-
   "toastCardUpdated": "Card updated successfully",
-
   "toastCardDeleted": "Card deleted successfully",
-
-  "toastCardError": "Error loading cards",
+  "toastCardError": "Error managing card",
 
   "toastProfileUpdated": "Profile updated successfully",
-
   "toastProfileError": "Error updating profile",
 
-  "toastSettingsUpdated": "Settings saved successfully",
-
-  "toastSettingsError": "Error saving settings",
+  "toastSettingsUpdated": "Settings updated successfully",
+  "toastSettingsError": "Error updating settings",
 
   "toastUserCreated": "User created successfully",
-
   "toastUserUpdated": "User updated successfully",
-
   "toastUserDeleted": "User deleted successfully",
-
-  "toastUserError": "Error loading users",
-
-  "toastAvatarUpdated": "Avatar updated successfully",
-
-  "toastAvatarError": "Error updating avatar",
-
-  "serverError": "Server error",
-
-  "networkError": "Network error",
-
-  "unauthorized": "Unauthorized"
+  "toastUserError": "Error managing users"
 }

@@ -3,8 +3,8 @@ import {
     createCard,
     getCards,
     getPublicCards,
-    editCard,
-    removeCard,
+    updateCard,
+    deleteCard,
     getCardById
 } from "../controllers/cardController.js";
 
@@ -17,7 +17,7 @@ router.post("/", verifyToken, createCard);
 router.get("/", verifyToken, getCards);
 router.get("/:id", verifyToken, getCardById);
 router.get("/public", getPublicCards);
-router.put("/:id", verifyToken, editCard);
-router.delete("/:id", verifyToken, removeCard);
+router.put("/:id", verifyToken, updateCard);
+router.delete("/:id", verifyToken, deleteCard);
 
 export default router;

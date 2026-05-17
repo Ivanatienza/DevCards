@@ -4,6 +4,8 @@
 
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
+    <img :src="userAvatar" alt="avatar" class="w-16 h-16 rounded-full object-cover border shadow"/>
+
     <div>
 
       <h1 class="text-2xl font-bold">
@@ -119,7 +121,7 @@
       <input
         v-model="form.logo_url"
         type="text"
-        placeholder="Logo URL"
+        :placeholder="t('logoUrl')"
         class="input"
       />
 

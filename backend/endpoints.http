@@ -1,97 +1,102 @@
-=====================================================
-DevCards API
-=====================================================
-
 @baseUrl = http://localhost:3000/api
 @token =
 
-=====================================================
-Auth
-=====================================================
-Register
+### Registro
 
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
+
 {
-"name": "Ivan",
-"surname": "Atienza",
-"email": "ivan@test.com",
-"password": "123456",
-"avatar_url": "https://es.pngtree.com/so/usuarios"
+  "name": "Ivan",
+  "surname": "Atienza",
+  "email": "ivan@test.com",
+  "password": "123456",
+  "avatar_url": ""
 }
 
-Login
+###
+
+### Login
 
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
+
 {
-"email": "ivan@test.com",
-"password": "123456"
+  "email": "ivan@test.com",
+  "password": "123456"
 }
 
-=====================================================
-Cards
-=====================================================
+###
 
-Obtener cards del usuario
+### Obtener cards del usuario
 
 GET {{baseUrl}}/cards
 Authorization: Bearer {{token}}
 
-Obtener cards públicas
+###
+
+### Obtener cards públicas del usuario
 
 GET {{baseUrl}}/cards/public
 
-Obtener card por ID
+###
+
+### Obtener card por ID
 
 GET {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 
-Crear card
+###
+
+### Crear card
 
 POST {{baseUrl}}/cards
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
 {
-"logo_url": "https://es.wikipedia.org/wiki/Archivo:Vue.js_Logo_2.svg",
-"title": "Vue Docs",
-"description": "Documentación Vue",
-"documentation_url": "https://vuejs.org",
-"is_public": 1,
-"tags": ["vue","frontend"]
+  "logo_url": "https://vuejs.org/logo.png",
+  "title": "Vue Docs",
+  "description": "Documentación Vue",
+  "documentation_url": "https://vuejs.org",
+  "is_public": 1,
+  "tags": ["vue","frontend"]
 }
 
-Actualizar card
+###
+
+### Actualizar card
 
 PUT {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
 {
-"logo_url": "https://vuejs.org/logo.png",
-"title": “Documentación Vue",
-"description": "Documentación Vue 3 Inglés",
-"documentation_url": "https://vuejs.org",
-"is_public": 1,
-"tags": ["vue","frontend"]
+  "logo_url": "https://vuejs.org/logo.png",
+  "title": "Documentación Vue",
+  "description": "Documentación Vue 3 Inglés",
+  "documentation_url": "https://vuejs.org",
+  "is_public": 1,
+  "tags": ["vue","frontend"]
 }
 
-Eliminar card
+###
+
+### Eliminar card
 
 DELETE {{baseUrl}}/cards/1
 Authorization: Bearer {{token}}
 
-=====================================================
-Tags
-=====================================================
+###
 
-### Obtener tags
+### Obtener etiquetas de cards
 
 GET {{baseUrl}}/tags
 Authorization: Bearer {{token}}
 
 ###
 
-### Crear tag
+### Crear etiquetas de cards
 
 POST {{baseUrl}}/tags
 Authorization: Bearer {{token}}
@@ -101,18 +106,16 @@ Content-Type: application/json
   "name": "vue"
 }
 
-=====================================================
-Profile
-=====================================================
+###
 
-### Obtener perfil
+### Obtener perfil del usuario logueado
 
 GET {{baseUrl}}/users/profile
 Authorization: Bearer {{token}}
 
 ###
 
-### Actualizar perfil
+### Actualizar perfil del usuario
 
 PUT {{baseUrl}}/users/profile
 Authorization: Bearer {{token}}
@@ -125,47 +128,51 @@ Content-Type: application/json
   "avatar_url": ""
 }
 
-=====================================================
-Settings
-=====================================================
+###
 
-Obtener settings
+### Obtener preferencias del usuario
 
 GET {{baseUrl}}/settings
 Authorization: Bearer {{token}}
 
-Actualizar settings
+###
+
+### Actualizar preferencias del usuario
 
 PUT {{baseUrl}}/settings
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
 {
-"theme": "dark",
-"language": "es"
+  "theme": "dark",
+  "language": "es"
 }
 
-=====================================================
-Admin (users)
-=====================================================
+###
 
-Obtener usuarios
+### Obtener usuarios con rol admin
 
 GET {{baseUrl}}/users
 Authorization: Bearer {{token}}
 
-Actualizar usuario
+###
+
+### Actualizar usuarios con rol admin
 
 PUT {{baseUrl}}/users/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
 {
-"name": "Juan",
-"surname": "Gonzalez",
-"email": "admin@test.com",
-"avatar": "https://es.pngtree.com/freepng/user-profile-avatar_13369991.html"
+  "name": "Juan",
+  "surname": "Gonzalez",
+  "email": "admin@test.com",
+  "avatar_url": ""
 }
 
-Eliminar usuario
+###
+
+### Eliminar usuarios con rol admin
 
 DELETE {{baseUrl}}/users/1
 Authorization: Bearer {{token}}

@@ -88,7 +88,7 @@
       <input
         v-model="form.confirmPassword"
         type="password"
-        placeholder="Confirm Password"
+        :placeholder="t('confirmPassword')"
         class="input"
       />
 
