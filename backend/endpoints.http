@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@token =
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NzkwMTQyOTIsImV4cCI6MTc3OTEwMDY5Mn0.FeMxQelC8OEtpRcjKGCzc8Xz7K4RCNVL-H3KiLnP218
 
 ### Registro
 
@@ -7,10 +7,10 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "name": "Ivan",
-  "surname": "Atienza",
-  "email": "ivan@test.com",
-  "password": "123456",
+  "name": "Ian",
+  "surname": "Garcia",
+  "email": "ian@prueba.com",
+  "password": "Ianovich250@",
   "avatar_url": ""
 }
 
@@ -22,8 +22,8 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "ivan@test.com",
-  "password": "123456"
+  "email": "juangarcia@hotmail.com",
+  "password": "Juan@Garcia250"
 }
 
 ###
@@ -43,7 +43,7 @@ GET {{baseUrl}}/cards/public
 
 ### Obtener card por ID
 
-GET {{baseUrl}}/cards/1
+GET {{baseUrl}}/cards/7
 Authorization: Bearer {{token}}
 
 ###
@@ -57,7 +57,7 @@ Content-Type: application/json
 {
   "logo_url": "https://vuejs.org/logo.png",
   "title": "Vue Docs",
-  "description": "Documentación Vue",
+  "description": "Documentación Vue en inglés",
   "documentation_url": "https://vuejs.org",
   "is_public": 1,
   "tags": ["vue","frontend"]
@@ -67,13 +67,13 @@ Content-Type: application/json
 
 ### Actualizar card
 
-PUT {{baseUrl}}/cards/1
+PUT {{baseUrl}}/cards/7
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "logo_url": "https://vuejs.org/logo.png",
-  "title": "Documentación Vue",
+  "title": "Documentacion Vue",
   "description": "Documentación Vue 3 Inglés",
   "documentation_url": "https://vuejs.org",
   "is_public": 1,
@@ -84,7 +84,7 @@ Content-Type: application/json
 
 ### Eliminar card
 
-DELETE {{baseUrl}}/cards/1
+DELETE {{baseUrl}}/cards/7
 Authorization: Bearer {{token}}
 
 ###
@@ -122,9 +122,9 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Ivan",
-  "surname": "Atienza",
-  "email": "ivan@test.com",
+  "name": "Jose",
+  "surname": "Jimenez",
+  "email": "ivan@yahoo.com",
   "avatar_url": ""
 }
 

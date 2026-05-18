@@ -20,7 +20,7 @@ export const getCards = async(user_id, search = "") => {
         WHERE c.user_id = ?
         AND c.title LIKE ?
         GROUP BY c.id
-        ORDER BY c.created_at) DESC`,
+        ORDER BY c.created_at DESC`,
         [user_id, `%${search}%`]
     );
     

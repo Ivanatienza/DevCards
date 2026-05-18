@@ -2,19 +2,33 @@
 
 <div class="container-app py-6">
 
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+  <!-- Header -->
 
-    <img :src="userAvatar" alt="avatar" class="w-16 h-16 rounded-full object-cover border shadow"/>
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
+  >
 
-    <div>
+    <div class="flex items-center gap-4">
 
-      <h1 class="text-2xl font-bold">
-        {{ t("dashboard") }}
-      </h1>
+      <!-- Avatar -->
 
-      <p class="text-gray-500">
-        {{ t("manageCards") }}
-      </p>
+      <img
+        :src="userAvatar"
+        alt="avatar"
+        class="w-16 h-16 rounded-full object-cover border shadow"
+      />
+
+      <div>
+
+        <h1 class="text-2xl font-bold">
+          {{ t("dashboard") }}
+        </h1>
+
+        <p class="text-gray-500">
+          {{ t("manageCards") }}
+        </p>
+
+      </div>
 
     </div>
 
@@ -112,11 +126,11 @@
       <input
         v-model="form.documentation_url"
         type="text"
-        placeholder="https://..."
+        placeholder="https://"
         class="input"
       />
 
-      <!-- Logo -->
+      <!-- Logo URL -->
 
       <input
         v-model="form.logo_url"
@@ -175,11 +189,19 @@
 
 <script setup>
 
-import { ref, onMounted } from "vue";
+import {
+
+  ref,
+  onMounted,
+  computed
+
+} from "vue";
 
 import { useToast } from "vue-toastification";
 
 import { useI18n } from "vue-i18n";
+
+import { useAuthStore } from "../stores/auth";
 
 import Button from "../components/ui/Button.vue";
 
@@ -187,18 +209,11 @@ import Modal from "../components/ui/Modal.vue";
 
 import CardList from "../components/cards/CardList.vue";
 
-import {
+import { getCards, createCard, updateCard, deleteCard } from "../services/cardService";
 
-  getCards,
-  createCard,
-  updateCard,
-  deleteCard
+import { validateCard} from "../utils/validators";
 
-} from "../services/cardService";
-
-import {
-  validateCard
-} from "../utils/validators";
+const auth = useAuthStore();
 
 const toast = useToast();
 
@@ -225,6 +240,14 @@ const form = ref({
 
 });
 
+// Avatar usuario
+const userAvatar = computed(() => {
+
+  return auth.user?.avatar_url ||
+    "/default-avatar.png";
+
+});
+
 // Obtener cards
 const loadCards = async() => {
 
@@ -234,11 +257,14 @@ const loadCards = async() => {
 
     const res = await getCards();
 
-    cards.value = res.data.data || res.data;
+    cards.value =
+      res.data.data || res.data;
 
-  }catch(error){
+  }catch{
 
-    toast.error(t("toastCardError"));
+    toast.error(
+      t("toastCardError")
+    );
 
   }finally{
 
@@ -248,7 +274,7 @@ const loadCards = async() => {
 
 };
 
-// Abrir modal crear
+// Abrir crear
 const openCreateModal = () => {
 
   editingId.value = null;
@@ -270,7 +296,7 @@ const openCreateModal = () => {
 
 };
 
-// Abrir modal editar
+// Abrir editar
 const openEditModal = (card) => {
 
   editingId.value = card.id;
@@ -296,12 +322,18 @@ const closeModal = () => {
 
 };
 
-// Guardar card
+// Guardar
 const handleSubmit = async() => {
 
-  errors.value = validateCard(form.value);
+  errors.value =
+    validateCard(
+      form.value,
+      t
+    );
 
-  if(Object.keys(errors.value).length){
+  if(
+    Object.keys(errors.value).length
+  ){
     return;
   }
 
@@ -322,17 +354,23 @@ const handleSubmit = async() => {
     if(editingId.value){
 
       await updateCard(
+
         editingId.value,
         payload
+
       );
 
-      toast.success(t("toastCardUpdated"));
+      toast.success(
+        t("toastCardUpdated")
+      );
 
     }else{
 
       await createCard(payload);
 
-      toast.success(t("toastCardCreated"));
+      toast.success(
+        t("toastCardCreated")
+      );
 
     }
 
@@ -340,19 +378,23 @@ const handleSubmit = async() => {
 
     closeModal();
 
-  }catch(error){
+  }catch{
 
-    toast.error(t("toastCardError"));
+    toast.error(
+      t("toastCardError")
+    );
 
   }
 
 };
 
-// Eliminar card
+// Eliminar
 const handleDelete = async(id) => {
 
   const confirmed =
-    confirm(t("confirmDeleteCard"));
+    confirm(
+      t("confirmDeleteCard")
+    );
 
   if(!confirmed){
     return;
@@ -363,13 +405,19 @@ const handleDelete = async(id) => {
     await deleteCard(id);
 
     cards.value =
-      cards.value.filter(c => c.id !== id);
+      cards.value.filter(
+        c => c.id !== id
+      );
 
-    toast.success(t("toastCardDeleted"));
+    toast.success(
+      t("toastCardDeleted")
+    );
 
-  }catch(error){
+  }catch{
 
-    toast.error(t("toastCardError"));
+    toast.error(
+      t("toastCardError")
+    );
 
   }
 

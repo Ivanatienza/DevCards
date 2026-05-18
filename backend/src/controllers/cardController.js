@@ -90,7 +90,11 @@ export const getPublicCards = async(req,res) => {
 
     );
 
-    res.json(cards);
+    res.json({
+
+      data: rows
+
+    });
 
   }catch(error){
 
@@ -136,7 +140,7 @@ export const createCard = async(req,res) => {
         description,
         documentation_url,
         logo_url,
-        is_public,
+        Number(is_public),
         req.user.id
       ]
 

@@ -157,14 +157,18 @@ const loadProfile = async() => {
   try{
 
     const res =
-      await api.get("/users/profile");
+      await api.get(
+        "/users/profile"
+      );
 
     form.value =
       res.data.data;
 
   }catch{
 
-    toast.error(t("toastProfileError"));
+    toast.error(
+      t("toastProfileError")
+    );
 
   }
 
