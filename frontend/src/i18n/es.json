@@ -11,15 +11,21 @@
 
   "title": "Título",
   "description": "Descripción",
-  "tags": "Etiquetas",
   "logoUrl": "URL del logo",
+  "tags": "Etiquetas",
   "tagsPlaceholder": "vue, frontend, javascript",
   "publicCard": "Card pública",
+  "public": "Pública",
   "noCards": "No hay cards disponibles",
+
+  "documentation": "Documentación",
 
   "login": "Iniciar sesión",
   "register": "Registrarse",
   "logout": "Cerrar sesión",
+  "welcomeBack": "Bienvenido de nuevo",
+  "createAccount": "Crea tu cuenta",
+
   "email": "Correo electrónico",
   "password": "Contraseña",
   "confirmPassword": "Confirmar contraseña",
@@ -39,14 +45,22 @@
   "darkMode": "Modo oscuro",
 
   "users": "Usuarios",
+  "manageUsers": "Gestiona usuarios",
+
   "createUser": "Crear usuario",
   "editUser": "Editar usuario",
   "deleteUser": "Eliminar usuario",
+
   "role": "Rol",
   "admin": "Administrador",
   "user": "Usuario",
 
+  "adminPanel": "Panel administrador",
+
   "publicCards": "Cards públicas",
+  "exploreCards": "Explora cards públicas",
+
+  "actions": "Acciones",
 
   "confirmDeleteCard": "¿Seguro que deseas eliminar esta card?",
   "confirmDeleteUser": "¿Seguro que deseas eliminar este usuario?",

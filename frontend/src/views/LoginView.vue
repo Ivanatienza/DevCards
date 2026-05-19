@@ -1,22 +1,29 @@
 <template>
 
-<div class="max-w-md mx-auto py-10 px-4">
+<div>
 
-  <h1 class="text-3xl font-bold mb-6">
+  <h1 class="text-3xl font-bold mb-2 text-center">
     {{ t("login") }}
   </h1>
 
+  <p class="text-gray-500 text-center mb-8">
+    {{ t("welcomeBack") }}
+  </p>
+
   <form
-    class="flex flex-col gap-4"
+    class="space-y-5"
     @submit.prevent="handleLogin"
   >
 
     <div>
 
+      <label class="block mb-2 font-medium">
+        {{ t("email") }}
+      </label>
+
       <input
         v-model="form.email"
         type="email"
-        :placeholder="t('email')"
         class="input"
       />
 
@@ -31,10 +38,13 @@
 
     <div>
 
+      <label class="block mb-2 font-medium">
+        {{ t("password") }}
+      </label>
+
       <input
         v-model="form.password"
         type="password"
-        :placeholder="t('password')"
         class="input"
       />
 
@@ -47,9 +57,9 @@
 
     </div>
 
-    <Button type="submit">
+    <button class="primary-btn w-full">
       {{ t("login") }}
-    </Button>
+    </button>
 
   </form>
 
@@ -59,74 +69,34 @@
 
 <script setup>
 
-import { ref } from "vue";
-
-import { useRouter } from "vue-router";
-
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { useToast } from "vue-toastification";
-
-import { login } from "../services/authService";
-
-import Button from "../components/ui/Button.vue";
-
-import {
-  validateLogin
-} from "../utils/validators";
-
-const router = useRouter();
-
-const toast = useToast();
+import { useAuthStore } from "../stores/auth";
+import { validateLogin } from "../utils/validators";
 
 const { t } = useI18n();
 
-const form = ref({
-
-  email:"",
-  password:""
-
-});
+const auth = useAuthStore();
 
 const errors = ref({});
 
+const form = reactive({
+  email:"",
+  password:""
+});
+
 const handleLogin = async() => {
 
-  errors.value =
-    validateLogin(form.value,t);
+  errors.value = validateLogin(form, t);
 
   if(Object.keys(errors.value).length){
     return;
   }
 
-  try{
-
-    const res =
-      await login(form.value);
-
-    localStorage.setItem(
-      "token",
-      res.data.token
-    );
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(res.data.user)
-    );
-
-    toast.success(
-      t("toastLoginSuccess")
-    );
-
-    router.push("/dashboard");
-
-  }catch(error){
-
-    toast.error(
-      t("toastLoginError")
-    );
-
-  }
+  await auth.login(
+    form.email,
+    form.password
+  );
 
 };
 

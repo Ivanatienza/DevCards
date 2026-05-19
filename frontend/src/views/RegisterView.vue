@@ -1,109 +1,58 @@
 <template>
 
-<div class="max-w-md mx-auto py-10 px-4">
+<div>
 
-  <h1 class="text-3xl font-bold mb-6">
+  <h1 class="text-3xl font-bold mb-2 text-center">
     {{ t("register") }}
   </h1>
 
+  <p class="text-gray-500 text-center mb-8">
+    {{ t("createAccount") }}
+  </p>
+
   <form
-    class="flex flex-col gap-4"
+    class="space-y-5"
     @submit.prevent="handleRegister"
   >
 
-    <div>
+    <input
+      v-model="form.name"
+      type="text"
+      :placeholder="t('name')"
+      class="input"
+    />
 
-      <input
-        v-model="form.name"
-        type="text"
-        :placeholder="t('name')"
-        class="input"
-      />
+    <input
+      v-model="form.surname"
+      type="text"
+      :placeholder="t('surname')"
+      class="input"
+    />
 
-      <p
-        v-if="errors.name"
-        class="text-red-500 text-sm"
-      >
-        {{ errors.name }}
-      </p>
+    <input
+      v-model="form.email"
+      type="email"
+      :placeholder="t('email')"
+      class="input"
+    />
 
-    </div>
+    <input
+      v-model="form.password"
+      type="password"
+      :placeholder="t('password')"
+      class="input"
+    />
 
-    <div>
+    <input
+      v-model="form.confirmPassword"
+      type="password"
+      :placeholder="t('confirmPassword')"
+      class="input"
+    />
 
-      <input
-        v-model="form.surname"
-        type="text"
-        :placeholder="t('surname')"
-        class="input"
-      />
-
-      <p
-        v-if="errors.surname"
-        class="text-red-500 text-sm"
-      >
-        {{ errors.surname }}
-      </p>
-
-    </div>
-
-    <div>
-
-      <input
-        v-model="form.email"
-        type="email"
-        :placeholder="t('email')"
-        class="input"
-      />
-
-      <p
-        v-if="errors.email"
-        class="text-red-500 text-sm"
-      >
-        {{ errors.email }}
-      </p>
-
-    </div>
-
-    <div>
-
-      <input
-        v-model="form.password"
-        type="password"
-        :placeholder="t('password')"
-        class="input"
-      />
-
-      <p
-        v-if="errors.password"
-        class="text-red-500 text-sm"
-      >
-        {{ errors.password }}
-      </p>
-
-    </div>
-
-    <div>
-
-      <input
-        v-model="form.confirmPassword"
-        type="password"
-        :placeholder="t('confirmPassword')"
-        class="input"
-      />
-
-      <p
-        v-if="errors.confirmPassword"
-        class="text-red-500 text-sm"
-      >
-        {{ errors.confirmPassword }}
-      </p>
-
-    </div>
-
-    <Button type="submit">
+    <button class="primary-btn w-full">
       {{ t("register") }}
-    </Button>
+    </button>
 
   </form>
 
@@ -113,66 +62,25 @@
 
 <script setup>
 
-import { ref } from "vue";
-
-import { useRouter } from "vue-router";
-
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-import { useToast } from "vue-toastification";
-
-import { register } from "../services/authService";
-
-import Button from "../components/ui/Button.vue";
-
-import {
-  validateRegister
-} from "../utils/validators";
-
-const router = useRouter();
-
-const toast = useToast();
+import { validateRegister } from "../utils/validators";
 
 const { t } = useI18n();
 
-const form = ref({
+const errors = ref({});
 
+const form = reactive({
   name:"",
   surname:"",
   email:"",
   password:"",
   confirmPassword:""
-
 });
 
-const errors = ref({});
+const handleRegister = () => {
 
-const handleRegister = async() => {
-
-  errors.value =
-    validateRegister(form.value,t);
-
-  if(Object.keys(errors.value).length){
-    return;
-  }
-
-  try{
-
-    await register(form.value);
-
-    toast.success(
-      t("toastRegisterSuccess")
-    );
-
-    router.push("/login");
-
-  }catch(error){
-
-    toast.error(
-      t("toastRegisterError")
-    );
-
-  }
+  errors.value = validateRegister(form, t);
 
 };
 

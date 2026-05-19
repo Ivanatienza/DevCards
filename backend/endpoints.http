@@ -22,8 +22,8 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "juangarcia@hotmail.com",
-  "password": "Juan@Garcia250"
+  "email": "admin@devcards.com",
+  "password": "Admin123@"
 }
 
 ###
@@ -159,12 +159,12 @@ Authorization: Bearer {{token}}
 
 ### Actualizar usuarios con rol admin
 
-PUT {{baseUrl}}/users/1
+PUT {{baseUrl}}/users/14
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Juan",
+  "name": "Emilio",
   "surname": "Gonzalez",
   "email": "admin@test.com",
   "avatar_url": ""
@@ -174,5 +174,5 @@ Content-Type: application/json
 
 ### Eliminar usuarios con rol admin
 
-DELETE {{baseUrl}}/users/1
+DELETE {{baseUrl}}/users/14
 Authorization: Bearer {{token}}

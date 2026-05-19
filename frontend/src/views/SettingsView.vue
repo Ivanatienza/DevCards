@@ -1,17 +1,54 @@
 <template>
 
-<div class="max-w-md mx-auto px-4 py-10">
+<div class="max-w-2xl mx-auto">
 
-<h1 class="text-2xl mb-6">{{ t("settings") }}
-</h1>
+  <div class="card-ui p-8 space-y-8">
 
-<select v-model="theme" class="input mb-3">
-<option value="light">{{ t("light") }}</option>
-<option value="dark">{{ t("dark") }}</option>
-</select>
+    <h1 class="text-4xl font-bold">
+      {{ t("settings") }}
+    </h1>
 
-<Button @click="save">{{ t("save") }}
-</Button>
+    <div>
+
+      <p class="font-semibold mb-4">
+        {{ t("theme") }}
+      </p>
+
+      <div class="grid grid-cols-2 gap-4">
+
+        <button class="secondary-btn">
+          ☀️ {{ t("lightMode") }}
+        </button>
+
+        <button class="primary-btn">
+          🌙 {{ t("darkMode") }}
+        </button>
+
+      </div>
+
+    </div>
+
+    <div>
+
+      <p class="font-semibold mb-4">
+        {{ t("language") }}
+      </p>
+
+      <select class="input">
+
+        <option>
+          Español
+        </option>
+
+        <option>
+          English
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -19,35 +56,8 @@
 
 <script setup>
 
-import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
-import { usei18n } from "vue-i18n";
-import Button from "../components/UI/Button.vue";
-import { getSettings, updateSettings } from "../services/settingsService";
+import { useI18n } from "vue-i18n";
 
-const toast = useToast();
-const { t, locale } = usei18n();
-const theme = ref("light");
-const language = ref("es");
-
-onMounted(async () => {
-    const data = await getSettings();
-    theme.value = data.theme;
-    language.value = data.language;
-});
-
-const saveSettings = () => {
-    try{
-        await updateSettings({
-            theme: theme.value,
-            language: language.value
-        });
-
-        toast.success(t("toastSettingsUpdated"));
-        
-    }catch(error){
-        toast.error(t("toastSettingsError"));
-    }
-}
+const { t } = useI18n();
 
 </script>

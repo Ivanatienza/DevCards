@@ -15,11 +15,18 @@
   "tags": "Tags",
   "tagsPlaceholder": "vue, frontend, javascript",
   "publicCard": "Public card",
+  "public": "Public",
   "noCards": "No cards available",
+  "documentation": "Documentation",
 
   "login": "Login",
   "register": "Register",
   "logout": "Logout",
+
+  "hello": "Hello",
+  "welcomeBack": "Welcome back",
+  "createAccount": "Create your account",
+
   "email": "Email",
   "password": "Password",
   "confirmPassword": "Confirm password",
@@ -39,14 +46,22 @@
   "darkMode": "Dark mode",
 
   "users": "Users",
+  "manageUsers": "Manage users",
+
   "createUser": "Create user",
   "editUser": "Edit user",
   "deleteUser": "Delete user",
+
   "role": "Role",
   "admin": "Administrator",
   "user": "User",
 
+  "adminPanel": "Admin panel",
+
   "publicCards": "Public cards",
+  "exploreCards": "Explore public cards",
+
+  "actions": "Actions",
 
   "confirmDeleteCard": "Are you sure you want to delete this card?",
   "confirmDeleteUser": "Are you sure you want to delete this user?",
