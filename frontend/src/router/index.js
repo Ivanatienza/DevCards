@@ -18,7 +18,7 @@ const routes = [
 
   // Layout Auth
   {
-    path: "/",
+    path: "/auth",
     component: AuthLayout,
     children: [
 
@@ -42,7 +42,7 @@ const routes = [
     children: [
 
       {
-        path: "",
+        path: "home",
         component: HomeView
       },
 

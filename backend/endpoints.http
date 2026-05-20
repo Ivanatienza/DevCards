@@ -43,7 +43,7 @@ GET {{baseUrl}}/cards/public
 
 ### Obtener card por ID
 
-GET {{baseUrl}}/cards/7
+GET {{baseUrl}}/cards/29
 Authorization: Bearer {{token}}
 
 ###

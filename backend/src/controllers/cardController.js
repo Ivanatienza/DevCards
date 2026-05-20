@@ -248,3 +248,90 @@ export const createCard = async(req,res) => {
   }
 
 };
+
+export const updateCard = async(req,res) => {
+
+  try{
+
+    const {
+      title,
+      description,
+      documentation_url,
+      logo_url,
+      is_public
+    } = req.body;
+
+    await pool.query(
+      `
+      UPDATE cards
+      SET
+        title = ?,
+        description = ?,
+        documentation_url = ?,
+        logo_url = ?,
+        is_public = ?
+      WHERE id = ?
+      AND user_id = ?
+      `,
+      [
+        title,
+        description,
+        documentation_url,
+        logo_url,
+        is_public,
+        req.params.id,
+        req.user.id
+      ]
+    );
+
+    res.json({
+      success:true,
+      message:"Card actualizada"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error actualizando card"
+    });
+
+  }
+
+};
+
+export const removeCard = async(req,res) => {
+
+  try{
+
+    await pool.query(
+      `
+      DELETE FROM cards
+      WHERE id = ?
+      AND user_id = ?
+      `,
+      [
+        req.params.id,
+        req.user.id
+      ]
+    );
+
+    res.json({
+      success:true,
+      message:"Card eliminada"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      message:"Error eliminando card"
+    });
+
+  }
+
+};
