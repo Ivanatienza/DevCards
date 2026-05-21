@@ -1,288 +1,564 @@
 <template>
 
-<div class="container-app py-8">
+  <div class="container-app py-6">
 
-<div class="flex flex-col md:flex-row md:items-center md:justify-center md:justify-between gap-4 mb-6">
+    <!-- Header -->
 
-<h1 class="text-2xl font-bold">
-{{ t("admin") }}
-</h1>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-</div>
+      <div>
 
-<button @click="openCreate" class="bg-blue-500 text-white px-4 py-2 rounded">
-{{ $t("createUser") }}
-</button>
+        <h1 class="text-3xl font-bold">
+          {{ $t("users") }}
+        </h1>
 
-<div v-if="loading" class="text-center py-10">
-{{ $t("loading") }}
-</div>
+        <p class="text-gray-500 dark:text-gray-400">
+          {{ $t("manageUsers") }}
+        </p>
 
-<div v-else-if="users.length === 0 " class="text-center py-10">
-{{ $t("noUsers") }}
-</div>
+      </div>
 
-<div v-else class="overflow-x-auto">
+      <button
+        @click="openCreate"
+        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
+      >
+        {{ $t("createUser") }}
+      </button>
 
-<table class="w-full bg-white dark:bg-gray-800 rounded shadow">
+    </div>
 
-<thead class="bg-gray-100 dark:bg-gray-700">
+    <!-- Loading -->
 
-<tr>
+    <div
+      v-if="loading"
+      class="text-center py-10"
+    >
+      {{ $t("loading") }}
+    </div>
 
-<th class="p-3">
-{{ $t("name") }}
-</th>
+    <!-- Table -->
 
-<th class="p-3">
-{{ $t("surname") }}
-</th>
+    <div
+      v-else
+      class="overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl shadow"
+    >
 
-<th class="p-3">
-{{ $t("email") }}
-</th>
+      <table class="w-full">
 
-<th class="p-3">
-{{ $t("role") }}
-</th>
+        <thead class="bg-gray-100 dark:bg-gray-800">
 
-<th class="p-3">
-{{ $t("actions") }}
-</th>
+          <tr>
 
-</tr>
+            <th class="p-3 text-left">
+              Avatar
+            </th>
 
-</thead>
+            <th class="p-3 text-left">
+              {{ $t("name") }}
+            </th>
 
-<tbody>
+            <th class="p-3 text-left">
+              {{ $t("surname") }}
+            </th>
 
-<tr v-for="user in users" :key="user.id" class="border-t dark:border-gray-700">
-</tr>
+            <th class="p-3 text-left">
+              {{ $t("email") }}
+            </th>
 
-<td class="p-3">
+            <th class="p-3 text-left">
+              {{ $t("role") }}
+            </th>
 
-<img :src="user.avatar_url || defaultAvatar " class="w-10 h-10 rounded-full-object-cover" />
+            <th class="p-3 text-left">
+              Actions
+            </th>
 
-</td>
+          </tr>
 
-<td class="p-3">
-{{ (user.name) }}
-</td>
+        </thead>
 
-<td class="p-3">
-{{ user.surname }}
-</td>
+        <tbody>
 
-<td class="p-3">
-{{ user.email }}
-</td>
+          <tr
+            v-for="user in users"
+            :key="user.id"
+            class="border-t dark:border-gray-700"
+          >
 
-<td class="p-3">
+            <!-- Avatar -->
 
-<span class="px-2 py-1 rounded text-xs" :class="user.role === 'admin'? 'bg-red-500 text-white' :'bg-gray-300 dark:bg-gray-600'">
-{{ user.role }}
-</span>
+            <td class="p-3">
 
-</td>
+              <img
+                :src="user.avatar_url || defaultAvatar"
+                alt="avatar"
+                class="w-10 h-10 rounded-full object-cover"
+              />
 
-<td class="p-3 flex gap-2">
+            </td>
 
-<button @click="openEdit(user)" class="text-blue-500">
-{{ $t("edit") }}
-</button>
+            <!-- Name -->
 
-<button @click="removeUser(user.id)" class="text-red-500">
-{{ $t("delete")}}
-</button>
+            <td class="p-3">
+              {{ user.name }}
+            </td>
 
-</td>
+            <!-- Surname -->
 
-</tbody>
+            <td class="p-3">
+              {{ user.surname }}
+            </td>
 
-</table>
+            <!-- Email -->
 
-</div>
+            <td class="p-3">
+              {{ user.email }}
+            </td>
 
-</div>
+            <!-- Role -->
 
-<Modal :show="showModal" @close="closeModal">
+            <td class="p-3">
 
-<template #title>
+              <span
+                class="px-2 py-1 rounded text-xs"
+                :class="
+                  user.role === 'admin'
+                    ? 'bg-red-500 text-white'
+                    : 'bg-gray-300 dark:bg-gray-600'
+                "
+              >
+                {{ user.role }}
+              </span>
 
-{{ editingUser ? $t("editUser") :$t("createUser") }}
+            </td>
 
-</template>
+            <!-- Actions -->
 
-<div>
+            <td class="p-3">
 
-<input v-model="form.name" type="text" :placeholder="$t('name')" class="border p-2 rounded dark:bg-gray-700"/>
+              <div class="flex gap-3">
 
-<p v-if="errors.name" class="text-red-500 text-sm mt-1">
-{{ errors.name }}
-</p>
+                <button
+                  @click="openEdit(user)"
+                  class="text-blue-500 hover:underline"
+                >
+                  {{ $t("edit") }}
+                </button>
 
-</div>
+                <button
+                  @click="removeUser(user.id)"
+                  class="text-red-500 hover:underline"
+                >
+                  {{ $t("delete") }}
+                </button>
 
-<div>
+              </div>
 
-<input v-model="form.surname" type="text" :placeholder="$t('surname')" class="border p-2 rounded dark:bg-gray-700"/>
+            </td>
 
-<p v-if="errors.surname" class="text-red-500 text-sm mt-1">
-{{ errors.surname }}
-</p>
+          </tr>
 
-</div>
+        </tbody>
 
-<div>
+      </table>
 
-<input v-model="form.email" type="text" :placeholder="$t('email')" class="border p-2 rounded dark:bg-gray-700"/>
+    </div>
 
-<p v-if="errors.email" class="text-red-500 text-sm mt-1">
-{{ errors.email }}
-</p>
+    <!-- Modal -->
 
-</div>
+    <div
+      v-if="showModal"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
 
-<div v-if="!editingUser">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg">
 
-<input v-model="form.password" type="password" :placeholder="$t('password')" class="border p-2 rounded dark:bg-gray-700"/>
+        <h2 class="text-2xl font-bold mb-4">
 
-<p v-if="errors.password" class="text-red-500 text-sm mt-1">
-{{ errors.password }}
-</p>
+          {{
+            editingId
+              ? $t("editUser")
+              : $t("createUser")
+          }}
 
-</div>
+        </h2>
 
-<div>
+        <form
+          class="flex flex-col gap-4"
+          @submit.prevent="saveUser"
+        >
 
-<select v-model="form.role" class="border p-2 rounded dark:bg-gray-700">
+          <!-- Name -->
 
-<option value="user">
-User
-</option>
+          <div>
 
-<option value="admin">
-Admin
-</option>
+            <input
+              v-model="form.name"
+              type="text"
+              :placeholder="$t('name')"
+              class="input"
+            />
 
-</select>
+            <p
+              v-if="errors.name"
+              class="text-red-500 text-sm mt-1"
+            >
+              {{ errors.name }}
+            </p>
 
-</div>
+          </div>
 
-<div class="flex justify-end gap-2">
+          <!-- Surname -->
 
-<button @click="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded">
-{{ $t("cancel") }}
-</button>
+          <div>
 
-<button @click="saveUser" class="bg-blue-500 text-white px-4 py-2 rounded">
-{{ $t("save") }}
-</button>
+            <input
+              v-model="form.surname"
+              type="text"
+              :placeholder="$t('surname')"
+              class="input"
+            />
 
-</div>
+            <p
+              v-if="errors.surname"
+              class="text-red-500 text-sm mt-1"
+            >
+              {{ errors.surname }}
+            </p>
 
-</Modal>
+          </div>
+
+          <!-- Email -->
+
+          <div>
+
+            <input
+              v-model="form.email"
+              type="email"
+              :placeholder="$t('email')"
+              class="input"
+            />
+
+            <p
+              v-if="errors.email"
+              class="text-red-500 text-sm mt-1"
+            >
+              {{ errors.email }}
+            </p>
+
+          </div>
+
+          <!-- Password -->
+
+          <div v-if="!editingId">
+
+            <input
+              v-model="form.password"
+              type="password"
+              :placeholder="$t('password')"
+              class="input"
+            />
+
+            <p
+              v-if="errors.password"
+              class="text-red-500 text-sm mt-1"
+            >
+              {{ errors.password }}
+            </p>
+
+          </div>
+
+          <!-- Avatar -->
+
+          <input
+            v-model="form.avatar_url"
+            type="text"
+            placeholder="https://..."
+            class="input"
+          />
+
+          <!-- Role -->
+
+          <select
+            v-model="form.role"
+            class="input"
+          >
+
+            <option value="user">
+              {{ $t("user") }}
+            </option>
+
+            <option value="admin">
+              {{ $t("admin") }}
+            </option>
+
+          </select>
+
+          <!-- Buttons -->
+
+          <div class="flex gap-3 pt-2">
+
+            <button
+              type="submit"
+              class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
+            >
+              {{
+                editingId
+                  ? $t("save")
+                  : $t("create")
+              }}
+            </button>
+
+            <button
+              type="button"
+              @click="closeModal"
+              class="px-4 py-2 rounded-lg bg-gray-300 dark:bg-gray-700"
+            >
+              {{ $t("cancel") }}
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </template>
 
 <script setup>
 
+import { ref, onMounted } from "vue";
+
 import { useToast } from "vue-toastification";
-import { usei18n } from "vue-i18n";
-import Button from "../components/UI/Button.vue";
-import Modal from "../components/UI/Modal.vue";
-import { required, isEmail, minLength } from "../utils/validators";
-import api from "../services/api";
+
+import { useI18n } from "vue-i18n";
+
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
-import { onMounted } from "vue";
+
+import { required, isEmail, minLength } from "../utils/validators";
 
 const toast = useToast();
-const { t } = usei18n();
-const users = ref([]);
-const loading = ref(false);
-const showModal = ref(false);
-const editingUser = ref(null);
-const defaultAvatar = "/DevCards/frontend/public/avatar usuario.png";
 
+const { t } = useI18n();
+
+const users = ref([]);
+
+const loading = ref(false);
+
+const showModal = ref(false);
+
+const editingId = ref(null);
+
+const errors = ref({});
+
+const defaultAvatar = "/default-avatar.png";
 
 const form = ref({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-    role: "user"
+
+  name:"",
+  surname:"",
+  email:"",
+  password:"",
+  avatar_url:"",
+  role:"user"
+
 });
 
 const loadUsers = async() => {
-    loading.value = true;
 
-    try{
-        const res = await getUsers();
-        users.value = res.data;
-    }catch(error){
-        toast.error($t("usersLoadError"));
-    }finally{
-        loading.value = false;
-    }
+  loading.value = true;
+
+  try{
+
+    const res = await getUsers();
+
+    users.value = res.data.data || res.data;
+
+  }catch(error){
+
+    toast.error(t("toastUserError"));
+
+  }finally{
+
+    loading.value = false;
+
+  }
+
 };
-
-onMounted(loadUsers);
 
 const openCreate = () => {
-    editingUser.value = null;
 
-    form.value = {
-        name: "",
-        surname: "",
-        email: "",
-        password: "",
-        role: "user"
-    }
+  editingId.value = null;
 
-    showModal.value = true;
+  errors.value = {};
+
+  form.value = {
+
+    name:"",
+    surname:"",
+    email:"",
+    password:"",
+    avatar_url:"",
+    role:"user"
+
+  };
+
+  showModal.value = true;
+
 };
 
-const openEdit = () => {
-    editingUser.value = user;
+const openEdit = (user) => {
 
-    form.value = {
-        ...user
-    };
+  editingId.value = user.id;
 
-    showModal.value = true;
+  errors.value = {};
+
+  form.value = {
+
+    ...user,
+    password:""
+
+  };
+
+  showModal.value = true;
+
 };
 
 const closeModal = () => {
-    showModal.value = false;
+
+  showModal.value = false;
+
+};
+
+const validate = () => {
+
+  const e = {};
+
+  e.name =
+    required(
+      form.value.name,
+      t("validationRequired")
+    );
+
+  e.email =
+    required(
+      form.value.email,
+      t("validationRequired")
+    ) ||
+    isEmail(
+      form.value.email,
+      t("validationEmail")
+    );
+
+  if(!editingId.value){
+
+    e.password =
+      required(
+        form.value.password,
+        t("validationRequired")
+      ) ||
+      minLength(
+        form.value.password,
+        6,
+        t("validationPasswordMin")
+      );
+
+  }
+
+  Object.keys(e).forEach(key => {
+
+    if(!e[key]){
+      delete e[key];
+    }
+
+  });
+
+  errors.value = e;
+
+  return !Object.keys(e).length;
+
 };
 
 const saveUser = async() => {
-    try{
-        if(editingUser.value){
-            await updateUser(editingUser.value.id, form.value);
-            toast.success($t("toastUserUpdated"));
-        }else{
-            await createUser(form.value);
-            toast.success($t("toastUserCreated"));
-        }
 
-        closeModal();
+  if(!validate()){
+    return;
+  }
 
-        loadUsers();
+  try{
 
-    }catch(error){
-        toast.error("Error guardando el usuario");
+    if(editingId.value){
+
+      await updateUser(
+        editingId.value,
+        form.value
+      );
+
+      toast.success(
+        t("toastUserUpdated")
+      );
+
+    }else{
+
+      await createUser(form.value);
+
+      toast.success(
+        t("toastUserCreated")
+      );
+
     }
+
+    closeModal();
+
+    loadUsers();
+
+  }catch(error){
+
+    toast.error(
+      t("toastUserError")
+    );
+
+  }
+
 };
 
 const removeUser = async(id) => {
-    try{
-        await deleteUser(id);
-        toast.success($t("toastUserDeleted"));
-        loadUsers();
-    }catch(error){
-        toast.error("Error al eliminar el usuario");
-    }
+
+  const confirmed = confirm(
+    t("confirmDeleteUser")
+  );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    await deleteUser(id);
+
+    users.value =
+      users.value.filter(
+        user => user.id !== id
+      );
+
+    toast.success(
+      t("toastUserDeleted")
+    );
+
+  }catch(error){
+
+    toast.error(
+      t("toastUserError")
+    );
+
+  }
+
 };
+
+onMounted(loadUsers);
 
 </script>

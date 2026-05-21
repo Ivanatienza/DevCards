@@ -137,3 +137,41 @@ export function validateUser(data, t) {
   return errors;
 
 }
+
+export const required = (value, message) => {
+
+  if(!value || !value.toString().trim()){
+
+    return message;
+
+  }
+
+  return "";
+
+};
+
+export const isEmail = (value, message) => {
+
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if(value && !regex.test(value)){
+
+    return message;
+
+  }
+
+  return "";
+
+};
+
+export const minLength = (value, min, message) => {
+
+  if(value && value.length < min){
+
+    return message;
+
+  }
+
+  return "";
+
+};

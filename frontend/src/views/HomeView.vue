@@ -44,7 +44,7 @@
 import { ref, onMounted} from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { usei18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import Button from "../components/UI/Button.vue";
 
 const router = useRouter();

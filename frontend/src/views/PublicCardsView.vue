@@ -15,8 +15,8 @@
 
 import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
-import { usei18n } from "vue-i18n";
-import CardList from "../components/Cards/CardList.vue";
+import { useI18n } from "vue-i18n";
+import CardList from "../components/CardList.vue";
 import { getPublicCards } from "../services/cardService";
 
 const toast = useToast();
