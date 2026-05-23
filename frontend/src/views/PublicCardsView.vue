@@ -20,7 +20,7 @@ import CardList from "../components/CardList.vue";
 import { getPublicCards } from "../services/cardService";
 
 const toast = useToast();
-const { t } = usei18n();
+const { t } = useI18n();
 const cards = ref([]);
 
 const loadPublicCards = async() => {

@@ -5,25 +5,19 @@
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
     <div>
-
-      <h1 class="text-4xl font-bold mb-2">
-        {{ t("dashboard") }}
-      </h1>
-
-      <p class="text-gray-500">
-        {{ t("manageCards") }}
-      </p>
-
+      <h1 class="text-4xl font-bold mb-2">{{ t("dashboard") }}</h1>
+      <p class="text-gray-500">{{ t("manageCards") }}</p>
     </div>
 
     <div class="flex items-center gap-4">
 
       <img
-        :src="auth.user?.avatar_url || '/default-avatar.png'"
+        :src="auth.user?.avatar_url || '/avatar usuario.png'"
         class="w-14 h-14 rounded-full object-cover border-2 border-blue-500"
+        @error="(e) => e.target.src = '/avatar usuario.png'"
       />
 
-      <button class="primary-btn">
+      <button class="primary-btn" @click="showCreateForm = true">
         + {{ t("create") }}
       </button>
 
@@ -31,7 +25,14 @@
 
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+  <!-- Estado de carga -->
+  <p v-if="loading" class="text-center text-gray-500">{{ t("loading") }}</p>
+
+  <!-- Sin cards -->
+  <p v-else-if="!cards.length" class="text-center text-gray-500">{{ t("noCards") }}</p>
+
+  <!-- Lista de cards -->
+  <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
     <div
       v-for="card in cards"
@@ -42,8 +43,9 @@
       <div class="flex items-center justify-between mb-4">
 
         <img
-          :src="card.logo_url"
+          :src="card.logo_url || '/avatar usuario.png'"
           class="w-14 h-14 rounded-2xl object-cover"
+          @error="(e) => e.target.src = '/avatar usuario.png'"
         />
 
         <span
@@ -55,16 +57,11 @@
 
       </div>
 
-      <h2 class="text-2xl font-bold mb-3">
-        {{ card.title }}
-      </h2>
+      <h2 class="text-2xl font-bold mb-3">{{ card.title }}</h2>
 
-      <p class="text-gray-500 mb-5 line-clamp-3">
-        {{ card.description }}
-      </p>
+      <p class="text-gray-500 mb-5 line-clamp-3">{{ card.description }}</p>
 
       <div class="flex flex-wrap gap-2 mb-5">
-
         <span
           v-for="tag in card.tags"
           :key="tag"
@@ -72,7 +69,6 @@
         >
           #{{ tag }}
         </span>
-
       </div>
 
       <a
@@ -82,6 +78,15 @@
       >
         {{ t("documentation") }}
       </a>
+
+      <div class="flex gap-3 mt-4">
+        <button @click="editCard(card)" class="text-blue-500 text-sm hover:underline">
+          {{ t("edit") }}
+        </button>
+        <button @click="confirmDelete(card)" class="text-red-500 text-sm hover:underline">
+          {{ t("delete") }}
+        </button>
+      </div>
 
     </div>
 
@@ -94,25 +99,47 @@
 <script setup>
 
 import { ref, onMounted } from "vue";
-
 import { useI18n } from "vue-i18n";
-
+import { useToast } from "vue-toastification";
 import { useAuthStore } from "../stores/auth";
-
-import { getCards } from "../services/cardService";
+import { getCards, deleteCard } from "../services/cardService";
 
 const { t } = useI18n();
-
 const auth = useAuthStore();
+const toast = useToast();
 
 const cards = ref([]);
+const loading = ref(false);
+const showCreateForm = ref(false);
 
-const loadCards = async() => {
+const loadCards = async () => {
+  loading.value = true;
+  try {
+    const res = await getCards();
+    // CORRECCIÓN: getCards() ya devuelve res.data del axios (= {success, data:[...]})
+    // por lo que accedemos a .data una sola vez
+    cards.value = res.data || [];
+  } catch (error) {
+    toast.error(t("toastCardError"));
+  } finally {
+    loading.value = false;
+  }
+};
 
-  const res = await getCards();
+const editCard = (card) => {
+  // TODO: abrir modal de edición
+  console.log("Editar card:", card);
+};
 
-  cards.value = res.data.data || [];
-
+const confirmDelete = async (card) => {
+  if (!confirm(t("confirmDeleteCard"))) return;
+  try {
+    await deleteCard(card.id);
+    cards.value = cards.value.filter(c => c.id !== card.id);
+    toast.success(t("toastCardDeleted"));
+  } catch (error) {
+    toast.error(t("toastCardError"));
+  }
 };
 
 onMounted(loadCards);

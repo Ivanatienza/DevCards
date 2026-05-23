@@ -23,7 +23,9 @@
   "login": "Iniciar sesión",
   "register": "Registrarse",
   "logout": "Cerrar sesión",
-  "welcomeBack": "Bienvenido de nuevo",
+  "homeSubtitle": "Organiza y gestiona tus recursos de desarrollo",
+  "hello": "Hola",
+  "welcome": "Bienvenido",
   "createAccount": "Crea tu cuenta",
 
   "email": "Correo electrónico",

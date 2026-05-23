@@ -24,7 +24,8 @@
   "logout": "Logout",
 
   "hello": "Hello",
-  "welcomeBack": "Welcome back",
+  "homeSubtitle": "Organize and manage your development resources",
+  "welcome": "Welcome",
   "createAccount": "Create your account",
 
   "email": "Email",

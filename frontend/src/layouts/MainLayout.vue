@@ -1,22 +1,22 @@
 <template>
 
-<div class="min-h-screen flex flex-col bg-gray-50-dark:bg-gray-900 dark:text-white">
+  <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
 
-<Navbar />
+    <Navbar />
 
-<main class="flex-1 w-full">
+    <main class="flex-1 w-full">
 
-<div class="container-app px-4 sm:px-6 lg:px-8 py-6">
+      <div class="container-app px-4 sm:px-6 lg:px-8 py-6">
 
-<router-view />
+        <router-view />
 
-</div>
+      </div>
 
-</main>
+    </main>
 
-<Footer />
+    <Footer />
 
-</div>
+  </div>
 
 </template>
 

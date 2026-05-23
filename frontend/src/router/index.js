@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
 import AuthLayout from "../layouts/AuthLayout.vue";
 
-// Vistas
+// Views
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
@@ -16,65 +16,73 @@ import AdminView from "../views/AdminView.vue";
 
 const routes = [
 
-  // Layout Auth
+  // Redirect inicial
   {
-    path: "/auth",
-    component: AuthLayout,
-    children: [
+    path:"/",
+    redirect:"/home"
+  },
+
+  // Auth
+  {
+    path:"/auth",
+    component:AuthLayout,
+
+    children:[
 
       {
-        path: "login",
-        component: LoginView
+        path:"login",
+        component:LoginView
       },
 
       {
-        path: "register",
-        component: RegisterView
+        path:"register",
+        component:RegisterView
       }
 
     ]
   },
 
-  // Layout principal
+  // Main
   {
-    path: "/",
-    component: MainLayout,
-    children: [
+    path:"/",
+    component:MainLayout,
+
+    children:[
 
       {
-        path: "home",
-        component: HomeView
+        path:"home",
+        component:HomeView
       },
 
       {
-        path: "dashboard",
-        component: DashboardView,
-        meta: { requiresAuth: true }
+        path:"dashboard",
+        component:DashboardView,
+        meta:{ requiresAuth:true }
       },
 
       {
-        path: "profile",
-        component: ProfileView,
-        meta: { requiresAuth: true }
+        path:"profile",
+        component:ProfileView,
+        meta:{ requiresAuth:true }
       },
 
       {
-        path: "settings",
-        component: SettingsView,
-        meta: { requiresAuth: true }
+        path:"settings",
+        component:SettingsView,
+        meta:{ requiresAuth:true }
       },
 
       {
-        path: "public",
-        component: PublicCardsView
+        path:"public",
+        component:PublicCardsView
       },
 
       {
-        path: "admin",
-        component: AdminView,
-        meta: {
-          requiresAuth: true,
-          requiresAdmin: true
+        path:"admin",
+        component:AdminView,
+        meta:{
+          requiresAuth:true,
+          requiresAdmin:true
         }
       }
 
@@ -84,34 +92,43 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+
+  history:createWebHistory(),
+
   routes
+
 });
 
 // Guards
 router.beforeEach((to, from, next) => {
 
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token");
 
   const user = JSON.parse(
     localStorage.getItem("user")
   );
 
-  // Comprobación autenticación usuario
-  if (to.meta.requiresAuth && !token) {
-    return next("/login");
+  // Auth
+  if(to.meta.requiresAuth && !token){
+
+    return next("/auth/login");
+
   }
 
-  // Comprobación rol usuario administrador
-  if (to.meta.requiresAdmin) {
+  // Admin
+  if(to.meta.requiresAdmin){
 
-    if (!user || user.role !== "admin") {
-      return next("/");
+    if(!user || user.role !== "admin"){
+
+      return next("/home");
+
     }
+
   }
 
   next();
-  
+
 });
 
 export default router;

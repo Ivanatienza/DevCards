@@ -4,15 +4,21 @@
 
 <input v-model="title" :type="text" :placeholder="$t('title')" class="border p-2 rounded dark:bg-gray-700"/>
 
-<p v-if="errors.title" class="text-red-500 text-sm"> {{ errors.title }} </p>
+<p v-if="errors.title" class="text-red-500 text-sm">
+{{ errors.title }}
+</p>
 
 <textarea v-model="description" :placeholder="$t('description')" class="border p-2 rounded dark:bg-gray-700"/>
 
-<p v-if="errors.description" class="text-red-500 text-sm">{{ errors.description }}</p>
+<p v-if="errors.description" class="text-red-500 text-sm">
+{{ errors.description }}
+</p>
 
 <input v-model="documentation_url" :type="url" :placeholder="$t('documentationUrl')" class="border p-2 rounded dark:bg-gray-700" />
 
-<p v-if="errors.documentation_url" class="text-red-500 text-sm">{{ errors.documentation_url }}</p>
+<p v-if="errors.documentation_url" class="text-red-500 text-sm">
+{{ errors.documentation_url }}
+</p>
 
 <input v-model="logo_url" :type="url" :placeholder="$t('logoUrl')" class="border p-2 rounded dark:bg-gray-700" />
 
@@ -22,7 +28,9 @@
 
 <input type="checkbox" v-model="is_public"/>Public</label>
 
-<button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition" >{{ $t("save") }}</button>
+<button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition" >
+{{ $t("save") }}
+</button>
 
 </div>
 

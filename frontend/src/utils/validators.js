@@ -23,7 +23,7 @@ export function validateRequired(value) {
 
 }
 
-// LOGIN
+// Login
 export function validateLogin(data, t) {
 
   const errors = {};
@@ -40,7 +40,7 @@ export function validateLogin(data, t) {
 
 }
 
-// REGISTER
+// Registro
 export function validateRegister(data, t) {
 
   const errors = {};
@@ -70,7 +70,7 @@ export function validateRegister(data, t) {
 
 }
 
-// PROFILE
+// Perfil del usuario
 export function validateProfile(data, t) {
 
   const errors = {};
@@ -91,7 +91,7 @@ export function validateProfile(data, t) {
 
 }
 
-// CARD
+// Tarjeta
 export function validateCard(data, t) {
 
   const errors = {};
@@ -109,7 +109,7 @@ export function validateCard(data, t) {
 
 }
 
-// ADMIN USER
+// Usuario administrador
 export function validateUser(data, t) {
 
   const errors = {};
