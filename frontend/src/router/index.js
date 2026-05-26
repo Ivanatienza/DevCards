@@ -92,21 +92,17 @@ const routes = [
 ];
 
 const router = createRouter({
-
   history:createWebHistory(),
-
   routes
-
 });
 
 // Guards
 router.beforeEach((to, from, next) => {
 
-  const token =
-    localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
+  const user = JSON.parse(localStorage.getItem("user")
+  
   );
 
   // Auth

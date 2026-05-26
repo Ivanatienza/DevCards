@@ -4,12 +4,10 @@
 
   <div class="card-ui p-8 space-y-8">
 
-    <h1 class="text-4xl font-bold">{{ t("settings") }}</h1>
-
     <!-- Tema -->
     <div>
 
-      <p class="font-semibold mb-4">{{ t("theme") }}</p>
+      <p class="font-semibold mb-4 text-center">{{ t("theme") }}</p>
 
       <div class="grid grid-cols-2 gap-4">
 
@@ -34,13 +32,14 @@
     </div>
 
     <!-- Idioma -->
-    <div>
+    <div class="flex justify-center">
 
-      <p class="font-semibold mb-4">{{ t("language") }}</p>
-
-      <select class="input" v-model="currentLang" @change="setLanguage">
+      <select class="input w-48 text-center cursor-pointer" 
+      v-model="currentLang" 
+      @change="setLanguage"
+      >
         <option value="es">Español</option>
-        <option value="en">English</option>
+        <option value="en">Inglés</option>
       </select>
 
     </div>
@@ -61,11 +60,10 @@ const { t, locale } = useI18n();
 const toast = useToast();
 
 const isDark = ref(false);
-const currentLang = ref("es");
+const currentLang = ref(localStorage.getItem("lang") || "es");
 
 onMounted(() => {
   isDark.value = document.documentElement.classList.contains("dark");
-  currentLang.value = localStorage.getItem("lang") || "es";
 });
 
 const setTheme = (theme) => {

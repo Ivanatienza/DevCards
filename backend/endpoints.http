@@ -55,7 +55,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "logo_url": "https://vuejs.org/logo.png",
+  "logo_url": "https://cdn.simpleicons.org/vuedotjs",
   "title": "Vue Docs",
   "description": "Documentación Vue en inglés",
   "documentation_url": "https://vuejs.org",
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 ### Actualizar card
 
-PUT {{baseUrl}}/cards/7
+PUT {{baseUrl}}/cards/29
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

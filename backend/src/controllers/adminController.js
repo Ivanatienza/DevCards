@@ -18,11 +18,11 @@ export const getUsers = async (req,res) => {
 export const createUserAdmin = async(req,res) => {
 
     try{
-        const { name, surname, email, password, role } = req.body;
+        const { name, surname, email, password, avatar_url, role } = req.body;
 
         await pool.query(
-            "INSERT INTO users (name,surname,email,password,role) VALUES (?,?,?,?,?)",
-            [name,surname,email,password,role || "user"]
+            "INSERT INTO users (name,surname,email,password,avatar_url,role) VALUES (?,?,?,?,?,?)",
+            [name,surname,email,password,avatar_url,role || "user"]
         );
 
         res.json({ message: "Usuario creado" });
@@ -36,13 +36,13 @@ export const createUserAdmin = async(req,res) => {
 export const updateUserAdmin = async(req,res) => {
     try{
         const { id } = req.params;
-        const { name,surname,email,password,role } = req.body;
+        const { name,surname,email,avatar_url,role } = req.body;
 
         await pool.query(
             `UPDATE users
             SET name = ?, surname = ?, email = ?, avatar_url = ?, role = ?
             WHERE id = ?`,
-            [name,surname,email,password,role,id]
+            [name,surname,email,avatar_url,role,id]
         );
 
     res.json({ message: "Usuario actualizado" });

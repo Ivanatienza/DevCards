@@ -5,22 +5,13 @@
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
 
     <div>
-      <h1 class="text-4xl font-bold mb-2">{{ t("dashboard") }}</h1>
       <p class="text-gray-500">{{ t("manageCards") }}</p>
     </div>
 
     <div class="flex items-center gap-4">
-
-      <img
-        :src="auth.user?.avatar_url || '/avatar usuario.png'"
-        class="w-14 h-14 rounded-full object-cover border-2 border-blue-500"
-        @error="(e) => e.target.src = '/avatar usuario.png'"
-      />
-
-      <button class="primary-btn" @click="showCreateForm = true">
+      <button class="primary-btn" @click="openCreate">
         + {{ t("create") }}
       </button>
-
     </div>
 
   </div>
@@ -58,7 +49,6 @@
       </div>
 
       <h2 class="text-2xl font-bold mb-3">{{ card.title }}</h2>
-
       <p class="text-gray-500 mb-5 line-clamp-3">{{ card.description }}</p>
 
       <div class="flex flex-wrap gap-2 mb-5">
@@ -71,22 +61,45 @@
         </span>
       </div>
 
-      <a
-        :href="card.documentation_url"
-        target="_blank"
-        class="text-blue-600 hover:underline"
-      >
+      <a :href="card.documentation_url" target="_blank" class="text-blue-600 hover:underline">
         {{ t("documentation") }}
       </a>
 
       <div class="flex gap-3 mt-4">
-        <button @click="editCard(card)" class="text-blue-500 text-sm hover:underline">
+        <!-- CORRECCIÓN: editCard ahora abre el modal con los datos de la card -->
+        <button @click="openEdit(card)" class="text-blue-500 text-sm hover:underline">
           {{ t("edit") }}
         </button>
         <button @click="confirmDelete(card)" class="text-red-500 text-sm hover:underline">
           {{ t("delete") }}
         </button>
       </div>
+
+    </div>
+
+  </div>
+
+  <!--Modal Crear/Editar card -->
+  <div
+    v-if="showModal"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+    @click.self="closeModal"
+  >
+
+    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg shadow-xl">
+
+      <h2 class="text-2xl font-bold mb-4">
+        {{ editingCard ? t("edit") : t("create") }}
+      </h2>
+
+      <CardForm :card="editingCard" @save="handleSave" />
+
+      <button
+        @click="closeModal"
+        class="mt-4 text-sm text-gray-500 hover:underline"
+      >
+        {{ t("cancel") }}
+      </button>
 
     </div>
 
@@ -101,43 +114,72 @@
 import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useToast } from "vue-toastification";
-import { useAuthStore } from "../stores/auth";
-import { getCards, deleteCard } from "../services/cardService";
+import { getCards, createCard, updateCard, deleteCard } from "../services/cardService";
+import CardForm from "../components/CardForm.vue";
 
-const { t } = useI18n();
-const auth = useAuthStore();
-const toast = useToast();
+const { t }   = useI18n();
+const toast   = useToast();
 
-const cards = ref([]);
-const loading = ref(false);
-const showCreateForm = ref(false);
+const cards       = ref([]);
+const loading     = ref(false);
+const showModal   = ref(false);
+const editingCard = ref(null);
 
+//Cargar cards
 const loadCards = async () => {
   loading.value = true;
   try {
     const res = await getCards();
-    // CORRECCIÓN: getCards() ya devuelve res.data del axios (= {success, data:[...]})
-    // por lo que accedemos a .data una sola vez
     cards.value = res.data || [];
-  } catch (error) {
+  } catch {
     toast.error(t("toastCardError"));
   } finally {
     loading.value = false;
   }
 };
 
-const editCard = (card) => {
-  // TODO: abrir modal de edición
-  console.log("Editar card:", card);
+//Modal crear card
+const openCreate = () => {
+  editingCard.value = null;
+  showModal.value   = true;
 };
 
+//Modal editar card
+const openEdit = (card) => {
+  editingCard.value = { ...card };
+  showModal.value   = true;
+};
+
+const closeModal = () => {
+  showModal.value   = false;
+  editingCard.value = null;
+};
+
+//Actualizar card
+const handleSave = async (formData) => {
+  try {
+    if (editingCard.value?.id) {
+      await updateCard(editingCard.value.id, formData);
+      toast.success(t("toastCardUpdated"));
+    } else {
+      await createCard(formData);
+      toast.success(t("toastCardCreated"));
+    }
+    closeModal();
+    await loadCards();
+  } catch {
+    toast.error(t("toastCardError"));
+  }
+};
+
+//Eliminar card
 const confirmDelete = async (card) => {
   if (!confirm(t("confirmDeleteCard"))) return;
   try {
     await deleteCard(card.id);
     cards.value = cards.value.filter(c => c.id !== card.id);
     toast.success(t("toastCardDeleted"));
-  } catch (error) {
+  } catch {
     toast.error(t("toastCardError"));
   }
 };

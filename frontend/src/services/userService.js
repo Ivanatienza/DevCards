@@ -20,7 +20,7 @@ export const updateProfile = async (data) => {
 
 //Crear usuario con rol administrador
 export const createUser = async (data) => {
-    const res = await api.post("/auth/register", data);
+    const res = await api.post("/users", data);
     return res.data;
 };
 
@@ -32,6 +32,6 @@ export const updateUser = async (id,data) => {
 
 //Eliminar usuario con rol administrador
 export const deleteUser = async (id) => {
-    const res = await api.delete(`/users/${id}`, data);
+    const res = await api.delete(`/users/${id}`);
     return res.data;
 };

@@ -5,10 +5,6 @@
     <!-- Hero -->
     <div class="text-center mb-10">
 
-      <h1 class="text-4xl font-bold">
-        DevCards
-      </h1>
-
       <p class="text-gray-500 dark:text-gray-400">
         {{ t("homeSubtitle") }}
       </p>
@@ -51,7 +47,7 @@
 
     </div>
 
-    <!-- Invitado: rutas corregidas a /auth/login y /auth/register -->
+    <!-- Invitado-->
     <div v-else class="text-center flex justify-center gap-3">
 
       <Button @click="router.push('/auth/login')">

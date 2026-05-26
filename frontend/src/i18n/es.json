@@ -12,6 +12,7 @@
   "title": "Título",
   "description": "Descripción",
   "logoUrl": "URL del logo",
+  "documentationUrl": "URL de la documentación",
   "tags": "Etiquetas",
   "tagsPlaceholder": "vue, frontend, javascript",
   "publicCard": "Card pública",
@@ -46,8 +47,7 @@
   "lightMode": "Modo claro",
   "darkMode": "Modo oscuro",
 
-  "users": "Usuarios",
-  "manageUsers": "Gestiona usuarios",
+  "users": "Gestión de usuarios",
 
   "createUser": "Crear usuario",
   "editUser": "Editar usuario",
@@ -96,5 +96,9 @@
   "toastUserCreated": "Usuario creado correctamente",
   "toastUserUpdated": "Usuario actualizado correctamente",
   "toastUserDeleted": "Usuario eliminado correctamente",
-  "toastUserError": "Error al gestionar usuarios"
+  "toastUserError": "Error al gestionar usuarios",
+
+  "footerDescription": "Comparte documentación de desarrollo",
+  "footerLinks": "Enlaces rápidos",
+  "footerProject": "Proyecto DAW"
 }

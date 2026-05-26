@@ -12,6 +12,7 @@
   "title": "Title",
   "description": "Description",
   "logoUrl": "Logo URL",
+  "documentationUrl": "Documentation URL",
   "tags": "Tags",
   "tagsPlaceholder": "vue, frontend, javascript",
   "publicCard": "Public card",
@@ -46,7 +47,7 @@
   "lightMode": "Light mode",
   "darkMode": "Dark mode",
 
-  "users": "Users",
+  "users": "User Management",
   "manageUsers": "Manage users",
 
   "createUser": "Create user",
@@ -96,5 +97,9 @@
   "toastUserCreated": "User created successfully",
   "toastUserUpdated": "User updated successfully",
   "toastUserDeleted": "User deleted successfully",
-  "toastUserError": "Error managing users"
+  "toastUserError": "Error managing users",
+
+  "footerDescription": "Share your development documentation",
+  "footerLinks": "Quick links",
+  "footerProject": "DAW Project"
 }

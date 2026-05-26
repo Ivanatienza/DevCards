@@ -60,10 +60,13 @@ export const useAuthStore = defineStore("auth", {
 
     },
 
-    updateUser(user){
+    updateUser(partialUser){
 
-      this.user = user;
-
+      this.user = {
+        ...this.user,
+        ...partialUser
+      };
+      
       localStorage.setItem(
         "user",
         JSON.stringify(user)

@@ -70,7 +70,7 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import { useI18n } from "vue-i18n";
 
@@ -82,32 +82,49 @@ const auth = useAuthStore();
 
 const avatarPreview = ref("");
 
+import { ref, watch } from "vue";
+
 const form = ref({
-
-  name: auth.user?.name || "",
-
-  surname: auth.user?.surname || "",
-
-  email: auth.user?.email || ""
-
+  name: "",
+  surname: "",
+  email: ""
 });
+
+watch(
+  () => auth.user,
+  (user) => {
+    if (!user) return;
+
+    form.value = {
+      name: user.name || "",
+      surname: user.surname || "",
+      email: user.email || ""
+    };
+  },
+  { immediate: true }
+  
+);
 
 const handleAvatar = (event) => {
 
   const file = event.target.files[0];
+  if(!file) return;
+  
+  const reader = new FileReader();
 
-  if(!file){
-    return;
-  }
-
-  avatarPreview.value = URL.createObjectURL(file);
+  reader.onload = () => {
+    avatarPreview.value = reader.result;
 
   auth.updateUser({
     ...auth.user,
-    avatar_url: avatarPreview.value
+    avatar_url: reader.result
   });
 
 };
+
+reader.readAsDataURL(file);
+
+}
 
 const saveProfile = () => {
 
