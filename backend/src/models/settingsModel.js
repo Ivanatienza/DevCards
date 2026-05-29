@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import pool from "../config/db.js";
 
 //Obtener las preferencias del usuario
 export const getSettings = async (user_id) => {

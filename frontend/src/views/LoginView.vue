@@ -2,18 +2,14 @@
 
 <div>
 
-  <h1 class="text-3xl font-bold mb-2 text-center">
-    {{ t("login") }}
-  </h1>
-
-  <p class="text-gray-500 text-center mb-8">
+  <p class="text-3xl font-bold mb-2 text-center">
     {{ t("welcome") }}
   </p>
 
   <form class="space-y-5" @submit.prevent="handleLogin">
 
     <div>
-      <label class="block mb-2 font-medium">{{ t("email") }}</label>
+      <label class="block mb-2 pt-7 font-medium">{{ t("email") }}</label>
       <input v-model="form.email" type="email" class="input" />
       <p v-if="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
     </div>

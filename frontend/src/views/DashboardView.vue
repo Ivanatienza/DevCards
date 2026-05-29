@@ -2,27 +2,29 @@
 
 <div class="py-8">
 
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+  <!--Titulo-->
+  <h1 class="text-3xl font-bold text-center mb-8">
+    {{ t("manageCards") }}
+  </h1>
 
-    <div>
-      <p class="text-gray-500">{{ t("manageCards") }}</p>
-    </div>
-
-    <div class="flex items-center gap-4">
-      <button class="primary-btn" @click="openCreate">
-        + {{ t("create") }}
-      </button>
-    </div>
-
+  <!--Botón crear card-->
+  <div class="flex justify-center mb-10">
+    <Button @click="openCreate">
+      + {{ t("create") }}
+    </Button>
   </div>
 
-  <!-- Estado de carga -->
-  <p v-if="loading" class="text-center text-gray-500">{{ t("loading") }}</p>
+  <!--Carga de cards-->
+  <p v-if="loading" class="text-center text-gray-500">
+    {{ t("loading") }}
+  </p>
 
-  <!-- Sin cards -->
-  <p v-else-if="!cards.length" class="text-center text-gray-500">{{ t("noCards") }}</p>
+  <!--Sin cards-->
+  <p v-else-if="!cards.length" class="text-center text-gray-500">
+    {{ t("noCards") }}
+  </p>
 
-  <!-- Lista de cards -->
+  <!--Lista de cards-->
   <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
     <div
@@ -48,8 +50,13 @@
 
       </div>
 
-      <h2 class="text-2xl font-bold mb-3">{{ card.title }}</h2>
-      <p class="text-gray-500 mb-5 line-clamp-3">{{ card.description }}</p>
+      <h2 class="text-2xl font-bold mb-3">
+        {{ card.title }}
+      </h2>
+
+      <p class="text-gray-500 mb-5 line-clamp-3">
+        {{ card.description }}
+      </p>
 
       <div class="flex flex-wrap gap-2 mb-5">
         <span
@@ -61,15 +68,19 @@
         </span>
       </div>
 
-      <a :href="card.documentation_url" target="_blank" class="text-blue-600 hover:underline">
+      <a
+        :href="card.documentation_url"
+        target="_blank"
+        class="text-blue-600 hover:underline"
+      >
         {{ t("documentation") }}
       </a>
 
       <div class="flex gap-3 mt-4">
-        <!-- CORRECCIÓN: editCard ahora abre el modal con los datos de la card -->
         <button @click="openEdit(card)" class="text-blue-500 text-sm hover:underline">
           {{ t("edit") }}
         </button>
+
         <button @click="confirmDelete(card)" class="text-red-500 text-sm hover:underline">
           {{ t("delete") }}
         </button>
@@ -79,7 +90,7 @@
 
   </div>
 
-  <!--Modal Crear/Editar card -->
+  <!--Modal-->
   <div
     v-if="showModal"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
@@ -88,18 +99,11 @@
 
     <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-lg shadow-xl">
 
-      <h2 class="text-2xl font-bold mb-4">
-        {{ editingCard ? t("edit") : t("create") }}
+      <h2 class="text-2xl font-bold mb-4 text-center">
+        {{ editingCard ? t("edit") : "" }}
       </h2>
 
-      <CardForm :card="editingCard" @save="handleSave" />
-
-      <button
-        @click="closeModal"
-        class="mt-4 text-sm text-gray-500 hover:underline"
-      >
-        {{ t("cancel") }}
-      </button>
+      <CardForm :card="editingCard" @save="handleSave" @cancel="closeModal"/>
 
     </div>
 
@@ -114,18 +118,19 @@
 import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useToast } from "vue-toastification";
-import { getCards, createCard, updateCard, deleteCard } from "../services/cardService";
+import Button from "../components/ui/Button.vue";
 import CardForm from "../components/CardForm.vue";
+import { getCards,createCard,updateCard,deleteCard } from "../services/cardService";
 
-const { t }   = useI18n();
-const toast   = useToast();
+const { t } = useI18n();
+const toast = useToast();
 
-const cards       = ref([]);
-const loading     = ref(false);
-const showModal   = ref(false);
+const cards = ref([]);
+const loading = ref(false);
+const showModal = ref(false);
 const editingCard = ref(null);
 
-//Cargar cards
+//Carga de cards
 const loadCards = async () => {
   loading.value = true;
   try {
@@ -138,24 +143,23 @@ const loadCards = async () => {
   }
 };
 
-//Modal crear card
+//Modales de editar y eliminar cards
 const openCreate = () => {
   editingCard.value = null;
-  showModal.value   = true;
+  showModal.value = true;
 };
 
-//Modal editar card
 const openEdit = (card) => {
   editingCard.value = { ...card };
-  showModal.value   = true;
+  showModal.value = true;
 };
 
 const closeModal = () => {
-  showModal.value   = false;
+  showModal.value = false;
   editingCard.value = null;
 };
 
-//Actualizar card
+//Guardar las cards
 const handleSave = async (formData) => {
   try {
     if (editingCard.value?.id) {
@@ -165,16 +169,19 @@ const handleSave = async (formData) => {
       await createCard(formData);
       toast.success(t("toastCardCreated"));
     }
+
     closeModal();
     await loadCards();
+
   } catch {
     toast.error(t("toastCardError"));
   }
 };
 
-//Eliminar card
+//Eliminar cards
 const confirmDelete = async (card) => {
   if (!confirm(t("confirmDeleteCard"))) return;
+
   try {
     await deleteCard(card.id);
     cards.value = cards.value.filter(c => c.id !== card.id);

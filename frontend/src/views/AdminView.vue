@@ -3,18 +3,20 @@
   <div class="container-app py-6">
 
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+     <div class="relative flex items-center justify-center mb-6">
 
-      <h1 class="text-3xl font-bold">{{ $t("users") }}</h1>
+      <h1 class="text-2xl font-bold text-center">
+        {{ $t("users") }}
+      </h1>
 
-      <button
-        @click="openCreate"
-        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
-      >
-        {{ $t("createUser") }}
-      </button>
+    <button
+      @click="openCreate"
+      class="absolute right-0 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
+    >
+      {{ $t("createUser") }}
+    </button>
 
-    </div>
+  </div>
 
     <!-- Loading -->
     <div v-if="loading" class="text-center py-10">
@@ -180,7 +182,7 @@ const loadUsers = async () => {
   loading.value = true;
   try {
     const res = await getUsers();
-    users.value = res.data?.data || res.data || [];
+    users.value = res.data || [];
   } catch {
     toast.error(t("toastUserError"));
   } finally {
@@ -190,20 +192,47 @@ const loadUsers = async () => {
 
 const openCreate = () => {
   editingId.value = null;
-  errors.value    = {};
-  form.value = { name: "", surname: "", email: "", password: "", avatar_url: "", role: "user" };
+  errors.value = {};
+  form.value = { 
+    name: "", 
+    surname: "", 
+    email: "", 
+    password: "", 
+    avatar_url: "", 
+    role: "user" };
   showModal.value = true;
 };
 
 const openEdit = (user) => {
   editingId.value = user.id;
   errors.value = {};
-  form.value = { ...user, password: "" };
+
+  form.value = {
+    name: user.name || "",
+    surname: user.surname || "",
+    email: user.email || "",
+    password: "",
+    avatar_url: user.avatar_url || "",
+    role: user.role || "user"
+  };
+
   showModal.value = true;
 };
 
 const closeModal = () => {
   showModal.value = false;
+  errors.value = {};
+  editingId.value = null;
+
+  form.value = {
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    avatar_url: "",
+    role: "user"
+  };
+  
 };
 
 const validate = () => {
@@ -242,14 +271,14 @@ const saveUser = async () => {
       role: form.value.role
     };
 
-    if (!editingId.value) {
+    if (!editingId.value && form.value.password) {
       payload.password = form.value.password;
     }
 
     if (wasEditing) {
-      await updateUser(editingId.value, form.value);
+      await updateUser(editingId.value, payload);
     } else {
-      await createUser(form.value);
+      await createUser(payload);
     }
 
     closeModal();

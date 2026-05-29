@@ -3,12 +3,8 @@
 <div>
 
   <h1 class="text-3xl font-bold mb-2 text-center">
-    {{ t("register") }}
-  </h1>
-
-  <p class="text-gray-500 text-center mb-8">
     {{ t("createAccount") }}
-  </p>
+  </h1>
 
   <form class="space-y-5" @submit.prevent="handleRegister">
 

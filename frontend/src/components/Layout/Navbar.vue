@@ -85,19 +85,6 @@
 
         </div>
 
-        <!-- GUEST -->
-        <div v-else class="flex gap-2">
-
-          <router-link to="/auth/login" class="text-sm hover:text-blue-500 transition">
-            {{ $t("login") }}
-          </router-link>
-
-          <router-link to="/auth/register" class="text-sm hover:text-blue-500 transition">
-            {{ $t("register") }}
-          </router-link>
-
-        </div>
-
       </div>
 
     </div>
@@ -109,8 +96,11 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAuthStore } from "../stores/auth";
+import { useAuthStore } from "../../stores/auth";
+import { useToast } from "vue-toastification";
 
+
+const toast = useToast();
 const router = useRouter();
 const { locale } = useI18n();
 const auth = useAuthStore();
@@ -123,9 +113,15 @@ onMounted(() => {
   isDark.value = document.documentElement.classList.contains("dark");
 });
 
-const logout = () => {
-  auth.logout();
-  router.push("/home");
+const logout = async () => {
+  await auth.logout();
+
+  toast.success(t("logoutSuccess"));
+
+  setTimeout(() => {
+    router.push("/home");
+  }, 700);
+
 };
 
 const setLocale = (lang) => {

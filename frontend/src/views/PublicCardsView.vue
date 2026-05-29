@@ -1,12 +1,9 @@
 <template>
 
-<div class="px-4">
-
-<h1 class="text-2xl mb-6">
-{{ t("publicCards") }}
-</h1>
-
-<CardList :cards="cards" :readonly="true"/>
+<div class="px-4 flex justify-center">
+    <div class="w-full max-w-6*1">
+        <CardList :cards="cards" :readonly="true"/>
+    </div>
 
 </div>
 </template>
@@ -28,7 +25,7 @@ const loadPublicCards = async() => {
         const res = await getPublicCards();
         cards.value = res.data;
     }catch(error){
-        toast.error("publicCardsLoadError");
+        toast.error(t("toastCardError"));
     }
 }
 

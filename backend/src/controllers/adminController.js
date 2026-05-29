@@ -1,75 +1,83 @@
-import { pool } from "../config/db.js";
+import bcrypt from "bcrypt";
+import pool from "../config/db.js";
 
-//Obtener los usuarios
-export const getUsers = async (req,res) => {
-    try{
-        const [users] = await pool.query(
-            "SELECT id,name,surname,email,role,avatar_url FROM users"
-        );
+// Obtener los usuarios
+export const getUsers = async (req, res) => {
+  try {
 
-        res.json(users);
+    const [users] = await pool.query(
+      "SELECT id, name, surname, email, role, avatar_url FROM users"
+    );
 
-    }catch(error){
-        res.status(500).json({message: "Error al obtener usuarios"});
-    }
+    res.json({ success: true, data: users });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error al obtener usuarios" });
+  }
 };
 
-//Crear usuarios
-export const createUserAdmin = async(req,res) => {
+// Crear usuario desde panel administrador
+export const createUserAdmin = async (req, res) => {
+  try {
 
-    try{
-        const { name, surname, email, password, avatar_url, role } = req.body;
+    const { name, surname, email, password, avatar_url, role } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        await pool.query(
-            "INSERT INTO users (name,surname,email,password,avatar_url,role) VALUES (?,?,?,?,?,?)",
-            [name,surname,email,password,avatar_url,role || "user"]
-        );
+    await pool.query(
+      "INSERT INTO users (name, surname, email, password, avatar_url, role) VALUES (?,?,?,?,?,?)",
+      [name, surname, email, hashedPassword, avatar_url || null, role || "user"]
+    );
 
-        res.json({ message: "Usuario creado" });
+    res.status(201).json({ success: true, message: "Usuario creado" });
 
-    }catch(error){
-        res.status(500).json({message: "Error al crear el usuario"});
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error al crear el usuario" });
+  }
 };
 
-//Actualizar usuarios
-export const updateUserAdmin = async(req,res) => {
-    try{
-        const { id } = req.params;
-        const { name,surname,email,avatar_url,role } = req.body;
+// Actualizar usuario
+export const updateUserAdmin = async (req, res) => {
+  try {
 
-        await pool.query(
-            `UPDATE users
-            SET name = ?, surname = ?, email = ?, avatar_url = ?, role = ?
-            WHERE id = ?`,
-            [name,surname,email,avatar_url,role,id]
-        );
+    const { id } = req.params;
+    const { name, surname, email, avatar_url, role } = req.body;
 
-    res.json({ message: "Usuario actualizado" });
+    await pool.query(
+      `UPDATE users
+       SET name = ?, surname = ?, email = ?, avatar_url = ?, role = ?
+       WHERE id = ?`,
+      [name, surname, email, avatar_url || null, role, id]
+    );
 
-    }catch(error){
+    res.json({ success: true, message: "Usuario actualizado" });
 
-        res.status(500).json({ message: "Error al actualizar el usuario" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error al actualizar el usuario" });
+  }
+};
 
-    };
-}
+// Eliminar usuario
+export const deleteUser = async (req, res) => {
+  try {
 
-//Eliminar usuarios
-export const deleteUser = async(req,res) => {
-    try{
-        const {id} = req.params;
-        const [result] = await pool.query(
-            "DELETE FROM users WHERE id = ?",
-            [id]
-        );
-        if(result.affectedRows === 0){
-            return res.status(404).json({message: "El usuario no existe"});
-        }
+    const { id } = req.params;
 
-        res.json({message: "Usuario eliminado correctamente"});
+    const [result] = await pool.query(
+      "DELETE FROM users WHERE id = ?",
+      [id]
+    );
 
-    }catch(error){
-        
-        res.status(500).json({message: "Error al eliminar el usuario"});
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "El usuario no existe" });
     }
+
+    res.json({ success: true, message: "Usuario eliminado correctamente" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error al eliminar el usuario" });
+  }
 };

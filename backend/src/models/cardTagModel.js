@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import pool from "../config/db.js";
 
 //Añadir etiqueta a una card
 export const addTagToCard = async(card_id, tag_id) => {

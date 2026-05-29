@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import pool from "../config/db.js";
 
 //Crear una card
 export const createCard = async(user_id,logo_url,title,description,documentation_url,is_public) => {

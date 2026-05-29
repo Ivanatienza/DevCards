@@ -7,7 +7,9 @@
     <!-- Tema -->
     <div>
 
-      <p class="font-semibold mb-4 text-center">{{ t("theme") }}</p>
+      <p class="font-semibold mb-4 text-center">
+        {{ t("theme") }}
+      </p>
 
       <div class="grid grid-cols-2 gap-4">
 
@@ -32,7 +34,11 @@
     </div>
 
     <!-- Idioma -->
-    <div class="flex justify-center">
+    <div class="flex flex-col items-center">
+
+      <p class="font-semibold mb-4 text-center">
+        {{ t("language") }}
+      </p>
 
       <select class="input w-48 text-center cursor-pointer" 
       v-model="currentLang" 

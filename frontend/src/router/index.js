@@ -74,7 +74,8 @@ const routes = [
 
       {
         path:"public",
-        component:PublicCardsView
+        component:PublicCardsView,
+        meta:{ requiresAuth:true }
       },
 
       {
