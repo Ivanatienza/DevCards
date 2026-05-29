@@ -1,0 +1,178 @@
+@baseUrl = http://localhost:3000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NzkwMTQyOTIsImV4cCI6MTc3OTEwMDY5Mn0.FeMxQelC8OEtpRcjKGCzc8Xz7K4RCNVL-H3KiLnP218
+
+### Registro
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Ian",
+  "surname": "Garcia",
+  "email": "ian@prueba.com",
+  "password": "Ianovich250@",
+  "avatar_url": ""
+}
+
+###
+
+### Login
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@devcards.com",
+  "password": "Admin123@"
+}
+
+###
+
+### Obtener cards del usuario
+
+GET {{baseUrl}}/cards
+Authorization: Bearer {{token}}
+
+###
+
+### Obtener cards públicas del usuario
+
+GET {{baseUrl}}/cards/public
+
+###
+
+### Obtener card por ID
+
+GET {{baseUrl}}/cards/29
+Authorization: Bearer {{token}}
+
+###
+
+### Crear card
+
+POST {{baseUrl}}/cards
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "logo_url": "https://cdn.simpleicons.org/vuedotjs",
+  "title": "Vue Docs",
+  "description": "Documentación Vue en inglés",
+  "documentation_url": "https://vuejs.org",
+  "is_public": 1,
+  "tags": ["vue","frontend"]
+}
+
+###
+
+### Actualizar card
+
+PUT {{baseUrl}}/cards/29
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "logo_url": "https://vuejs.org/logo.png",
+  "title": "Documentacion Vue",
+  "description": "Documentación Vue 3 Inglés",
+  "documentation_url": "https://vuejs.org",
+  "is_public": 1,
+  "tags": ["vue","frontend"]
+}
+
+###
+
+### Eliminar card
+
+DELETE {{baseUrl}}/cards/7
+Authorization: Bearer {{token}}
+
+###
+
+### Obtener etiquetas de cards
+
+GET {{baseUrl}}/tags
+Authorization: Bearer {{token}}
+
+###
+
+### Crear etiquetas de cards
+
+POST {{baseUrl}}/tags
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "vue"
+}
+
+###
+
+### Obtener perfil del usuario logueado
+
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+
+###
+
+### Actualizar perfil del usuario
+
+PUT {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Jose",
+  "surname": "Jimenez",
+  "email": "ivan@yahoo.com",
+  "avatar_url": ""
+}
+
+###
+
+### Obtener preferencias del usuario
+
+GET {{baseUrl}}/settings
+Authorization: Bearer {{token}}
+
+###
+
+### Actualizar preferencias del usuario
+
+PUT {{baseUrl}}/settings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "theme": "dark",
+  "language": "es"
+}
+
+###
+
+### Obtener usuarios con rol admin
+
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+###
+
+### Actualizar usuarios con rol admin
+
+PUT {{baseUrl}}/users/14
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Emilio",
+  "surname": "Gonzalez",
+  "email": "admin@test.com",
+  "avatar_url": ""
+}
+
+###
+
+### Eliminar usuarios con rol admin
+
+DELETE {{baseUrl}}/users/14
+Authorization: Bearer {{token}}

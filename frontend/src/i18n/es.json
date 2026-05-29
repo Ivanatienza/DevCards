@@ -1,0 +1,104 @@
+{
+  "dashboard": "Dashboard",
+  "manageCards": "Gestiona tus cards",
+  "loading": "Cargando...",
+
+  "create": "Crear",
+  "edit": "Editar",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+
+  "title": "Título",
+  "description": "Descripción",
+  "logoUrl": "URL del logo",
+  "documentationUrl": "URL de la documentación",
+  "tags": "Etiquetas",
+  "tagsPlaceholder": "vue, frontend, javascript",
+  "publicCard": "Card pública",
+  "public": "Pública",
+  "noCards": "No hay cards disponibles",
+
+  "documentation": "Documentación",
+
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "logout": "Cerrar sesión",
+  "homeSubtitle": "Organiza y gestiona tus recursos de desarrollo",
+  "hello": "Hola",
+  "welcome": "Bienvenido",
+  "createAccount": "Crea tu cuenta",
+
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "confirmPassword": "Confirmar contraseña",
+
+  "name": "Nombre",
+  "surname": "Apellidos",
+
+  "profile": "Perfil",
+  "settings": "Configuración",
+
+  "changeAvatar": "Cambiar avatar",
+  "avatarMaxSize": "La imagen no puede superar 2MB",
+
+  "language": "Idioma",
+  "theme": "Tema",
+  "lightMode": "Modo claro",
+  "darkMode": "Modo oscuro",
+
+  "users": "Gestión de usuarios",
+
+  "createUser": "Crear usuario",
+  "editUser": "Editar usuario",
+  "deleteUser": "Eliminar usuario",
+
+  "role": "Rol",
+  "admin": "Administrador",
+  "user": "Usuario",
+
+  "adminPanel": "Panel administrador",
+
+  "publicCards": "Cards públicas",
+  "exploreCards": "Explora cards públicas",
+
+  "actions": "Acciones",
+
+  "confirmDeleteCard": "¿Seguro que deseas eliminar esta card?",
+  "confirmDeleteUser": "¿Seguro que deseas eliminar este usuario?",
+
+  "validationRequired": "Este campo es obligatorio",
+  "validationEmail": "Correo inválido",
+  "validationPasswordMin": "La contraseña debe tener mínimo 6 caracteres",
+  "validationPasswordsMatch": "Las contraseñas no coinciden",
+  "validationUrl": "URL inválida",
+  "validationDuplicateTags": "No se permiten etiquetas duplicadas",
+
+  "toastLoginSuccess": "Inicio de sesión correcto",
+  "toastLoginError": "Error al iniciar sesión",
+
+  "toastRegisterSuccess": "Registro completado",
+  "toastRegisterError": "Error al registrarse",
+
+  "toastLogout": "Sesión cerrada",
+
+  "toastCardCreated": "Card creada correctamente",
+  "toastCardUpdated": "Card actualizada correctamente",
+  "toastCardDeleted": "Card eliminada correctamente",
+  "toastCardError": "Error al gestionar la card",
+
+  "toastProfileUpdated": "Perfil actualizado correctamente",
+  "toastProfileError": "Error al actualizar el perfil",
+
+  "toastSettingsUpdated": "Configuración actualizada",
+  "toastSettingsError": "Error al actualizar la configuración",
+
+  "toastUserCreated": "Usuario creado correctamente",
+  "toastUserUpdated": "Usuario actualizado correctamente",
+  "toastUserDeleted": "Usuario eliminado correctamente",
+  "toastUserError": "Error al gestionar usuarios",
+
+  "footerDescription": "Comparte documentación de desarrollo",
+  "footerLinks": "Enlaces rápidos",
+  "footerProject": "Proyecto DAW"
+}

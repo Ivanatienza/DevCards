@@ -1,0 +1,15 @@
+/* Importación global de Tailwind */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos globales personalizados */
+body{
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-app{
+    @apply max-w-7xl mx-auto;
+}
