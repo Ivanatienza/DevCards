@@ -118,7 +118,7 @@
 import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useToast } from "vue-toastification";
-import Button from "../components/ui/Button.vue";
+import Button from "../components/UI/Button.vue";
 import CardForm from "../components/CardForm.vue";
 import { getCards,createCard,updateCard,deleteCard } from "../services/cardService";
 
