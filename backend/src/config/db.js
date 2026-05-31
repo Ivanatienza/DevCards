@@ -31,7 +31,4 @@ const testConnection = async () => {
   }
 };
 
-// Ejecutar test de conexión al cargar la app
-testConnection();
-
 export default pool;
