@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000/api
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sZSI6InVzZXIiLCJpYXQiOjE3NzkwMTQyOTIsImV4cCI6MTc3OTEwMDY5Mn0.FeMxQelC8OEtpRcjKGCzc8Xz7K4RCNVL-H3KiLnP218
+@token = pega aqui tu token
 
 ### Registro
 
