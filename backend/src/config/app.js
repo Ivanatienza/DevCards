@@ -21,6 +21,13 @@ app.use(cors({
   credentials: true
 }));
 
+app.get("/", (req, res) => {
+  res.json({
+    ok: true,
+    message: "API funcionando 🚀"
+  });
+});
+
 //Definición de rutas
 //app.use("/api/auth", authRoutes);
 //app.use("/api/users", userRoutes);
