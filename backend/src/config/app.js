@@ -22,12 +22,12 @@ app.use(cors({
 }));
 
 //Definición de rutas
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/cards", cardRoutes);
-app.use("/api/settings", settingsRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/tags", tagRoutes);
+//app.use("/api/auth", authRoutes);
+//app.use("/api/users", userRoutes);
+//app.use("/api/cards", cardRoutes);
+//app.use("/api/settings", settingsRoutes);
+//app.use("/api/admin", adminRoutes);
+//app.use("/api/tags", tagRoutes);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);
