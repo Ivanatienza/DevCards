@@ -4,6 +4,7 @@ Aplicación web full stack para la gestión y compartición de tarjetas de docum
 
 Permite a los usuarios crear, editar, organizar y consultar recursos técnicos mediante etiquetas, con autenticación segura, panel administrativo y personalización de experiencia.
 
+
 🌐 Demo en producción:
 
 Frontend: 
@@ -13,6 +14,7 @@ https://dev-cards-favs.vercel.app
 Backend API: 
 
 https://devcards-production.up.railway.app/
+
 
 ✨ Funcionalidades principales:
 
@@ -42,7 +44,9 @@ Gestión de avatar
 
 Configuración personalizada
 
+
 🧠 Tecnologías utilizadas:
+
 
 🔙 Backend:
 
@@ -60,6 +64,7 @@ Cookie Parser
 
 CORS
 
+
 🎨 Frontend
 
 Vue 3 (Composition API)
@@ -76,13 +81,16 @@ Vue I18n
 
 Vue Toastification
 
+
 ☁️ Despliegue
 
 Railway (Backend + Base de datos MySQL)
 
 Vercel (Frontend)
 
+
 📁 Estructura del proyecto
+
 
 DevCards/
 │
@@ -106,6 +114,7 @@ DevCards/
     │   ├── i18n/
     │   └── main.js
 
+
 ⚙️ Instalación local
 
 1️⃣ Clonar repositorio
@@ -114,15 +123,15 @@ git clone https://github.com/tuusuario/devcards.git
 
 cd devcards
 
+
 🔧 Backend
 
 cd backend
 
 npm install
 
-Variables de entorno
 
-Crear archivo .env
+Variables de entorno
 
 PORT=3000
 
@@ -138,9 +147,11 @@ DB_NAME=
 
 JWT_SECRET=
 
+
 Ejecutar backend
 
 npm run dev
+
 
 🎨 Frontend
 
@@ -150,11 +161,11 @@ npm install
 
 npm run dev
 
+
 Variables de entorno
 
-Crear archivo .env
-
 VITE_API_URL=http://localhost:3000/api
+
 
 🔐 Sistema de autenticación
 
@@ -172,6 +183,7 @@ El token se almacena en cookie
 
 Se valida en rutas protegidas mediante middleware
 
+
 📡 API Endpoints
 
 Auth
@@ -183,6 +195,7 @@ POST   /api/auth/login
 POST   /api/auth/logout
 
 GET    /api/auth/me
+
 
 Cards
 
@@ -196,6 +209,7 @@ DELETE /api/cards/:id
 
 GET    /api/cards/public
 
+
 Users
 
 GET    /api/users
@@ -206,17 +220,20 @@ PUT    /api/users/profile
 
 DELETE /api/users/:id
 
+
 Settings
 
 GET    /api/settings
 
 PUT    /api/settings
 
+
 Tags
 
 GET    /api/tags
 
 POST   /api/tags
+
 
 Admin
 
@@ -227,6 +244,7 @@ POST   /api/admin/users
 PUT    /api/admin/users/:id
 
 DELETE /api/admin/users/:id
+
 
 🛡️ Validaciones implementadas
 
@@ -244,6 +262,7 @@ Validación de campos obligatorios
 
 Control de permisos por rol
 
+
 Frontend
 
 Validación reactiva por campo
@@ -253,6 +272,7 @@ Feedback visual inmediato
 Mensajes de error dinámicos
 
 Prevención de formularios inválidos
+
 
 🎨 UI / UX
 
@@ -270,9 +290,11 @@ Navegación intuitiva
 
 Componentes reutilizables
 
+
 🏗️ Arquitectura
 
 El backend sigue una arquitectura MVC:
+
 
 Models → acceso a datos
 
@@ -282,7 +304,9 @@ Routes → definición de endpoints
 
 Middlewares → autenticación y autorización
 
+
 El frontend aplica separación modular mediante:
+
 
 Stores globales (Pinia)
 
@@ -292,17 +316,22 @@ Componentes reutilizables
 
 Composables
 
+
 ☁️ Despliegue
+
 
 Backend y base de datos
 
 Desplegados en Railway.
 
+
 Frontend
 
 Desplegado en Vercel.
 
+
 📌 Estado del proyecto
+
 
 ✅ Proyecto finalizado
 
