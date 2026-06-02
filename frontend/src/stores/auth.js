@@ -25,7 +25,7 @@ export const useAuthStore = defineStore("auth", {
     async login(email,password){
 
       const res = await api.post(
-        "/auth/login",
+        "api/auth/login",
         {
           email,
           password
@@ -33,7 +33,6 @@ export const useAuthStore = defineStore("auth", {
       );
 
       this.token = res.data.token;
-
       this.user = res.data.user;
 
       localStorage.setItem(
