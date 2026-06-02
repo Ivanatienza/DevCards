@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://dev-cards-ruddy.vercel.app/',
+  origin: 'https://dev-cards-ruddy.vercel.app',
   credentials: true
 }));
 
