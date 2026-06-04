@@ -1,26 +1,51 @@
 import { getSettings, updateSettings as updateSettingsModel } from "../models/settingsModel.js";
 
-//Obtener las preferencias del usuario
-export const getUserSettings = async (req,res,next) => {
-    try{
-        const settings = await getSettings(req.user.id);
-        res.json(settings);
+/* =========================
+   GET SETTINGS
+========================= */
+export const getUserSettings = async (req, res, next) => {
+  try {
+    const settings = await getSettings(req.user.id);
 
-    }catch(error){
-        next(error);
-    }
+    res.json(settings);
+
+  } catch (error) {
+    next(error);
+  }
 };
 
-//Guardar las preferencias del usuario
-export const updateSettings = async(req,res,next) => {
-    try{
-        const { theme,language } = req.body;
+/* =========================
+   UPDATE SETTINGS
+========================= */
+export const updateSettings = async (req, res, next) => {
+  try {
+    const { theme, language } = req.body;
+    const allowedThemes = ["light", "dark"];
+    const allowedLanguages = ["es", "en"];
 
-        await updateSettingsModel(req.user.id,theme,language);
+    const finalTheme = allowedThemes.includes(theme)
+      ? theme
+      : "light";
 
-        res.json({message: "Configuración guardada."});
+    const finalLanguage = allowedLanguages.includes(language)
+      ? language
+      : "es";
 
-    }catch(error){
-        next(error);
-    }
+    await updateSettingsModel(
+      req.user.id,
+      finalTheme,
+      finalLanguage
+    );
+
+    res.json({
+      message: "Configuración guardada.",
+      settings: {
+        theme: finalTheme,
+        language: finalLanguage,
+      },
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
