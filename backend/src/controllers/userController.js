@@ -19,11 +19,11 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, surname, avatar_url } = req.body;
+    const { name, surname, email, avatar_url } = req.body;
 
     await pool.query(
-      "UPDATE users SET name=?, surname=?, avatar_url=? WHERE id=?",
-      [name, surname, avatar_url, req.user.id]
+      "UPDATE users SET name=?, surname=?, email=?, avatar_url=? WHERE id=?",
+      [name, surname, email, avatar_url, req.user.id]
     );
 
     res.json({ message: "Perfil actualizado" });
