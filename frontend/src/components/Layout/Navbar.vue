@@ -70,7 +70,7 @@
 
           <router-link to="/profile" title="Ver perfil">
             <img
-              :src="user?.avatar_url || '/avatar usuario.png'"
+              :src="user?.avatar_url || '/avatar-usuario.png'"
               class="w-8 h-8 rounded-full object-cover border hover:ring-2 hover:ring-blue-500 transition"
               @error="onAvatarError"
             />
@@ -118,9 +118,8 @@ const logout = async () => {
 
   toast.success(t("logoutSuccess"));
 
-  setTimeout(() => {
+  await auth.logout();
     router.push("/home");
-  }, 700);
 
 };
 
@@ -136,6 +135,7 @@ const toggleDark = () => {
 };
 
 const onAvatarError = (e) => {
-  e.target.src = "/avatar usuario.png";
+  e.target.src = "/avatar-usuario.png";
 };
+  
 </script>
