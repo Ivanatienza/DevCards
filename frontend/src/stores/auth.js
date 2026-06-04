@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api";
+import { login as loginService, logout as logoutService } from "../services/authService";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -13,33 +13,40 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
+
+    // LOGIN
     async login(email, password) {
       try {
-        const res = await api.post("/auth/login", {
-          email,
-          password,
-        });
+        const data = await loginService({ email, password });
 
-        this.token = res.data.token;
-        this.user = res.data.user;
+        this.token = data.token;
+        this.user = data.user;
 
         localStorage.setItem("token", this.token);
         localStorage.setItem("user", JSON.stringify(this.user));
 
-        return res.data;
+        return data;
       } catch (error) {
         throw error;
       }
     },
 
-    logout() {
+    // LOGOUT
+    async logout() {
+      try {
+        await logoutService();
+      } catch (error) {
+        // incluso si falla backend, limpiamos frontend igual
+        console.warn("Logout error:", error);
+      }
+
       this.user = null;
       this.token = null;
 
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     },
-    
+
     updateUser(partialUser) {
       if (!this.user) return;
 
