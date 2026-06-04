@@ -229,26 +229,26 @@ export const createCard = async (req, res) => {
    UPDATE CARD
 ========================= */
 export const updateCard = async (req, res) => {
+  const connection = await pool.getConnection();
+
   try {
+    await connection.beginTransaction();
+
     const {
       title,
       description,
       documentation_url,
       logo_url,
       is_public,
+      tags,
     } = req.body;
 
-    const [result] = await pool.query(
+    // 1. Update card data
+    const [result] = await connection.query(
       `
       UPDATE cards
-      SET
-        title = ?,
-        description = ?,
-        documentation_url = ?,
-        logo_url = ?,
-        is_public = ?
-      WHERE id = ?
-      AND user_id = ?
+      SET title = ?, description = ?, documentation_url = ?, logo_url = ?, is_public = ?
+      WHERE id = ? AND user_id = ?
       `,
       [
         title,
@@ -262,11 +262,53 @@ export const updateCard = async (req, res) => {
     );
 
     if (result.affectedRows === 0) {
+      await connection.rollback();
       return res.status(404).json({
         success: false,
         message: "Card no encontrada",
       });
     }
+
+    // 2. Reset tags
+    await connection.query(
+      `DELETE FROM card_tags WHERE card_id = ?`,
+      [req.params.id]
+    );
+
+    // 3. Reinsert tags
+    if (tags && tags.length > 0) {
+      const tagArray = Array.isArray(tags) ? tags : tags.split(",");
+
+      for (const tagName of tagArray) {
+        const cleanTag = tagName.trim().toLowerCase();
+        if (!cleanTag) continue;
+
+        const [existingTag] = await connection.query(
+          `SELECT id FROM tags WHERE name = ?`,
+          [cleanTag]
+        );
+
+        let tagId;
+
+        if (existingTag.length === 0) {
+          const [newTag] = await connection.query(
+            `INSERT INTO tags (name) VALUES (?)`,
+            [cleanTag]
+          );
+          tagId = newTag.insertId;
+        } else {
+          tagId = existingTag[0].id;
+        }
+
+        await connection.query(
+          `INSERT IGNORE INTO card_tags (card_id, tag_id)
+           VALUES (?, ?)`,
+          [req.params.id, tagId]
+        );
+      }
+    }
+
+    await connection.commit();
 
     res.json({
       success: true,
@@ -274,12 +316,16 @@ export const updateCard = async (req, res) => {
     });
 
   } catch (error) {
+    await connection.rollback();
     console.error(error);
 
     res.status(500).json({
       success: false,
       message: "Error actualizando card",
     });
+
+  } finally {
+    connection.release();
   }
 };
 
