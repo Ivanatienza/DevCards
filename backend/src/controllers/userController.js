@@ -83,9 +83,17 @@ export const updateProfile = async (req, res) => {
       ]
     );
 
+    const [updatedUser] = await pool.query(
+      `SELECT id, name, surname, email, avatar_url, role
+       FROM users
+       WHERE id = ?`,
+      [req.user.id]
+    );
+
     res.json({
       success: true,
       message: "Perfil actualizado",
+      user: updatedUser[0],
     });
 
   } catch (error) {
