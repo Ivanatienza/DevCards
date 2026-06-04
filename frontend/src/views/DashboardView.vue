@@ -150,7 +150,8 @@ const loadCards = async () => {
 
   try {
     const res = await getCards();
-    cards.value = (res.data || []).map(card => ({
+    const rawCards = res.data?.data || [];
+    cards.value = rawCards.map(card => ({
       ...card,
       tags: card.tags ? card.tags.split(",") : []
     }));
