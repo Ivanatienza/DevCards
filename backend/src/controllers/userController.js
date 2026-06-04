@@ -31,6 +31,18 @@ export const updateProfile = async (req, res) => {
       validateURL(avatar_url);
     }
 
+    //Comprobar email duplicado
+    const [existingUsers] = await pool.query(
+      "SELECT id FROM users WHERE email = ? AND id != ?",
+      [email, req.user.id]
+    );
+
+    if (existingUsers.length > 0) {
+      return res.status(409).json({
+        message: "El email ya existe",
+      });
+    }
+
     await pool.query(
       "UPDATE users SET name=?, surname=?, email=?, avatar_url=? WHERE id=?",
       [name, surname, email, avatar_url, req.user.id]
@@ -39,7 +51,7 @@ export const updateProfile = async (req, res) => {
     res.json({ message: "Perfil actualizado" });
   } catch (error) {
     res.status(400).json({
-      message: error.message || "Error actualizando perfil",
+      message: error.message || "Error al actualizar el perfil",
     });
   }
 };
