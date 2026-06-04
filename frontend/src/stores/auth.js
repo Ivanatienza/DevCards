@@ -1,79 +1,54 @@
 import { defineStore } from "pinia";
-
 import api from "../services/api";
 
 export const useAuthStore = defineStore("auth", {
-
   state: () => ({
-
-    user: JSON.parse(localStorage.getItem("user")) || null,
-
-    token: localStorage.getItem("token") || null
-
+    user: JSON.parse(localStorage.getItem("user") || "null"),
+    token: localStorage.getItem("token") || null,
   }),
 
   getters: {
-
     isAuthenticated: (state) => !!state.token,
-
-    isAdmin: (state) => state.user?.role === "admin"
-
+    isAdmin: (state) => state.user?.role === "admin",
   },
 
   actions: {
-
-    async login(email,password){
-
-      const res = await api.post(
-        "/auth/login",
-        {
+    async login(email, password) {
+      try {
+        const res = await api.post("/auth/login", {
           email,
-          password
-        }
-      );
+          password,
+        });
 
-      this.token = res.data.token;
+        this.token = res.data.token;
+        this.user = res.data.user;
 
-      this.user = res.data.user;
+        localStorage.setItem("token", this.token);
+        localStorage.setItem("user", JSON.stringify(this.user));
 
-      localStorage.setItem(
-        "token",
-        this.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(this.user)
-      );
-
+        return res.data;
+      } catch (error) {
+        throw error;
+      }
     },
 
-    logout(){
-
+    logout() {
       this.user = null;
-
       this.token = null;
 
       localStorage.removeItem("token");
-
       localStorage.removeItem("user");
-
     },
-
-    updateUser(partialUser){
+    
+    updateUser(partialUser) {
+      if (!this.user) return;
 
       this.user = {
         ...this.user,
-        ...partialUser
+        ...partialUser,
       };
-      
-      localStorage.setItem(
-        "user",
-        JSON.stringify(this.user)
-      );
 
-    }
-
-  }
-
+      localStorage.setItem("user", JSON.stringify(this.user));
+    },
+  },
 });
