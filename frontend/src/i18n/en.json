@@ -13,12 +13,12 @@
   "description": "Description",
   "logoUrl": "Logo URL",
   "documentationUrl": "Documentation URL",
+  "documentation": "Documentation",
   "tags": "Tags",
   "tagsPlaceholder": "vue, frontend, javascript",
   "publicCard": "Public card",
   "public": "Public",
   "noCards": "No cards available",
-  "documentation": "Documentation",
 
   "login": "Login",
   "register": "Register",
@@ -48,8 +48,6 @@
   "darkMode": "Dark mode",
 
   "users": "User Management",
-  "manageUsers": "Manage users",
-
   "createUser": "Create user",
   "editUser": "Edit user",
   "deleteUser": "Delete user",
@@ -57,11 +55,6 @@
   "role": "Role",
   "admin": "Administrator",
   "user": "User",
-
-  "adminPanel": "Admin panel",
-
-  "publicCards": "Public cards",
-  "exploreCards": "Explore public cards",
 
   "actions": "Actions",
 
@@ -82,6 +75,7 @@
   "toastRegisterError": "Registration failed",
 
   "logoutSuccess": "Logged out successfully",
+  "toastLogout": "Logged out successfully",
 
   "toastCardCreated": "Card created successfully",
   "toastCardUpdated": "Card updated successfully",
