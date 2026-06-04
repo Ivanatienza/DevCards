@@ -102,7 +102,7 @@ import { useToast } from "vue-toastification";
 
 const toast = useToast();
 const router = useRouter();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const auth = useAuthStore();
 
 const user = computed(() => auth.user);
