@@ -1,14 +1,15 @@
 import pool from "../config/db.js";
 
-export const getCards = async(req,res) => {
-
-  try{
-
+/* =========================
+   GET USER CARDS
+========================= */
+export const getCards = async (req, res) => {
+  try {
     const [cards] = await pool.query(
       `
       SELECT
         c.*,
-        GROUP_CONCAT(t.name) AS tags
+        GROUP_CONCAT(DISTINCT t.name) AS tags
       FROM cards c
       LEFT JOIN card_tags ct
         ON c.id = ct.card_id
@@ -21,40 +22,36 @@ export const getCards = async(req,res) => {
       [req.user.id]
     );
 
-    const formatted = cards.map(card => ({
+    const formatted = cards.map((card) => ({
       ...card,
-      tags: card.tags
-        ? card.tags.split(",")
-        : []
+      is_public: Boolean(card.is_public),
+      tags: card.tags ? card.tags.split(",") : [],
     }));
 
     res.json({
-      success:true,
-      data:formatted
+      success: true,
+      data: formatted,
     });
 
-  }catch(error){
-
+  } catch (error) {
     console.error(error);
-
     res.status(500).json({
-      success:false,
-      message:"Error obteniendo cards"
+      success: false,
+      message: "Error obteniendo cards",
     });
-
   }
-
 };
 
-export const getPublicCards = async(req,res) => {
-
-  try{
-
+/* =========================
+   GET PUBLIC CARDS
+========================= */
+export const getPublicCards = async (req, res) => {
+  try {
     const [cards] = await pool.query(
       `
       SELECT
         c.*,
-        GROUP_CONCAT(t.name) AS tags
+        GROUP_CONCAT(DISTINCT t.name) AS tags
       FROM cards c
       LEFT JOIN card_tags ct
         ON c.id = ct.card_id
@@ -66,35 +63,31 @@ export const getPublicCards = async(req,res) => {
       `
     );
 
-    const formatted = cards.map(card => ({
+    const formatted = cards.map((card) => ({
       ...card,
-      tags: card.tags
-        ? card.tags.split(",")
-        : []
+      is_public: Boolean(card.is_public),
+      tags: card.tags ? card.tags.split(",") : [],
     }));
 
     res.json({
-      success:true,
-      data:formatted
+      success: true,
+      data: formatted,
     });
 
-  }catch(error){
-
+  } catch (error) {
     console.error(error);
-
     res.status(500).json({
-      success:false,
-      message:"Error obteniendo cards públicas"
+      success: false,
+      message: "Error obteniendo cards públicas",
     });
-
   }
-
 };
 
-export const getCardById = async(req,res) => {
-
-  try{
-
+/* =========================
+   GET CARD BY ID
+========================= */
+export const getCardById = async (req, res) => {
+  try {
     const [cards] = await pool.query(
       `
       SELECT *
@@ -105,39 +98,37 @@ export const getCardById = async(req,res) => {
       [req.params.id, req.user.id]
     );
 
-    if(cards.length === 0){
-
+    if (cards.length === 0) {
       return res.status(404).json({
-        success:false,
-        message:"Card no encontrada"
+        success: false,
+        message: "Card no encontrada",
       });
-
     }
 
     res.json({
-      success:true,
-      data:cards[0]
+      success: true,
+      data: {
+        ...cards[0],
+        is_public: Boolean(cards[0].is_public),
+      },
     });
 
-  }catch(error){
-
+  } catch (error) {
     console.error(error);
-
     res.status(500).json({
-      success:false,
-      message:"Error obteniendo card"
+      success: false,
+      message: "Error obteniendo card",
     });
-
   }
-
 };
 
-export const createCard = async(req,res) => {
-
+/* =========================
+   CREATE CARD
+========================= */
+export const createCard = async (req, res) => {
   const connection = await pool.getConnection();
 
-  try{
-
+  try {
     await connection.beginTransaction();
 
     const {
@@ -146,122 +137,108 @@ export const createCard = async(req,res) => {
       documentation_url,
       logo_url,
       is_public,
-      tags
+      tags,
     } = req.body;
+
+    if (!title || !description || !documentation_url) {
+      await connection.rollback();
+      return res.status(400).json({
+        success: false,
+        message: "Faltan campos obligatorios",
+      });
+    }
 
     const [result] = await connection.query(
       `
       INSERT INTO cards
-      (
-        title,
-        description,
-        documentation_url,
-        logo_url,
-        is_public,
-        user_id
-      )
+      (title, description, documentation_url, logo_url, is_public, user_id)
       VALUES (?,?,?,?,?,?)
       `,
       [
         title,
         description,
         documentation_url,
-        logo_url,
-        is_public,
-        req.user.id
+        logo_url || null,
+        is_public ? 1 : 0,
+        req.user.id,
       ]
     );
 
     const cardId = result.insertId;
 
-    if(tags){
-
+    // =========================
+    // TAGS SYSTEM
+    // =========================
+    if (tags) {
       const tagArray = Array.isArray(tags)
         ? tags
         : tags.split(",");
 
-      for(const tagName of tagArray){
+      for (const tagName of tagArray) {
+        const cleanTag = tagName.trim().toLowerCase();
 
-        const cleanTag = tagName.trim();
+        if (!cleanTag) continue;
 
-        if(!cleanTag){
-          continue;
-        }
-
-        let [tag] = await connection.query(
+        const [existingTag] = await connection.query(
           `SELECT id FROM tags WHERE name = ?`,
           [cleanTag]
         );
 
         let tagId;
 
-        if(tag.length === 0){
-
+        if (existingTag.length === 0) {
           const [newTag] = await connection.query(
             `INSERT INTO tags (name) VALUES (?)`,
             [cleanTag]
           );
-
           tagId = newTag.insertId;
-
-        }else{
-
-          tagId = tag[0].id;
-
+        } else {
+          tagId = existingTag[0].id;
         }
 
         await connection.query(
-          `
-          INSERT IGNORE INTO card_tags
-          (card_id, tag_id)
-          VALUES (?,?)
-          `,
+          `INSERT IGNORE INTO card_tags (card_id, tag_id)
+           VALUES (?, ?)`,
           [cardId, tagId]
         );
-
       }
-
     }
 
     await connection.commit();
 
     res.status(201).json({
-      success:true,
-      id:cardId
+      success: true,
+      id: cardId,
     });
 
-  }catch(error){
-
+  } catch (error) {
     await connection.rollback();
-
     console.error(error);
 
     res.status(500).json({
-      success:false,
-      message:"Error creando card"
+      success: false,
+      message: "Error creando card",
     });
 
-  }finally{
-
+  } finally {
     connection.release();
-
   }
-
 };
 
-export const updateCard = async(req,res) => {
-
-  try{
-
+/* =========================
+   UPDATE CARD
+========================= */
+export const updateCard = async (req, res) => {
+  try {
     const {
       title,
       description,
       documentation_url,
       logo_url,
-      is_public
+      is_public,
     } = req.body;
 
-    await pool.query(
+    const [result] = await pool.query(
       `
       UPDATE cards
       SET
@@ -277,61 +254,67 @@ export const updateCard = async(req,res) => {
         title,
         description,
         documentation_url,
-        logo_url,
-        is_public,
+        logo_url || null,
+        is_public ? 1 : 0,
         req.params.id,
-        req.user.id
+        req.user.id,
       ]
     );
 
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Card no encontrada",
+      });
+    }
+
     res.json({
-      success:true,
-      message:"Card actualizada"
+      success: true,
+      message: "Card actualizada",
     });
 
-  }catch(error){
-
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      success:false,
-      message:"Error actualizando card"
+      success: false,
+      message: "Error actualizando card",
     });
-
   }
-
 };
 
-export const removeCard = async(req,res) => {
-
-  try{
-
-    await pool.query(
+/* =========================
+   DELETE CARD
+========================= */
+export const removeCard = async (req, res) => {
+  try {
+    const [result] = await pool.query(
       `
       DELETE FROM cards
       WHERE id = ?
       AND user_id = ?
       `,
-      [
-        req.params.id,
-        req.user.id
-      ]
+      [req.params.id, req.user.id]
     );
 
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Card no encontrada",
+      });
+    }
+
     res.json({
-      success:true,
-      message:"Card eliminada"
+      success: true,
+      message: "Card eliminada",
     });
 
-  }catch(error){
-
+  } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      success:false,
-      message:"Error eliminando card"
+      success: false,
+      message: "Error eliminando card",
     });
-
   }
-
 };
