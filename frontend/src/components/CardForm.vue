@@ -5,7 +5,7 @@
       v-model="title"
       type="text"
       :placeholder="$t('title')"
-      class="border p-2 rounded dark:bg-gray-700 dark:text-white"
+      class="input"
     />
     <p v-if="errors.title" class="text-red-500 text-sm">
       {{ errors.title }}
@@ -14,7 +14,7 @@
     <textarea
       v-model="description"
       :placeholder="$t('description')"
-      class="border p-2 rounded dark:bg-gray-700 dark:text-white"
+      class="input"
     />
     <p v-if="errors.description" class="text-red-500 text-sm">
       {{ errors.description }}
@@ -24,7 +24,7 @@
       v-model="documentation_url"
       type="url"
       :placeholder="$t('documentationUrl')"
-      class="border p-2 rounded dark:bg-gray-700 dark:text-white"
+      class="input"
     />
     <p v-if="errors.documentation_url" class="text-red-500 text-sm">
       {{ errors.documentation_url }}
@@ -34,14 +34,14 @@
       v-model="logo_url"
       type="url"
       :placeholder="$t('logoUrl')"
-      class="border p-2 rounded dark:bg-gray-700 dark:text-white"
+      class="input"
     />
 
     <input
       v-model="tags"
       type="text"
       :placeholder="$t('tagsPlaceholder')"
-      class="border p-2 rounded dark:bg-gray-700 dark:text-white"
+      class="input"
     />
     <p v-if="errors.tags" class="text-red-500 text-sm">
       {{ errors.tags }}
@@ -49,7 +49,7 @@
 
     <label class="flex gap-2 items-center">
       <input type="checkbox" v-model="is_public" />
-      {{ $t('publicCard') }}
+      {{ $t("publicCard") }}
     </label>
 
     <!-- BOTONES -->
@@ -90,7 +90,7 @@ const tags = ref("");
 const errors = ref({});
 
 /* =========================
-   EDITAR FORM
+   SYNC FORM (EDIT MODE)
 ========================= */
 watch(
   () => props.card,
@@ -109,7 +109,9 @@ watch(
     description.value = val.description || "";
     documentation_url.value = val.documentation_url || "";
     logo_url.value = val.logo_url || "";
-    is_public.value = !!val.is_public;
+
+    // backend -> 0/1 | frontend -> boolean
+    is_public.value = Boolean(val.is_public);
 
     tags.value = Array.isArray(val.tags)
       ? val.tags.join(", ")
@@ -119,7 +121,7 @@ watch(
 );
 
 /* =========================
-   VALIDACIÓN
+   VALIDATION
 ========================= */
 const validate = () => {
   errors.value = {};
@@ -144,12 +146,10 @@ const validate = () => {
 
   const tagArray = tags.value
     .split(",")
-    .map(t => t.trim().toLowerCase())
+    .map(tag => tag.trim().toLowerCase())
     .filter(Boolean);
 
-  const hasDuplicates = tagArray.length !== new Set(tagArray).size;
-
-  if (hasDuplicates) {
+  if (tagArray.length !== new Set(tagArray).size) {
     errors.value.tags = t("validationDuplicateTags");
   }
 
@@ -165,7 +165,7 @@ const submit = () => {
   const cleanTags = [...new Set(
     tags.value
       .split(",")
-      .map(t => t.trim().toLowerCase())
+      .map(tag => tag.trim().toLowerCase())
       .filter(Boolean)
   )];
 
@@ -180,7 +180,7 @@ const submit = () => {
 };
 
 /* =========================
-   CANCELAR
+   CANCEL
 ========================= */
 const onCancel = () => {
   emit("cancel");
