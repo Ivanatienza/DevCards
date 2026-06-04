@@ -1,54 +1,54 @@
-// Manejo de tarjetas en varias vistas
+// composables/useCards.js
 
 import { ref } from "vue";
 import * as CardService from "../services/cardService";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 
-// Estado global compartido
-const cards = ref([]);
-
 export function useCards() {
-
+  const cards = ref([]);
   const loading = ref(false);
   const error = ref(null);
+
   const toast = useToast();
   const { t } = useI18n();
 
-  // Obtener todas las cards
-  const fetchCards = async () => {
+  // Obtener cards
+  const fetchCards = async (search = "") => {
     loading.value = true;
+    error.value = null;
+
     try {
-      // getCards() devuelve {success, data:[...]}, accedemos a .data
-      const res = await CardService.getCards();
+      const res = await CardService.getCards(search);
       cards.value = res.data || [];
+
     } catch (err) {
-      error.value = err.message;
+      error.value = err?.response?.data?.message || err.message;
       toast.error(t("toastCardError"));
     } finally {
       loading.value = false;
     }
   };
 
-  // Crear nueva tarjeta
+  // Crear card
   const createCard = async (card) => {
     try {
       await CardService.createCard(card);
       await fetchCards();
       toast.success(t("toastCardCreated"));
     } catch (err) {
-      toast.error(t("toastCardError"));
+      toast.error(err?.response?.data?.message || t("toastCardError"));
     }
   };
 
-  // Eliminar card por id
+  // Eliminar card
   const deleteCard = async (id) => {
     try {
       await CardService.deleteCard(id);
-      cards.value = cards.value.filter(c => c.id !== id);
+      cards.value = cards.value.filter((c) => c.id !== id);
       toast.success(t("toastCardDeleted"));
     } catch (err) {
-      toast.error(t("toastCardError"));
+      toast.error(err?.response?.data?.message || t("toastCardError"));
     }
   };
 
@@ -58,6 +58,6 @@ export function useCards() {
     error,
     fetchCards,
     createCard,
-    deleteCard
+    deleteCard,
   };
 }
