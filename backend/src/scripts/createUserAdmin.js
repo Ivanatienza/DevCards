@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { pool } from "../config/db.js";
+import pool from "../config/db.js";
 
 const createAdmin = async () => {
   try {
@@ -38,3 +38,5 @@ const createAdmin = async () => {
 };
 
 createAdmin();
+
+export default pool;
