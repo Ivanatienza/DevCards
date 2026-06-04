@@ -5,17 +5,6 @@ Aplicación web full stack para la gestión y compartición de tarjetas de docum
 Permite a los usuarios crear, editar, organizar y consultar recursos técnicos mediante etiquetas, con autenticación segura, panel administrativo y personalización de experiencia.
 
 
-🌐 Demo en producción:
-
-Frontend: 
-
-https://dev-cards-favs.vercel.app
-
-Backend API: 
-
-https://devcards-production.up.railway.app/
-
-
 ✨ Funcionalidades principales:
 
 Registro e inicio de sesión de usuarios
@@ -82,13 +71,6 @@ Vue I18n
 Vue Toastification
 
 
-☁️ Despliegue
-
-Railway (Backend + Base de datos MySQL)
-
-Vercel (Frontend)
-
-
 📁 Estructura del proyecto
 
 
@@ -119,7 +101,7 @@ DevCards/
 
 1️⃣ Clonar repositorio
 
-git clone https://github.com/tuusuario/devcards.git
+git clone https://github.com/Ivanatienza/devcards.git
 
 cd devcards
 
@@ -164,7 +146,7 @@ npm run dev
 
 Variables de entorno
 
-VITE_API_URL=http://localhost:3000/api
+VITE_API_URL=tu URL
 
 
 🔐 Sistema de autenticación
@@ -317,19 +299,6 @@ Componentes reutilizables
 Composables
 
 
-☁️ Despliegue
-
-
-Backend y base de datos
-
-Desplegados en Railway.
-
-
-Frontend
-
-Desplegado en Vercel.
-
-
 📌 Estado del proyecto
 
 
@@ -337,7 +306,6 @@ Desplegado en Vercel.
 
 ✅ Funcional en entorno local
 
-✅ Preparado para despliegue en producción
 
 👨‍💻 Autor
 
