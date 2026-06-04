@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import { validateEmail, validateName, validateURL } from "../utils/validates.js";
 
 export const getProfile = async (req, res) => {
   try {
@@ -21,6 +22,15 @@ export const updateProfile = async (req, res) => {
   try {
     const { name, surname, email, avatar_url } = req.body;
 
+    // Validaciones
+    validateName(name);
+    validateName(surname);
+    validateEmail(email);
+
+    if (avatar_url) {
+      validateURL(avatar_url);
+    }
+
     await pool.query(
       "UPDATE users SET name=?, surname=?, email=?, avatar_url=? WHERE id=?",
       [name, surname, email, avatar_url, req.user.id]
@@ -28,6 +38,8 @@ export const updateProfile = async (req, res) => {
 
     res.json({ message: "Perfil actualizado" });
   } catch (error) {
-    res.status(500).json({ message: "Error actualizando perfil" });
+    res.status(400).json({
+      message: error.message || "Error actualizando perfil",
+    });
   }
 };
