@@ -1,5 +1,5 @@
 import pool from "../config/db.js";
-import { validateEmail, validateName, validateURL } from "../utils/validates.js";
+import { validateEmail, validateName, validateURL } from "../middlewares/validates.js";
 
 export const getProfile = async (req, res) => {
   try {
