@@ -5,9 +5,19 @@ import { getSettings, updateSettings as updateSettingsModel } from "../models/se
 ========================= */
 export const getUserSettings = async (req, res, next) => {
   try {
-    const settings = await getSettings(req.user.id);
+    let settings = await getSettings(req.user.id);
+     
+    if (!settings) {
+      settings = {
+        theme: "light",
+        language: "es",
+      };
+    }
 
-    res.json(settings);
+    res.json({
+      theme: settings.theme,
+      language: settings.language,
+    });
 
   } catch (error) {
     next(error);
@@ -20,6 +30,7 @@ export const getUserSettings = async (req, res, next) => {
 export const updateSettings = async (req, res, next) => {
   try {
     const { theme, language } = req.body;
+
     const allowedThemes = ["light", "dark"];
     const allowedLanguages = ["es", "en"];
 
