@@ -16,7 +16,10 @@ export const verifyToken = (req, res, next) => {
 
   // Si no existe el token devuelve un error
   if (!token) {
-    return res.status(401).json({ message: "Token no proporcionado" });
+    return res.status(401).json({ 
+      success: false,
+      message: "Token no proporcionado" 
+    });
   }
 
   // Verifica el token
