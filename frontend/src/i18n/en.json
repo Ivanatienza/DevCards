@@ -81,7 +81,7 @@
   "toastRegisterSuccess": "Registration successful",
   "toastRegisterError": "Registration failed",
 
-  "toastLogout": "Session closed",
+  "logoutSuccess": "Logged out successfully",
 
   "toastCardCreated": "Card created successfully",
   "toastCardUpdated": "Card updated successfully",
