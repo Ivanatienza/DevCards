@@ -86,7 +86,7 @@ import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/auth";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import Button from "../components/ui/Button.vue";
+import Button from "../components/UI/Button.vue";
 
 const { t } = useI18n();
 const auth = useAuthStore();
