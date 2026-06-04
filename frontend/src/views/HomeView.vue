@@ -70,7 +70,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
-import Button from "../components/ui/Button.vue";
+import Button from "../components/UI/Button.vue";
 
 const router = useRouter();
 const toast = useToast();
