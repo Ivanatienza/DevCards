@@ -31,7 +31,6 @@ export const createUserAdmin = async (req, res) => {
   try {
     const { name, surname, email, password, avatar_url, role } = req.body;
 
-    // Validación básica
     if (!name || !surname || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -39,35 +38,57 @@ export const createUserAdmin = async (req, res) => {
       });
     }
 
-    // Validación de roles
-    const allowedRoles = ["user", "admin"];
-    const finalRole = role && allowedRoles.includes(role) ? role : "user";
+    const cleanEmail = email.trim().toLowerCase();
 
-    // Hash password
+    const allowedRoles = ["user", "admin"];
+    const finalRole = allowedRoles.includes(role) ? role : "user";
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await pool.query(
-      `INSERT INTO users (name, surname, email, password, avatar_url, role)
-       VALUES (?,?,?,?,?,?)`,
-      [name, surname, email, hashedPassword, avatar_url || null, finalRole]
-    );
+    const connection = await pool.getConnection();
 
-    res.status(201).json({
-      success: true,
-      message: "Usuario creado",
-    });
+    try {
+      await connection.beginTransaction();
+
+      // Crear usuario
+      const [result] = await connection.query(
+        `INSERT INTO users (name, surname, email, password, avatar_url, role)
+         VALUES (?,?,?,?,?,?)`,
+        [name, surname, cleanEmail, hashedPassword, avatar_url || null, finalRole]
+      );
+
+      const userId = result.insertId;
+       
+      await connection.query(
+        `INSERT INTO settings (user_id, theme, language)
+         VALUES (?, 'light', 'es')`,
+        [userId]
+      );
+
+      await connection.commit();
+
+      return res.status(201).json({
+        success: true,
+        message: "Usuario creado",
+      });
+
+    } catch (error) {
+      await connection.rollback();
+
+      if (error.code === "ER_DUP_ENTRY") {
+        return res.status(409).json({
+          success: false,
+          message: "El email ya está registrado",
+        });
+      }
+
+      throw error;
+    } finally {
+      connection.release();
+    }
 
   } catch (error) {
     console.error(error);
-
-    // Email duplicado
-    if (error.code === "ER_DUP_ENTRY") {
-      return res.status(409).json({
-        success: false,
-        message: "El email ya está registrado",
-      });
-    }
-
     res.status(500).json({
       success: false,
       message: "Error al crear el usuario",
@@ -83,7 +104,6 @@ export const updateUserAdmin = async (req, res) => {
     const { id } = req.params;
     const { name, surname, email, avatar_url, role } = req.body;
 
-    // Verificar si existe el usuario
     const [users] = await pool.query(
       "SELECT * FROM users WHERE id = ?",
       [id]
@@ -98,14 +118,17 @@ export const updateUserAdmin = async (req, res) => {
 
     const currentUser = users[0];
 
-    // Valores por defecto (fallback)
     const updatedName = name ?? currentUser.name;
     const updatedSurname = surname ?? currentUser.surname;
-    const updatedEmail = email ?? currentUser.email;
+    const updatedEmail = email
+      ? email.trim().toLowerCase()
+      : currentUser.email;
+
     const updatedAvatar = avatar_url ?? currentUser.avatar_url;
-    const updatedRole = role ?? currentUser.role;
 
     const allowedRoles = ["user", "admin"];
+    const updatedRole = role ?? currentUser.role;
+
     if (!allowedRoles.includes(updatedRole)) {
       return res.status(400).json({
         success: false,
