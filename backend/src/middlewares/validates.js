@@ -1,13 +1,14 @@
 export const validateEmail = (email) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || !regex.test(email)) {
+
+  if (!email || !regex.test(email.trim())) {
     throw new Error("El email es inválido.");
   }
 };
 
 export const validatePassword = (password) => {
-  if (!password || password.trim().length < 6) {
-    throw new Error("La contraseña debe tener mínimo 6 caracteres.");
+  if (!password || password.trim().length < 8) {
+    throw new Error("La contraseña debe tener mínimo 8 caracteres.");
   }
 };
 
@@ -24,7 +25,9 @@ export const validateText = (text, field = "Campo") => {
 };
 
 export const validateURL = (url) => {
-  if (!url) throw new Error("La URL de documentación es obligatoria");
+  if (!url) {
+    throw new Error("La URL es obligatoria");
+  }
 
   try {
     const parsed = new URL(url);
@@ -32,13 +35,27 @@ export const validateURL = (url) => {
     if (!["http:", "https:"].includes(parsed.protocol)) {
       throw new Error();
     }
-  } catch (error) {
+  } catch {
     throw new Error("La URL introducida no es válida");
   }
 };
 
 export const validateTags = (tags) => {
-  if (!Array.isArray(tags)) {
-    throw new Error("Las etiquetas son inválidas");
+  if (!tags) {
+    throw new Error("Las etiquetas son obligatorias");
   }
+
+  const arr = Array.isArray(tags)
+    ? tags
+    : tags.split(",");
+
+  const cleaned = arr
+    .map(t => t.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (cleaned.length === 0) {
+    throw new Error("Las etiquetas no pueden estar vacías");
+  }
+
+  return cleaned;
 };
