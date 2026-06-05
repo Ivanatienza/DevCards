@@ -38,5 +38,3 @@ const createAdmin = async () => {
 };
 
 createAdmin();
-
-export default pool;
