@@ -81,6 +81,7 @@ const handleLogin = async () => {
     await auth.login(form.email, form.password);
 
     toast.success(t("toastLoginSuccess"));
+    router.push("/dashboard");
     
   } catch (error) {
     serverError.value =
