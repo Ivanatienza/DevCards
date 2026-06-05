@@ -70,7 +70,7 @@
 
           <router-link to="/profile" title="Ver perfil">
             <img
-              :src="user?.avatar_url || '/avatar usuario.png'"
+              :src="user?.avatar_url || '/avatar-usuario.png'"
               class="w-8 h-8 rounded-full object-cover border hover:ring-2 hover:ring-blue-500 transition"
               @error="onAvatarError"
             />
@@ -102,7 +102,7 @@ import { useToast } from "vue-toastification";
 
 const toast = useToast();
 const router = useRouter();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const auth = useAuthStore();
 
 const user = computed(() => auth.user);
@@ -117,10 +117,7 @@ const logout = async () => {
   await auth.logout();
 
   toast.success(t("logoutSuccess"));
-
-  setTimeout(() => {
     router.push("/home");
-  }, 700);
 
 };
 
@@ -136,6 +133,7 @@ const toggleDark = () => {
 };
 
 const onAvatarError = (e) => {
-  e.target.src = "/avatar usuario.png";
+  e.target.src = "/avatar-usuario.png";
 };
+  
 </script>

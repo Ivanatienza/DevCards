@@ -1,14 +1,11 @@
 <template>
-
   <div class="max-w-5xl mx-auto px-4 py-10">
 
     <!-- Hero -->
     <div class="text-center mb-10">
-
       <p class="text-gray-500 dark:text-gray-400">
         {{ t("homeSubtitle") }}
       </p>
-
     </div>
 
     <!-- Usuario autenticado -->
@@ -16,11 +13,10 @@
       v-if="user"
       class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 flex flex-col md:flex-row md:items-center gap-6"
     >
-
       <img
-        :src="user.avatar_url || '/avatar usuario.png'"
+        :src="user.avatar_url || '/avatar-usuario.png'"
         class="w-24 h-24 rounded-full object-cover"
-        @error="(e) => e.target.src = '/avatar usuario.png'"
+        @error="handleImageError"
       />
 
       <div class="flex-1">
@@ -30,7 +26,6 @@
       </div>
 
       <div class="flex flex-wrap gap-2">
-
         <Button @click="router.push('/dashboard')">
           {{ t("dashboard") }}
         </Button>
@@ -42,14 +37,11 @@
         <Button variant="danger" @click="logout">
           {{ t("logout") }}
         </Button>
-
       </div>
-
     </div>
 
-    <!-- Invitado-->
+    <!-- Invitado -->
     <div v-else class="text-center flex justify-center gap-3">
-
       <Button @click="router.push('/auth/login')">
         {{ t("login") }}
       </Button>
@@ -57,40 +49,37 @@
       <Button variant="secondary" @click="router.push('/auth/register')">
         {{ t("register") }}
       </Button>
-
     </div>
 
   </div>
-
 </template>
 
 <script setup>
-
-import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
-import Button from "../components/ui/Button.vue";
+import { computed } from "vue";
+
+import Button from "../components/UI/Button.vue";
+import { useAuthStore } from "../stores/auth";
 
 const router = useRouter();
 const toast = useToast();
 const { t } = useI18n();
 
-const user = ref(null);
+const auth = useAuthStore();
+const user = computed(() => auth.user);
 
-onMounted(() => {
-  const stored = localStorage.getItem("user");
-  if (stored) {
-    user.value = JSON.parse(stored);
-  }
-});
-
+// Logout usando store
 const logout = () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
+  auth.logout();
   toast.success(t("toastLogout"));
-  user.value = null;
-  router.push("/home");
+  router.push("/auth/login");
 };
 
+// fallback imagen avatar
+const handleImageError = (e) => {
+  e.target.src = "/avatar-usuario.png";
+};
+  
 </script>

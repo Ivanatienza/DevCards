@@ -48,10 +48,10 @@
 
             <td class="p-3">
               <img
-                :src="user.avatar_url || '/avatar usuario.png'"
+                :src="user.avatar_url || '/avatar-usuario.png'"
                 alt="avatar"
                 class="w-10 h-10 rounded-full object-cover"
-                @error="(e) => e.target.src = '/avatar usuario.png'"
+                @error="(e) => e.target.src = '/avatar-usuario.png'"
               />
             </td>
 
@@ -156,50 +156,63 @@
 </template>
 
 <script setup>
-
 import { ref, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
+
 import { required, isEmail, minLength } from "../utils/validators";
 
 const toast = useToast();
 const { t } = useI18n();
 
-const users     = ref([]);
-const loading   = ref(false);
-const saving    = ref(false);
+const users = ref([]);
+const loading = ref(false);
+const saving = ref(false);
 const showModal = ref(false);
 const editingId = ref(null);
-const errors    = ref({});
+const errors = ref({});
 
 const form = ref({
-  name: "", surname: "", email: "",
-  password: "", avatar_url: "", role: "user"
+  name: "",
+  surname: "",
+  email: "",
+  password: "",
+  avatar_url: "",
+  role: "user"
 });
 
+/* =========================
+   LOAD USERS
+========================= */
 const loadUsers = async () => {
   loading.value = true;
+
   try {
     const res = await getUsers();
     users.value = res.data || [];
-  } catch {
+
+  } catch (err) {
     toast.error(t("toastUserError"));
   } finally {
     loading.value = false;
   }
 };
 
+/* =========================
+   MODAL
+========================= */
 const openCreate = () => {
   editingId.value = null;
   errors.value = {};
-  form.value = { 
-    name: "", 
-    surname: "", 
-    email: "", 
-    password: "", 
-    avatar_url: "", 
-    role: "user" };
+  form.value = {
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    avatar_url: "",
+    role: "user"
+  };
   showModal.value = true;
 };
 
@@ -221,8 +234,8 @@ const openEdit = (user) => {
 
 const closeModal = () => {
   showModal.value = false;
-  errors.value = {};
   editingId.value = null;
+  errors.value = {};
 
   form.value = {
     name: "",
@@ -232,9 +245,11 @@ const closeModal = () => {
     avatar_url: "",
     role: "user"
   };
-  
 };
 
+/* =========================
+   VALIDATION
+========================= */
 const validate = () => {
   const e = {};
 
@@ -250,19 +265,23 @@ const validate = () => {
       minLength(form.value.password, 6, t("validationPasswordMin"));
   }
 
-  Object.keys(e).forEach(k => { if (!e[k]) delete e[k]; });
+  Object.keys(e).forEach(k => {
+    if (!e[k]) delete e[k];
+  });
+
   errors.value = e;
   return !Object.keys(e).length;
 };
 
+/* =========================
+   SAVE USER
+========================= */
 const saveUser = async () => {
   if (!validate()) return;
 
   saving.value = true;
-  const wasEditing = !!editingId.value;
 
   try {
-
     const payload = {
       name: form.value.name,
       surname: form.value.surname,
@@ -275,40 +294,41 @@ const saveUser = async () => {
       payload.password = form.value.password;
     }
 
-    if (wasEditing) {
+    if (editingId.value) {
       await updateUser(editingId.value, payload);
+      toast.success(t("toastUserUpdated"));
     } else {
       await createUser(payload);
+      toast.success(t("toastUserCreated"));
     }
 
     closeModal();
     await loadUsers();
 
-    toast.success(wasEditing ? t("toastUserUpdated") : t("toastUserCreated"));
-
-  } catch (err){
-
+  } catch (err) {
     console.error(err);
     toast.error(t("toastUserError"));
-
   } finally {
     saving.value = false;
-
   }
 };
 
+/* =========================
+   DELETE USER
+========================= */
 const removeUser = async (id) => {
   if (!confirm(t("confirmDeleteUser"))) return;
+
   try {
     await deleteUser(id);
     users.value = users.value.filter(u => u.id !== id);
     toast.success(t("toastUserDeleted"));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     toast.error(t("toastUserError"));
   }
 };
 
 onMounted(loadUsers);
-
+  
 </script>

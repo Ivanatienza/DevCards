@@ -1,80 +1,77 @@
 <template>
+  <div class="flex flex-col gap-4">
 
-<div class="flex flex-col gap-4">
+    <input
+      v-model="title"
+      type="text"
+      :placeholder="$t('title')"
+      class="input"
+    />
+    <p v-if="errors.title" class="text-red-500 text-sm">
+      {{ errors.title }}
+    </p>
 
-  <input
-    v-model="title"
-    type="text"
-    :placeholder="$t('title')"
-    class="border p-2 rounded dark:bg-gray-700 dark:text-white"
-  />
-  <p v-if="errors.title" class="text-red-500 text-sm">
-    {{ errors.title }}
-  </p>
+    <textarea
+      v-model="description"
+      :placeholder="$t('description')"
+      class="input"
+    />
+    <p v-if="errors.description" class="text-red-500 text-sm">
+      {{ errors.description }}
+    </p>
 
-  <textarea
-    v-model="description"
-    :placeholder="$t('description')"
-    class="border p-2 rounded dark:bg-gray-700 dark:text-white"
-  />
-  <p v-if="errors.description" class="text-red-500 text-sm">
-    {{ errors.description }}
-  </p>
+    <input
+      v-model="documentation_url"
+      type="url"
+      :placeholder="$t('documentationUrl')"
+      class="input"
+    />
+    <p v-if="errors.documentation_url" class="text-red-500 text-sm">
+      {{ errors.documentation_url }}
+    </p>
 
-  <input
-    v-model="documentation_url"
-    type="url"
-    :placeholder="$t('documentationUrl')"
-    class="border p-2 rounded dark:bg-gray-700 dark:text-white"
-  />
-  <p v-if="errors.documentation_url" class="text-red-500 text-sm">
-    {{ errors.documentation_url }}
-  </p>
+    <input
+      v-model="logo_url"
+      type="url"
+      :placeholder="$t('logoUrl')"
+      class="input"
+    />
 
-  <input
-    v-model="logo_url"
-    type="url"
-    :placeholder="$t('logoUrl')"
-    class="border p-2 rounded dark:bg-gray-700 dark:text-white"
-  />
+    <input
+      v-model="tags"
+      type="text"
+      :placeholder="$t('tagsPlaceholder')"
+      class="input"
+    />
+    <p v-if="errors.tags" class="text-red-500 text-sm">
+      {{ errors.tags }}
+    </p>
 
-  <input
-    v-model="tags"
-    type="text"
-    :placeholder="$t('tagsPlaceholder')"
-    class="border p-2 rounded dark:bg-gray-700 dark:text-white"
-  />
-  <p v-if="errors.tags" class="text-red-500 text-sm">
-    {{ errors.tags }}
-  </p>
+    <label class="flex gap-2 items-center">
+      <input type="checkbox" v-model="is_public" />
+      {{ $t("publicCard") }}
+    </label>
 
-  <label class="flex gap-2 items-center">
-    <input type="checkbox" v-model="is_public" />
-    {{ $t('publicCard') }}
-  </label>
+    <!-- BOTONES -->
+    <div class="flex justify-center gap-4 pt-4">
 
-  <!-- BOTONES -->
-  <div class="flex justify-center gap-4 pt-4">
+      <Button @click="submit">
+        {{ $t("save") }}
+      </Button>
 
-    <Button @click="submit">
-      {{ $t("save") }}
-    </Button>
-    
-    <Button variant="danger" @click="onCancel">
-      {{ $t("cancel") }}
-    </Button>
+      <Button variant="danger" @click="onCancel">
+        {{ $t("cancel") }}
+      </Button>
+
+    </div>
 
   </div>
-
-</div>
-
 </template>
 
 <script setup>
-
 import { ref, watch } from "vue";
+import Button from "./UI/Button.vue";
 import { useI18n } from "vue-i18n";
-import Button from "./ui/Button.vue";
 
 const { t } = useI18n();
 
@@ -92,6 +89,9 @@ const is_public = ref(false);
 const tags = ref("");
 const errors = ref({});
 
+/* =========================
+   SYNC FORM (EDIT MODE)
+========================= */
 watch(
   () => props.card,
   (val) => {
@@ -109,7 +109,10 @@ watch(
     description.value = val.description || "";
     documentation_url.value = val.documentation_url || "";
     logo_url.value = val.logo_url || "";
-    is_public.value = !!val.is_public;
+
+    // backend -> 0/1 | frontend -> boolean
+    is_public.value = Boolean(val.is_public);
+
     tags.value = Array.isArray(val.tags)
       ? val.tags.join(", ")
       : (val.tags || "");
@@ -117,6 +120,9 @@ watch(
   { immediate: true }
 );
 
+/* =========================
+   VALIDATION
+========================= */
 const validate = () => {
   errors.value = {};
 
@@ -130,13 +136,17 @@ const validate = () => {
 
   if (!documentation_url.value.trim()) {
     errors.value.documentation_url = t("validationRequired");
-  } else if (!documentation_url.value.startsWith("http")) {
-    errors.value.documentation_url = t("validationUrl");
+  } else {
+    try {
+      new URL(documentation_url.value);
+    } catch {
+      errors.value.documentation_url = t("validationUrl");
+    }
   }
 
   const tagArray = tags.value
     .split(",")
-    .map(t => t.trim().toLowerCase())
+    .map(tag => tag.trim().toLowerCase())
     .filter(Boolean);
 
   if (tagArray.length !== new Set(tagArray).size) {
@@ -146,13 +156,16 @@ const validate = () => {
   return Object.keys(errors.value).length === 0;
 };
 
+/* =========================
+   SUBMIT
+========================= */
 const submit = () => {
   if (!validate()) return;
 
-  const uniqueTags = [...new Set(
+  const cleanTags = [...new Set(
     tags.value
       .split(",")
-      .map(t => t.trim().toLowerCase())
+      .map(tag => tag.trim().toLowerCase())
       .filter(Boolean)
   )];
 
@@ -161,13 +174,16 @@ const submit = () => {
     description: description.value,
     documentation_url: documentation_url.value,
     logo_url: logo_url.value,
-    is_public: is_public.value ? 1 : 0,
-    tags: uniqueTags
+    is_public: is_public.value,
+    tags: cleanTags
   });
 };
 
+/* =========================
+   CANCEL
+========================= */
 const onCancel = () => {
   emit("cancel");
 };
-
+      
 </script>
