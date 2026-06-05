@@ -15,81 +15,55 @@ import PublicCardsView from "../views/PublicCardsView.vue";
 import AdminView from "../views/AdminView.vue";
 
 const routes = [
-
-  // Redirect inicial
   {
-    path:"/",
-    redirect:"/home"
+    path: "/",
+    redirect: "/home"
   },
 
-  // Auth
   {
-    path:"/auth",
-    component:AuthLayout,
-
-    children:[
-
+    path: "/",
+    component: MainLayout,
+    children: [
       {
-        path:"login",
-        component:LoginView
+        path: "home",
+        component: HomeView
       },
-
       {
-        path:"register",
-        component:RegisterView
+        path: "dashboard",
+        component: DashboardView,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "profile",
+        component: ProfileView,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "settings",
+        component: SettingsView,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "public",
+        component: PublicCardsView,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "admin",
+        component: AdminView,
+        meta: { requiresAuth: true, requiresAdmin: true }
       }
-
     ]
   },
 
-  // Main
   {
-    path:"/",
-    component:MainLayout,
-
-    children:[
-
-      {
-        path:"home",
-        component:HomeView
-      },
-
-      {
-        path:"dashboard",
-        component:DashboardView,
-        meta:{ requiresAuth:true }
-      },
-
-      {
-        path:"profile",
-        component:ProfileView,
-        meta:{ requiresAuth:true }
-      },
-
-      {
-        path:"settings",
-        component:SettingsView,
-        meta:{ requiresAuth:true }
-      },
-
-      {
-        path:"public",
-        component:PublicCardsView,
-        meta:{ requiresAuth:true }
-      },
-
-      {
-        path:"admin",
-        component:AdminView,
-        meta:{
-          requiresAuth:true,
-          requiresAdmin:true
-        }
-      }
-
+    path: "/auth",
+    component: AuthLayout,
+    children: [
+      { path: "login", component: LoginView },
+      { path: "register", component: RegisterView }
     ]
   }
-
 ];
 
 const router = createRouter({
@@ -102,7 +76,7 @@ router.beforeEach((to, from, next) => {
 
   const token = localStorage.getItem("token");
 
-  const user = JSON.parse(localStorage.getItem("user")
+  const user = JSON.parse(localStorage.getItem("user") || "null");
   
   );
 
