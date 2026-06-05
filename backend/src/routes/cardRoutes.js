@@ -14,10 +14,10 @@ router.get("/public/:id", getCardById);
 /* =========================
    USER CARDS
 ========================= */
-router.get("/", getCards);
-router.get("/:id", getCardById);
-router.post("/", createCard);
-router.put("/:id", updateCard);
-router.delete("/:id", removeCard);
+router.get("/", verifyToken, getCards);
+router.get("/:id", verifyToken,, getCardById);
+router.post("/", verifyToken,, createCard);
+router.put("/:id", verifyToken,, updateCard);
+router.delete("/:id", verifyToken,, removeCard);
 
 export default router;
