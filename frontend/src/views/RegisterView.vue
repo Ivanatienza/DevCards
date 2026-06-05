@@ -107,9 +107,8 @@ const handleRegister = async () => {
     localStorage.setItem("user", JSON.stringify(res.data.user));
 
     toast.success(t("toastRegisterSuccess"));
-
-    // Redirigir al dashboard tras el registro
-    router.push("/dashboard");
+    
+    await router.push("/dashboard");
 
   } catch (error) {
 
