@@ -185,7 +185,6 @@ const loadUsers = async () => {
     users.value = res.data?.data ?? [];
   } catch (error) {
     console.error(error);
-    toast.error(t("toastUserError"));
   } finally {
     loading.value = false;
   }
