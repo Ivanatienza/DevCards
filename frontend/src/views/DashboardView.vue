@@ -36,7 +36,7 @@
         <div class="flex items-center justify-between mb-4">
 
           <img
-            :src="card.logo_url || '/avatar usuario.png'"
+            :src="card.logo_url || '/avatar-usuario.png'"
             class="w-14 h-14 rounded-2xl object-cover"
             @error="handleImageError"
           />
@@ -165,7 +165,7 @@ const loadCards = async () => {
 
 // Image fallback
 const handleImageError = (e) => {
-  e.target.src = "/avatar usuario.png";
+  e.target.src = "/avatar-usuario.png";
 };
 
 // Modals
