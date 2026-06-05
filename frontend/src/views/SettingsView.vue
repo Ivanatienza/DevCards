@@ -85,13 +85,14 @@ const applyTheme = (t) => {
   document.documentElement.classList.toggle("dark", t === "dark");
 };
 
-const setTheme = async (t) => {
-  theme.value = t;
-  applyTheme(t);
+const setTheme = async (newTheme) => {
+  theme.value = newTheme;
+  applyTheme(newTheme);
+  localStorage.setItem("theme", newTheme);
 
   try {
     await updateSettings({
-      theme: t,
+      theme: newTheme,
       language: language.value
     });
 
