@@ -17,7 +17,7 @@ const pool = mysql.createPool({
 });
 
 // Función para verificar conexión al iniciar la app
-const testConnection = async () => {
+export const testConnection = async () => {
   try {
     const connection = await pool.getConnection();
 
@@ -31,7 +31,5 @@ const testConnection = async () => {
 
   }
 };
-
-testConnection();
 
 export default pool;
