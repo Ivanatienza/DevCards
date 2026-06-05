@@ -79,7 +79,7 @@ const emit = defineEmits(["edit", "delete"]);
 /* =========================
    IMAGE HANDLING
 ========================= */
-const defaultLogo = "/default-card.png";
+const defaultLogo = "/avatar-usuario.png";
 
 const logoSrc = ref(props.card.logo_url || defaultLogo);
 
