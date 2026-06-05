@@ -150,11 +150,7 @@ const loadCards = async () => {
 
   try {
     const res = await getCards();
-    const rawCards = res.data?.data || [];
-    cards.value = rawCards.map(card => ({
-      ...card,
-      tags: card.tags ? card.tags.split(",") : []
-    }));
+    cards.value = res.data || [];
 
   } catch {
     toast.error(t("toastCardError"));
