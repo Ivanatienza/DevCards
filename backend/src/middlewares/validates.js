@@ -7,8 +7,8 @@ export const validateEmail = (email) => {
 };
 
 export const validatePassword = (password) => {
-  if (!password || password.trim().length < 8) {
-    throw new Error("La contraseña debe tener mínimo 8 caracteres.");
+  if (!password || password.trim().length < 6) {
+    throw new Error("La contraseña debe tener mínimo 6 caracteres.");
   }
 };
 
