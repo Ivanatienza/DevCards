@@ -7,14 +7,11 @@ export const getCards = async (req, res) => {
   try {
     const [cards] = await pool.query(
       `
-      SELECT
-        c.*,
-        GROUP_CONCAT(DISTINCT t.name) AS tags
+      SELECT c.*,
+      GROUP_CONCAT(DISTINCT t.name) AS tags
       FROM cards c
-      LEFT JOIN card_tags ct
-        ON c.id = ct.card_id
-      LEFT JOIN tags t
-        ON ct.tag_id = t.id
+      LEFT JOIN card_tags ct ON c.id = ct.card_id
+      LEFT JOIN tags t ON ct.tag_id = t.id
       WHERE c.user_id = ?
       GROUP BY c.id
       ORDER BY c.created_at DESC
@@ -28,17 +25,11 @@ export const getCards = async (req, res) => {
       tags: card.tags ? card.tags.split(",") : [],
     }));
 
-    res.json({
-      success: true,
-      data: formatted,
-    });
+    res.json({ success: true, data: formatted });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "Error obteniendo cards",
-    });
+    res.status(500).json({ success: false, message: "Error obteniendo cards" });
   }
 };
 
@@ -49,14 +40,11 @@ export const getPublicCards = async (req, res) => {
   try {
     const [cards] = await pool.query(
       `
-      SELECT
-        c.*,
-        GROUP_CONCAT(DISTINCT t.name) AS tags
+      SELECT c.*,
+      GROUP_CONCAT(DISTINCT t.name) AS tags
       FROM cards c
-      LEFT JOIN card_tags ct
-        ON c.id = ct.card_id
-      LEFT JOIN tags t
-        ON ct.tag_id = t.id
+      LEFT JOIN card_tags ct ON c.id = ct.card_id
+      LEFT JOIN tags t ON ct.tag_id = t.id
       WHERE c.is_public = 1
       GROUP BY c.id
       ORDER BY c.created_at DESC
@@ -69,56 +57,61 @@ export const getPublicCards = async (req, res) => {
       tags: card.tags ? card.tags.split(",") : [],
     }));
 
-    res.json({
-      success: true,
-      data: formatted,
-    });
+    res.json({ success: true, data: formatted });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "Error obteniendo cards públicas",
-    });
+    res.status(500).json({ success: false, message: "Error obteniendo cards publicas" });
   }
 };
 
 /* =========================
-   GET CARD BY ID
+   GET CARD BY ID (usuario autenticado)
 ========================= */
 export const getCardById = async (req, res) => {
   try {
     const [cards] = await pool.query(
-      `
-      SELECT *
-      FROM cards
-      WHERE id = ?
-      AND user_id = ?
-      `,
+      `SELECT * FROM cards WHERE id = ? AND user_id = ?`,
       [req.params.id, req.user.id]
     );
 
     if (cards.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Card no encontrada",
-      });
+      return res.status(404).json({ success: false, message: "Card no encontrada" });
     }
 
     res.json({
       success: true,
-      data: {
-        ...cards[0],
-        is_public: Boolean(cards[0].is_public),
-      },
+      data: { ...cards[0], is_public: Boolean(cards[0].is_public) },
     });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "Error obteniendo card",
+    res.status(500).json({ success: false, message: "Error obteniendo card" });
+  }
+};
+
+/* =========================
+   GET PUBLIC CARD BY ID
+========================= */
+export const getPublicCardById = async (req, res) => {
+  try {
+    const [cards] = await pool.query(
+      `SELECT * FROM cards WHERE id = ? AND is_public = 1`,
+      [req.params.id]
+    );
+
+    if (cards.length === 0) {
+      return res.status(404).json({ success: false, message: "Card no encontrada" });
+    }
+
+    res.json({
+      success: true,
+      data: { ...cards[0], is_public: Boolean(cards[0].is_public) },
     });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error obteniendo card publica" });
   }
 };
 
@@ -131,95 +124,52 @@ export const createCard = async (req, res) => {
   try {
     await connection.beginTransaction();
 
-    const {
-      title,
-      description,
-      documentation_url,
-      logo_url,
-      is_public,
-      tags,
-    } = req.body;
+    const { title, description, documentation_url, logo_url, is_public, tags } = req.body;
 
     if (!title || !description || !documentation_url) {
       await connection.rollback();
-      return res.status(400).json({
-        success: false,
-        message: "Faltan campos obligatorios",
-      });
+      return res.status(400).json({ success: false, message: "Faltan campos obligatorios" });
     }
 
     const [result] = await connection.query(
-      `
-      INSERT INTO cards
-      (title, description, documentation_url, logo_url, is_public, user_id)
-      VALUES (?,?,?,?,?,?)
-      `,
-      [
-        title,
-        description,
-        documentation_url,
-        logo_url || null,
-        is_public ? 1 : 0,
-        req.user.id,
-      ]
+      `INSERT INTO cards (title, description, documentation_url, logo_url, is_public, user_id)
+       VALUES (?,?,?,?,?,?)`,
+      [title, description, documentation_url, logo_url || null, is_public ? 1 : 0, req.user.id]
     );
 
     const cardId = result.insertId;
 
-    // =========================
-    // TAGS SYSTEM
-    // =========================
     if (tags) {
-      const tagArray = Array.isArray(tags)
-        ? tags
-        : tags.split(",");
+      const tagArray = Array.isArray(tags) ? tags : tags.split(",");
 
       for (const tagName of tagArray) {
         const cleanTag = tagName.trim().toLowerCase();
-
         if (!cleanTag) continue;
 
-        const [existingTag] = await connection.query(
-          `SELECT id FROM tags WHERE name = ?`,
-          [cleanTag]
-        );
-
+        const [existingTag] = await connection.query(`SELECT id FROM tags WHERE name = ?`, [cleanTag]);
         let tagId;
 
         if (existingTag.length === 0) {
-          const [newTag] = await connection.query(
-            `INSERT INTO tags (name) VALUES (?)`,
-            [cleanTag]
-          );
+          const [newTag] = await connection.query(`INSERT INTO tags (name) VALUES (?)`, [cleanTag]);
           tagId = newTag.insertId;
         } else {
           tagId = existingTag[0].id;
         }
 
         await connection.query(
-          `INSERT IGNORE INTO card_tags (card_id, tag_id)
-           VALUES (?, ?)`,
+          `INSERT IGNORE INTO card_tags (card_id, tag_id) VALUES (?, ?)`,
           [cardId, tagId]
         );
       }
     }
 
     await connection.commit();
-
-    res.status(201).json({
-      success: true,
-      id: cardId,
-    });
+    res.status(201).json({ success: true, id: cardId });
 
   } catch (error) {
     await connection.rollback();
     console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Error creando card",
-    });
-
+    res.status(500).json({ success: false, message: "Error creando card" });
   } finally {
     connection.release();
   }
@@ -234,48 +184,22 @@ export const updateCard = async (req, res) => {
   try {
     await connection.beginTransaction();
 
-    const {
-      title,
-      description,
-      documentation_url,
-      logo_url,
-      is_public,
-      tags,
-    } = req.body;
+    const { title, description, documentation_url, logo_url, is_public, tags } = req.body;
 
-    // 1. Update card data
     const [result] = await connection.query(
-      `
-      UPDATE cards
-      SET title = ?, description = ?, documentation_url = ?, logo_url = ?, is_public = ?
-      WHERE id = ? AND user_id = ?
-      `,
-      [
-        title,
-        description,
-        documentation_url,
-        logo_url || null,
-        is_public ? 1 : 0,
-        req.params.id,
-        req.user.id,
-      ]
+      `UPDATE cards
+       SET title = ?, description = ?, documentation_url = ?, logo_url = ?, is_public = ?
+       WHERE id = ? AND user_id = ?`,
+      [title, description, documentation_url, logo_url || null, is_public ? 1 : 0, req.params.id, req.user.id]
     );
 
     if (result.affectedRows === 0) {
       await connection.rollback();
-      return res.status(404).json({
-        success: false,
-        message: "Card no encontrada",
-      });
+      return res.status(404).json({ success: false, message: "Card no encontrada" });
     }
 
-    // 2. Reset tags
-    await connection.query(
-      `DELETE FROM card_tags WHERE card_id = ?`,
-      [req.params.id]
-    );
+    await connection.query(`DELETE FROM card_tags WHERE card_id = ?`, [req.params.id]);
 
-    // 3. Reinsert tags
     if (tags && tags.length > 0) {
       const tagArray = Array.isArray(tags) ? tags : tags.split(",");
 
@@ -283,47 +207,30 @@ export const updateCard = async (req, res) => {
         const cleanTag = tagName.trim().toLowerCase();
         if (!cleanTag) continue;
 
-        const [existingTag] = await connection.query(
-          `SELECT id FROM tags WHERE name = ?`,
-          [cleanTag]
-        );
-
+        const [existingTag] = await connection.query(`SELECT id FROM tags WHERE name = ?`, [cleanTag]);
         let tagId;
 
         if (existingTag.length === 0) {
-          const [newTag] = await connection.query(
-            `INSERT INTO tags (name) VALUES (?)`,
-            [cleanTag]
-          );
+          const [newTag] = await connection.query(`INSERT INTO tags (name) VALUES (?)`, [cleanTag]);
           tagId = newTag.insertId;
         } else {
           tagId = existingTag[0].id;
         }
 
         await connection.query(
-          `INSERT IGNORE INTO card_tags (card_id, tag_id)
-           VALUES (?, ?)`,
+          `INSERT IGNORE INTO card_tags (card_id, tag_id) VALUES (?, ?)`,
           [req.params.id, tagId]
         );
       }
     }
 
     await connection.commit();
-
-    res.json({
-      success: true,
-      message: "Card actualizada",
-    });
+    res.json({ success: true, message: "Card actualizada" });
 
   } catch (error) {
     await connection.rollback();
     console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Error actualizando card",
-    });
-
+    res.status(500).json({ success: false, message: "Error actualizando card" });
   } finally {
     connection.release();
   }
@@ -335,32 +242,18 @@ export const updateCard = async (req, res) => {
 export const removeCard = async (req, res) => {
   try {
     const [result] = await pool.query(
-      `
-      DELETE FROM cards
-      WHERE id = ?
-      AND user_id = ?
-      `,
+      `DELETE FROM cards WHERE id = ? AND user_id = ?`,
       [req.params.id, req.user.id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Card no encontrada",
-      });
+      return res.status(404).json({ success: false, message: "Card no encontrada" });
     }
 
-    res.json({
-      success: true,
-      message: "Card eliminada",
-    });
+    res.json({ success: true, message: "Card eliminada" });
 
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Error eliminando card",
-    });
+    res.status(500).json({ success: false, message: "Error eliminando card" });
   }
 };
