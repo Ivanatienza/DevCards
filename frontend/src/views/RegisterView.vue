@@ -100,19 +100,20 @@ const handleRegister = async () => {
       name: form.name,
       surname: form.surname,
       email: form.email,
-      password: form.password
+      password: form.password,
     });
 
-    auth.login(form.email, form.password);
-
+    auth.token = res.token;
+    auth.user  = res.user;
+    localStorage.setItem("token", res.token);
+    localStorage.setItem("user", JSON.stringify(res.user));
+    
     toast.success(t("toastRegisterSuccess"));
 
     router.push("/dashboard");
 
   } catch (error) {
-    serverError.value =
-      error?.response?.data?.message || t("toastRegisterError");
-
+    serverError.value = error?.response?.data?.message || t("toastRegisterError");
     toast.error(serverError.value);
   } finally {
     loading.value = false;
