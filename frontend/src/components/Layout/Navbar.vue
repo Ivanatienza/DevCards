@@ -99,10 +99,9 @@ import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../../stores/auth";
 import { useToast } from "vue-toastification";
 
-
 const toast = useToast();
 const router = useRouter();
-const { locale } = useI18n();
+const { t, locale } = useI18n();
 const auth = useAuthStore();
 
 const user = computed(() => auth.user);
@@ -113,15 +112,11 @@ onMounted(() => {
   isDark.value = document.documentElement.classList.contains("dark");
 });
 
-const logout = async () => {
-  await auth.logout();
+const logout = () => {
+  auth.logout();
 
   toast.success(t("logoutSuccess"));
-
-  setTimeout(() => {
-    router.push("/home");
-  }, 700);
-
+  router.push("/home");
 };
 
 const setLocale = (lang) => {
@@ -136,6 +131,7 @@ const toggleDark = () => {
 };
 
 const onAvatarError = (e) => {
-  e.target.src = "/avatar usuario.png";
+  e.target.src = "/avatar-usuario.png";
 };
+
 </script>
