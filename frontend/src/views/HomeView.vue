@@ -14,7 +14,7 @@
       class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 flex flex-col md:flex-row md:items-center gap-6"
     >
       <img
-        :src="user.avatar_url || '/avatar usuario.png'"
+        :src="user.avatar_url || '/avatar-usuario.png'"
         class="w-24 h-24 rounded-full object-cover"
         @error="handleImageError"
       />
@@ -79,7 +79,7 @@ const logout = () => {
 
 // fallback imagen avatar
 const handleImageError = (e) => {
-  e.target.src = "/avatar usuario.png";
+  e.target.src = "/avatar-usuario.png";
 };
   
 </script>
