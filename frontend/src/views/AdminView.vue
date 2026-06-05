@@ -48,10 +48,10 @@
 
             <td class="p-3">
               <img
-                :src="user.avatar_url || '/avatar usuario.png'"
+                :src="user.avatar_url || '/avatar-usuario.png'"
                 alt="avatar"
                 class="w-10 h-10 rounded-full object-cover"
-                @error="(e) => e.target.src = '/avatar usuario.png'"
+                @error="(e) => e.target.src = '/avatar-usuario.png'"
               />
             </td>
 
@@ -182,8 +182,9 @@ const loadUsers = async () => {
   loading.value = true;
   try {
     const res = await getUsers();
-    users.value = res.data || [];
-  } catch {
+    users.value = res.data?.data ?? [];
+  } catch (error) {
+    console.error(error);
     toast.error(t("toastUserError"));
   } finally {
     loading.value = false;
