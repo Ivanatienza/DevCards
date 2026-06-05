@@ -9,7 +9,7 @@
         <div class="flex flex-col items-center mb-10">
 
           <img
-            :src="avatarPreview || auth.user?.avatar_url || '/default-avatar.png'"
+            :src="avatarPreview || auth.user?.avatar_url || '/avatar-usuario.png'"
             class="w-32 h-32 rounded-full object-cover border-4 border-blue-500 shadow-lg"
           />
 
