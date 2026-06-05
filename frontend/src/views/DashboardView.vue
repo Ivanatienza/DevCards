@@ -135,7 +135,7 @@ const loadCards = async () => {
   loading.value = true;
   try {
     const res = await getCards();
-    cards.value = res.data ?? [];
+    cards.value = res.data?.data ?? [];
   } catch {
     toast.error(t("toastCardError"));
   } finally {
