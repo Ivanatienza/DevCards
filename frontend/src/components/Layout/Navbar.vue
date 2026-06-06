@@ -117,7 +117,7 @@ const logout = async () => {
   await auth.logout();
 
   toast.success(t("logoutSuccess"));
-    router.push("/home");
+    router.push("/");
 
 };
 

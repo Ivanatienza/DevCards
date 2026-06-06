@@ -51,6 +51,7 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useToast } from "vue-toastification";
 import { useAuthStore } from "../stores/auth";
@@ -59,6 +60,7 @@ import { validateLogin } from "../utils/validators";
 const { t } = useI18n();
 const toast = useToast();
 const auth = useAuthStore();
+const router = useRouter();
 
 const errors = ref({});
 const serverError = ref("");

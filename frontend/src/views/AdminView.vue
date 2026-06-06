@@ -161,7 +161,7 @@ import { useToast } from "vue-toastification";
 import { useI18n } from "vue-i18n";
 import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
 
-import { required, isEmail, minLength } from "../utils/validators";
+import { validateEmail, required, minLength } from "../utils/validators";
 
 const toast = useToast();
 const { t } = useI18n();
@@ -257,7 +257,7 @@ const validate = () => {
 
   e.email =
     required(form.value.email, t("validationRequired")) ||
-    isEmail(form.value.email, t("validationEmail"));
+    (!validateEmail(form.value.email)? t("validationEmail"): "");
 
   if (!editingId.value) {
     e.password =

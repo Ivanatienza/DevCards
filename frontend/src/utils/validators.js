@@ -123,7 +123,7 @@ export function validateCard(data, t) {
   }
 
   if (Array.isArray(data.tags)) {
-    const lower = data.tags.map(t => t.toLowerCase());
+    const lower = data.tags.map(tag => tag.toLowerCase());
     if (lower.length !== new Set(lower).size) {
       errors.tags = t("validationDuplicateTags");
     }
@@ -131,3 +131,9 @@ export function validateCard(data, t) {
 
   return errors;
 }
+
+export const required = (val, msg) =>
+  (!val || !val.toString().trim()) ? msg : "";
+
+export const minLength = (val, min, msg) =>
+  (val && val.length < min) ? msg : "";
