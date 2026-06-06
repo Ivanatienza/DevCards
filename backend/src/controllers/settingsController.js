@@ -1,26 +1,62 @@
 import { getSettings, updateSettings as updateSettingsModel } from "../models/settingsModel.js";
 
-//Obtener las preferencias del usuario
-export const getUserSettings = async (req,res,next) => {
-    try{
-        const settings = await getSettings(req.user.id);
-        res.json(settings);
-
-    }catch(error){
-        next(error);
+/* =========================
+   GET SETTINGS
+========================= */
+export const getUserSettings = async (req, res, next) => {
+  try {
+    let settings = await getSettings(req.user.id);
+     
+    if (!settings) {
+      settings = {
+        theme: "light",
+        language: "es",
+      };
     }
+
+    res.json({
+      theme: settings.theme,
+      language: settings.language,
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
 
-//Guardar las preferencias del usuario
-export const updateSettings = async(req,res,next) => {
-    try{
-        const { theme,language } = req.body;
+/* =========================
+   UPDATE SETTINGS
+========================= */
+export const updateSettings = async (req, res, next) => {
+  try {
+    const { theme, language } = req.body;
 
-        await updateSettingsModel(req.user.id,theme,language);
+    const allowedThemes = ["light", "dark"];
+    const allowedLanguages = ["es", "en"];
 
-        res.json({message: "Configuración guardada."});
+    const finalTheme = allowedThemes.includes(theme)
+      ? theme
+      : "light";
 
-    }catch(error){
-        next(error);
-    }
+    const finalLanguage = allowedLanguages.includes(language)
+      ? language
+      : "es";
+
+    await updateSettingsModel(
+      req.user.id,
+      finalTheme,
+      finalLanguage
+    );
+
+    res.json({
+      message: "Configuración guardada.",
+      settings: {
+        theme: finalTheme,
+        language: finalLanguage,
+      },
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };

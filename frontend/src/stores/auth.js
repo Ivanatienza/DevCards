@@ -1,78 +1,61 @@
 import { defineStore } from "pinia";
-
-import api from "../services/api";
+import { login as loginService, logout as logoutService } from "../services/authService";
 
 export const useAuthStore = defineStore("auth", {
-
   state: () => ({
-
-    user: JSON.parse(localStorage.getItem("user")) || null,
-
-    token: localStorage.getItem("token") || null
-
+    user: JSON.parse(localStorage.getItem("user") || "null"),
+    token: localStorage.getItem("token") || null,
   }),
 
   getters: {
-
     isAuthenticated: (state) => !!state.token,
-
-    isAdmin: (state) => state.user?.role === "admin"
-
+    isAdmin: (state) => state.user?.role === "admin",
   },
 
   actions: {
 
-    async login(email,password){
+    // LOGIN
+    async login(email, password) {
+      try {
+        const data = await loginService({ email, password });
 
-      const res = await api.post(
-        "api/auth/login",
-        {
-          email,
-          password
-        }
-      );
+        this.token = data.token;
+        this.user = data.user;
 
-      this.token = res.data.token;
-      this.user = res.data.user;
+        localStorage.setItem("token", this.token);
+        localStorage.setItem("user", JSON.stringify(this.user));
 
-      localStorage.setItem(
-        "token",
-        this.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(this.user)
-      );
-
+        return data;
+      } catch (error) {
+        throw error;
+      }
     },
 
-    logout(){
+    // LOGOUT
+    async logout() {
+      try {
+        await logoutService();
+      } catch (error) {
+        // incluso si falla backend, limpiamos frontend igual
+        console.warn("Logout error:", error);
+      }
 
       this.user = null;
-
       this.token = null;
 
       localStorage.removeItem("token");
-
       localStorage.removeItem("user");
-
     },
 
-    updateUser(partialUser){
+    updateUser(partialUser) {
+      if (!this.user) return;
 
       this.user = {
         ...this.user,
-        ...partialUser
+        ...partialUser,
       };
-      
-      localStorage.setItem(
-        "user",
-        JSON.stringify(this.user)
-      );
 
-    }
-
-  }
-
+      localStorage.setItem("user", JSON.stringify(this.user));
+    },
+  },
 });
