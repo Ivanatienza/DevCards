@@ -32,19 +32,16 @@ const routes = [
         component: ProfileView,
         meta: { requiresAuth: true },
       },
-
       {
         path: "settings",
         component: SettingsView,
         meta: { requiresAuth: true },
       },
-
       {
         path: "public",
         component: PublicCardsView,
         meta: { requiresAuth: true },
       },
-
       {
         path: "admin",
         component: AdminView,

@@ -99,7 +99,6 @@ import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../../stores/auth";
 import { useToast } from "vue-toastification";
 
-
 const toast = useToast();
 const router = useRouter();
 const { locale, t } = useI18n();
@@ -113,8 +112,8 @@ onMounted(() => {
   isDark.value = document.documentElement.classList.contains("dark");
 });
 
-const logout = async () => {
-  await auth.logout();
+const logout = () => {
+  auth.logout();
 
   toast.success(t("logoutSuccess"));
     router.push("/");

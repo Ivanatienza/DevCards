@@ -1,78 +1,139 @@
-# 🚀 DevCards
+🚀 DevCards:
 
-Aplicación web para gestionar y compartir tarjetas de documentación de desarrollo.  
-Permite a los usuarios crear, editar, eliminar y consultar recursos técnicos organizados por etiquetas.
+Aplicación web full stack para la gestión y compartición de tarjetas de documentación técnica orientadas al desarrollo de software.
 
-## 🧠 Tecnologías utilizadas
+Permite a los usuarios crear, editar, organizar y consultar recursos técnicos mediante etiquetas, con autenticación segura, panel administrativo y personalización de experiencia.
 
-### 🔙 Backend
 
-- Node.js  
-- Express  
-- MySQL  
-- JWT (autenticación)  
-- Docker (base de datos)
+✨ Funcionalidades principales:
 
-### 🎨 Frontend
+Registro e inicio de sesión de usuarios
 
-- Vue 3 (Composition API)  
-- Vue Router  
-- Pinia (estado global)  
-- Axios  
-- Tailwind CSS  
-- Vue I18n  
-- Vue Toastification
+Autenticación segura con JWT
 
-## 📁 Estructura del proyecto
+Gestión completa de tarjetas técnicas (CRUD)
 
-backend/
- ├── controllers/
- ├── models/
- ├── routes/
- ├── middlewares/
- ├── utils/
- ├── config/
- └── server.js
+Organización mediante etiquetas
 
-frontend/
- ├── components/
- ├── views/
- ├── router/
- ├── stores/
- ├── services/
- ├── composables/
- ├── i18n/
- └── main.js
+Perfil de usuario editable
 
-## ⚙️ Instalación y ejecución
+Panel de administración
 
-### 🔧 Backend
+Gestión de usuarios
+
+Sistema de roles (usuario / administrador)
+
+Modo oscuro
+
+Internacionalización (Español / Inglés)
+
+Notificaciones toast
+
+Gestión de avatar
+
+Configuración personalizada
+
+
+🧠 Tecnologías utilizadas:
+
+
+🔙 Backend:
+
+Node.js
+
+Express.js
+
+MySQL
+
+JWT
+
+Bcrypt
+
+Cookie Parser
+
+CORS
+
+
+🎨 Frontend
+
+Vue 3 (Composition API)
+
+Vue Router
+
+Pinia
+
+Axios
+
+Tailwind CSS
+
+Vue I18n
+
+Vue Toastification
+
+
+📁 Estructura del proyecto
+
+
+DevCards/
+│
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   └── server.js
+│
+└── frontend/
+    ├── src/
+    │   ├── components/
+    │   ├── views/
+    │   ├── router/
+    │   ├── stores/
+    │   ├── services/
+    │   ├── composables/
+    │   ├── i18n/
+    │   └── main.js
+
+
+⚙️ Instalación local
+
+1️⃣ Clonar repositorio
+
+git clone https://github.com/Ivanatienza/devcards.git
+
+cd devcards
+
+
+🔧 Backend
 
 cd backend
+
 npm install
+
 
 Variables de entorno
 
 PORT=3000
 
-DB_HOST=localhost
+DB_HOST=
 
-DB_USER=root
+DB_PORT=
 
-DB_PASSWORD=tu_password
+DB_USER=
 
-DB_NAME=devcards
+DB_PASSWORD=
 
-JWT_SECRET=tu_jwt_secret
+DB_NAME=
+
+JWT_SECRET=
 
 
-🐳 Base de datos (Docker)
-
-docker-compose up --build
-
-▶️ Ejecutar backend
+Ejecutar backend
 
 npm run dev
+
 
 🎨 Frontend
 
@@ -82,116 +143,172 @@ npm install
 
 npm run dev
 
-🔐 Autenticación
 
-Se utiliza JWT:
+Variables de entorno
+
+VITE_API_URL=tu URL
+
+
+🔐 Sistema de autenticación
+
+El sistema utiliza JWT (JSON Web Tokens) con cookies seguras.
+
+Flujo:
 
 El usuario inicia sesión
 
-El backend genera un token
+El backend valida credenciales
 
-El token se guarda en el cliente
+Se genera un token JWT
 
-Se envía en cada petición protegida
+El token se almacena en cookie
 
-📡 Endpoints principales
+Se valida en rutas protegidas mediante middleware
+
+
+📡 API Endpoints
 
 Auth
 
-POST /api/auth/register
+POST   /api/auth/register
 
-POST /api/auth/login
+POST   /api/auth/login
 
-POST /api/auth/logout
+POST   /api/auth/logout
+
+GET    /api/auth/me
+
 
 Cards
 
-GET /api/cards
+GET    /api/cards
 
-POST /api/cards
+POST   /api/cards
 
-PUT /api/cards/:id
+PUT    /api/cards/:id
 
 DELETE /api/cards/:id
 
-GET /api/cards/public
+GET    /api/cards/public
+
 
 Users
 
-GET /api/users
+GET    /api/users
 
-GET /api/users/profile
+GET    /api/users/profile
 
-PUT /api/users/profile
+PUT    /api/users/profile
 
 DELETE /api/users/:id
 
+
 Settings
 
-GET /api/settings
+GET    /api/settings
 
-PUT /api/settings
+PUT    /api/settings
+
 
 Tags
 
-GET /api/tags
+GET    /api/tags
 
-POST /api/tags
+POST   /api/tags
+
 
 Admin
 
-GET /api/admin/users
+GET    /api/admin/users
 
-POST /api/admin/users
+POST   /api/admin/users
 
-PUT /api/admin/users/:id
+PUT    /api/admin/users/:id
 
 DELETE /api/admin/users/:id
 
-🧪 Validaciones
+
+🛡️ Validaciones implementadas
 
 Backend
 
 Validación de email
 
-Validación de password segura
+Contraseñas seguras
 
 Validación de URLs
 
-Validación de texto y campos obligatorios
+Sanitización de entradas
+
+Validación de campos obligatorios
+
+Control de permisos por rol
 
 
 Frontend
 
-Validación por campo (UX)
+Validación reactiva por campo
 
-Reglas reutilizables
+Feedback visual inmediato
 
-Errores visuales en formularios
+Mensajes de error dinámicos
 
-🎨 UI/UX
+Prevención de formularios inválidos
 
-Diseño con Tailwind CSS
 
-Soporte modo oscuro
+🎨 UI / UX
 
-Internacionalización (ES / EN)
+Diseño responsive
 
-Notificaciones con toast
+Interfaz moderna con Tailwind CSS
+
+Modo oscuro
+
+Soporte bilingüe (ES / EN)
+
+Toast notifications
+
+Navegación intuitiva
 
 Componentes reutilizables
 
 
-📌 Notas técnicas
+🏗️ Arquitectura
 
-Arquitectura MVC en backend
+El backend sigue una arquitectura MVC:
 
-Uso de middlewares para auth y roles
 
-Separación de lógica (services, composables)
+Models → acceso a datos
 
-Uso de Docker para persistencia de datos
+Controllers → lógica de negocio
+
+Routes → definición de endpoints
+
+Middlewares → autenticación y autorización
+
+
+El frontend aplica separación modular mediante:
+
+
+Stores globales (Pinia)
+
+Servicios API
+
+Componentes reutilizables
+
+Composables
+
+
+📌 Estado del proyecto
+
+
+✅ Proyecto finalizado
+
+✅ Funcional en entorno local
+
 
 👨‍💻 Autor
 
 Iván Atienza Moya
+
+Proyecto Full Stack desarrollado como práctica profesional con Vue + Node.js + MySQL

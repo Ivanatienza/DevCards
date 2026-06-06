@@ -72,7 +72,6 @@
 import { ref, watch } from "vue";
 import Button from "./UI/Button.vue";
 import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
 
 const props = defineProps({
